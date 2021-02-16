@@ -1,10 +1,13 @@
 ﻿using Kaboom.Abstract;
+using System.Collections.Generic;
 
 namespace Kaboom.Model
 {
     public abstract class WindowArrangement : IHaveBounds, ITreeNode
     {
         private Rectangle m_bounds;
+        private ITreeNode m_parent;
+        private List<ITreeNode> m_children = new List<ITreeNode>();
 
         public WindowArrangement(Rectangle bounds)
         {
@@ -19,22 +22,39 @@ namespace Kaboom.Model
 
         public void Insert(ITreeNode child)
         {
-            throw new System.NotImplementedException();
+            m_children.Add(child);
+            child.SetParent(this);
         }
 
-        public void Remove(ITreeNode child)
+        public bool RemoveAndReturnSuccess(ITreeNode toBeRemoved)
         {
-            throw new System.NotImplementedException();
+            foreach(var child in m_children)
+            {
+                if(child == toBeRemoved)
+                {
+                    return m_children.Remove(child);
+                }
+                else if (child.RemoveAndReturnSuccess(toBeRemoved))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public void SetParent(ITreeNode parent)
         {
-            throw new System.NotImplementedException();
+            m_parent = parent;
         }
 
         public ITreeNode GetParent()
         {
-            throw new System.NotImplementedException();
+            return m_parent;
+        }
+
+        public List<ITreeNode> Children()
+        {
+            return m_children;
         }
     }
 }

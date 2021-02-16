@@ -26,6 +26,7 @@ namespace Kaboom.Model
             if(m_rootArrangement == null)
             {
                 m_rootArrangement = arrangement;
+                m_rootArrangement.SetParent(this);
             }
             else
             {
@@ -33,14 +34,20 @@ namespace Kaboom.Model
             }
         }
 
+        public void Insert(Window window)
+        {
+            m_rootArrangement.Insert(window);
+        }
+
         public void Insert(ITreeNode child)
         {
             throw new System.NotImplementedException();
         }
 
-        public void Remove(ITreeNode child)
+        public bool RemoveAndReturnSuccess(ITreeNode child)
         {
-            throw new System.NotImplementedException();
+            //note that you can't remove the root arrangement
+            return m_rootArrangement.RemoveAndReturnSuccess(child);
         }
 
         public void SetParent(Workspace workspace)
@@ -60,6 +67,11 @@ namespace Kaboom.Model
         public ITreeNode GetParent()
         {
             return m_workspace;
+        }
+
+        public List<ITreeNode> Children()
+        {
+            return new List<ITreeNode>() { m_rootArrangement };
         }
     }
 }

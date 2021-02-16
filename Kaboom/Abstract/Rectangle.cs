@@ -1,4 +1,5 @@
 ﻿using Kaboom.Abstract.Exceptions;
+using System;
 
 namespace Kaboom.Abstract
 {
@@ -25,6 +26,17 @@ namespace Kaboom.Abstract
             Y = y;
             Width = width;
             Height = height;
+        }
+
+        public bool IsOtherRectangleInside(Rectangle otherRectangle)
+        {
+            return  (X <= otherRectangle.X && otherRectangle.X <= X + Width) &&
+                    (Y <= otherRectangle.Y && otherRectangle.Y <= Y + Height);
+        }
+
+        public override String ToString()
+        {
+            return $"Rectangle(X: {X}, Y: {Y}, Width: {Width}, Height: {Height})";
         }
     }
 }

@@ -21,7 +21,7 @@
 
         private void RemoveWindow(Window window)
         {
-            throw new System.NotImplementedException();
+            m_workspace.RemoveAndReturnSuccess(window);
         }
 
         public Workspace GetWorkspace()
