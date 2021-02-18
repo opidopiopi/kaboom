@@ -27,6 +27,7 @@ namespace Kaboom.Model
             {
                 m_rootArrangement = arrangement;
                 m_rootArrangement.SetParent(this);
+                m_rootArrangement.Bounds = Bounds;
             }
             else
             {

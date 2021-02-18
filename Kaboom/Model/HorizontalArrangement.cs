@@ -1,9 +1,6 @@
 ﻿using Kaboom.Abstract;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kaboom.Model
 {
@@ -11,6 +8,19 @@ namespace Kaboom.Model
     {
         public HorizontalArrangement(Rectangle bounds) : base(bounds)
         {
+        }
+
+        protected override void UpdateBoundsOfChildren()
+        {
+            List<IHaveBounds> children = m_children.Cast<IHaveBounds>().ToList();   //I don't like
+
+            int numberOfChildren = children.Count();
+            int widthPerChild = Bounds.Width / numberOfChildren;
+
+            for(int i = 0; i < numberOfChildren; i++)
+            {
+                children[i].Bounds = new Rectangle(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
+            }
         }
     }
 }

@@ -63,5 +63,38 @@ namespace Testing
             m_windowProvider.RemoveWindow(windowScreenB);
             Assert.IsFalse(m_screenB.Children()[0].Children().Contains(windowScreenB));
         }
+
+        [TestMethod]
+        public void bounds_of_inserted_window_will_be_updated()
+        {
+            Window windowScreenA = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            Window windowScreenB = new Window(null, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
+
+            m_windowProvider.InsertWindow(windowScreenA);
+            m_windowProvider.InsertWindow(windowScreenB);
+
+            Assert.AreEqual(windowScreenA.Bounds, m_screenA.Bounds);
+            Assert.AreEqual(windowScreenB.Bounds, m_screenB.Bounds);
+
+
+            Window windowScreenA_new = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            Kaboom.Abstract.Rectangle screenA_LeftHalf = new Kaboom.Abstract.Rectangle(
+                m_screenA.Bounds.X,
+                m_screenA.Bounds.Y,
+                m_screenA.Bounds.Width / 2,
+                m_screenA.Bounds.Height);
+            Kaboom.Abstract.Rectangle screenA_RightHalf = new Kaboom.Abstract.Rectangle(
+                m_screenA.Bounds.X + m_screenA.Bounds.Width / 2,
+                m_screenA.Bounds.Y,
+                m_screenA.Bounds.Width / 2,
+                m_screenA.Bounds.Height);
+
+            m_windowProvider.InsertWindow(windowScreenA_new);
+
+            Assert.AreEqual(windowScreenA.Bounds, screenA_LeftHalf);
+            Assert.AreEqual(windowScreenA_new.Bounds, screenA_RightHalf);
+
+            Assert.AreEqual(windowScreenB.Bounds, m_screenB.Bounds);
+        }
     }
 }

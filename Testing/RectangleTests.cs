@@ -20,19 +20,23 @@ namespace Testing
         [TestMethod]
         public void only_positive_values_are_allowed_for_width_and_height()
         {
-            Assert.ThrowsException<ValueIsNegativeOrZero>(() => {
+            Assert.ThrowsException<ValueIsNegativeOrZero>(() =>
+            {
                 Rectangle bounds = new Rectangle(5, 5, -55, 5);
             });
 
-            Assert.ThrowsException<ValueIsNegativeOrZero>(() => {
+            Assert.ThrowsException<ValueIsNegativeOrZero>(() =>
+            {
                 Rectangle bounds = new Rectangle(5, 5, 0, 5);
             });
 
-            Assert.ThrowsException<ValueIsNegativeOrZero>(() => {
+            Assert.ThrowsException<ValueIsNegativeOrZero>(() =>
+            {
                 Rectangle bounds = new Rectangle(5, 5, 5, -55);
             });
 
-            Assert.ThrowsException<ValueIsNegativeOrZero>(() => {
+            Assert.ThrowsException<ValueIsNegativeOrZero>(() =>
+            {
                 Rectangle bounds = new Rectangle(5, 5, 5, 0);
             });
 
@@ -52,18 +56,18 @@ namespace Testing
                     Rectangle main = new Rectangle(x, y, w, h);
 
                     //if X and Y is outside the bounds return false
-                    Rectangle tooFarLeft    = new Rectangle(    x - 50,          y, 100, 100);
-                    Rectangle tooFarRight   = new Rectangle(x + w + 50,          y, 100, 100);
-                    Rectangle tooFarUp      = new Rectangle(         x,     y - 50, 100, 100);
-                    Rectangle tooFarDown    = new Rectangle(         x, y + h + 50, 100, 100);
+                    Rectangle tooFarLeft = new Rectangle(x - 50, y, 100, 100);
+                    Rectangle tooFarRight = new Rectangle(x + w + 50, y, 100, 100);
+                    Rectangle tooFarUp = new Rectangle(x, y - 50, 100, 100);
+                    Rectangle tooFarDown = new Rectangle(x, y + h + 50, 100, 100);
 
                     //if X and Y are inside or on the border return true
-                    Rectangle inside            = new Rectangle(x + w / 2, y + h / 2, 100, 100);
+                    Rectangle inside = new Rectangle(x + w / 2, y + h / 2, 100, 100);
 
-                    Rectangle topLeftCorner     = new Rectangle(    x,     y, 100, 100);
-                    Rectangle topRightCorner    = new Rectangle(x + w,     y, 100, 100);
-                    Rectangle lowerLeftCorner   = new Rectangle(    x, y + h, 100, 100);
-                    Rectangle lowerRightCorner  = new Rectangle(x + w, y + h, 100, 100);
+                    Rectangle topLeftCorner = new Rectangle(x, y, 100, 100);
+                    Rectangle topRightCorner = new Rectangle(x + w, y, 100, 100);
+                    Rectangle lowerLeftCorner = new Rectangle(x, y + h, 100, 100);
+                    Rectangle lowerRightCorner = new Rectangle(x + w, y + h, 100, 100);
 
                     Rectangle[] theseAreOutside = { tooFarLeft, tooFarRight, tooFarUp, tooFarDown };
                     Rectangle[] theseAreInside = { inside, topLeftCorner, topRightCorner, lowerLeftCorner, lowerRightCorner };
@@ -79,6 +83,15 @@ namespace Testing
                     }
                 }
             }
+        }
+
+        [TestMethod]
+        public void rectangle_equals_test()
+        {
+            Rectangle rectangleA = new Rectangle(5, 5, 55, 55);
+            Rectangle rectangleB = new Rectangle(5, 5, 55, 55);
+
+            Assert.AreEqual(rectangleA, rectangleB);
         }
     }
 }

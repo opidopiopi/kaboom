@@ -38,5 +38,24 @@ namespace Kaboom.Abstract
         {
             return $"Rectangle(X: {X}, Y: {Y}, Width: {Width}, Height: {Height})";
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Rectangle rectangle &&
+                   X == rectangle.X &&
+                   Y == rectangle.Y &&
+                   Width == rectangle.Width &&
+                   Height == rectangle.Height;
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 466501756;
+            hashCode = hashCode * -1521134295 + X.GetHashCode();
+            hashCode = hashCode * -1521134295 + Y.GetHashCode();
+            hashCode = hashCode * -1521134295 + Width.GetHashCode();
+            hashCode = hashCode * -1521134295 + Height.GetHashCode();
+            return hashCode;
+        }
     }
 }

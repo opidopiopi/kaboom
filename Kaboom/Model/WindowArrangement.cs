@@ -7,7 +7,7 @@ namespace Kaboom.Model
     {
         private Rectangle m_bounds;
         private ITreeNode m_parent;
-        private List<ITreeNode> m_children = new List<ITreeNode>();
+        protected List<ITreeNode> m_children = new List<ITreeNode>();
 
         public WindowArrangement(Rectangle bounds)
         {
@@ -24,6 +24,8 @@ namespace Kaboom.Model
         {
             m_children.Add(child);
             child.SetParent(this);
+
+            UpdateBoundsOfChildren();
         }
 
         public bool RemoveAndReturnSuccess(ITreeNode toBeRemoved)
@@ -56,5 +58,7 @@ namespace Kaboom.Model
         {
             return m_children;
         }
+
+        protected abstract void UpdateBoundsOfChildren();
     }
 }
