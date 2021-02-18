@@ -17,7 +17,11 @@ namespace Kaboom.Model
         public Rectangle Bounds
         {
             get => m_bounds;
-            set => m_bounds = value;
+            set
+            {
+                m_bounds = value;
+                UpdateBoundsOfChildren();
+            }
         }
 
         public void Insert(ITreeNode child)

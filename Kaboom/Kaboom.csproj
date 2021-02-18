@@ -54,6 +54,7 @@
     <Compile Include="Model\HorizontalArrangement.cs" />
     <Compile Include="Model\IProvideScreens.cs" />
     <Compile Include="Model\IProvideWindows.cs" />
+    <Compile Include="Model\ISetWindowBounds.cs" />
     <Compile Include="Model\IWindowIdentity.cs" />
     <Compile Include="Model\Screen.cs" />
     <Compile Include="Model\Window.cs" />

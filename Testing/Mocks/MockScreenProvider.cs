@@ -1,7 +1,7 @@
 ﻿using Kaboom.Model;
 using System.Collections.Generic;
 
-namespace Testing
+namespace Testing.Mocks
 {
     public class MockScreenProvider : IProvideScreens
     {

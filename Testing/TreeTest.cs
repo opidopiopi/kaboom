@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Kaboom.Model;
 using System.Collections.Generic;
+using Testing.Mocks;
 
 namespace Testing
 {
@@ -12,6 +13,7 @@ namespace Testing
 
         MockScreenProvider m_screenProvider;
         MockWindowProvider m_windowProvider;
+        MockWindowBoundsSetter m_windowBoundsSetter;
 
         TilingWindowManager m_windowManager;
 
@@ -23,8 +25,9 @@ namespace Testing
 
             m_screenProvider = new MockScreenProvider(new List<Screen>(){ m_screenA, m_screenB });
             m_windowProvider = new MockWindowProvider();
+            m_windowBoundsSetter = new MockWindowBoundsSetter();
 
-            m_windowManager = new TilingWindowManager(m_windowProvider, m_screenProvider);
+            m_windowManager = new TilingWindowManager(m_windowProvider, m_screenProvider, m_windowBoundsSetter);
         }
 
 
@@ -38,46 +41,48 @@ namespace Testing
         [TestMethod]
         public void new_window_will_be_inserted_under_correct_screen_root_arrangement()
         {
-            Window windowScreenA = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
-            Window windowScreenB = new Window(null, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
+            MockWindowIdentity windowScreenA = new MockWindowIdentity(1);
+            MockWindowIdentity windowScreenB = new MockWindowIdentity(2);
 
-            m_windowProvider.InsertWindow(windowScreenA);
-            m_windowProvider.InsertWindow(windowScreenB);
+            m_windowProvider.InsertWindow(windowScreenA, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            m_windowProvider.InsertWindow(windowScreenB, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
 
-            Assert.AreEqual(m_screenA, windowScreenA.GetParent().GetParent());
-            Assert.AreEqual(m_screenB, windowScreenB.GetParent().GetParent());
+            Assert.AreEqual(windowScreenA, ((Window) m_screenA.Children()[0].Children()[0]).Identity());
+            Assert.AreEqual(windowScreenB, ((Window) m_screenB.Children()[0].Children()[0]).Identity());
         }
 
         [TestMethod]
         public void windows_can_be_removed()
         {
-            Window windowScreenA = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
-            Window windowScreenB = new Window(null, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
-
-            m_windowProvider.InsertWindow(windowScreenA);
-            m_windowProvider.InsertWindow(windowScreenB);
+            MockWindowIdentity windowScreenA = new MockWindowIdentity(1);
+            MockWindowIdentity windowScreenB = new MockWindowIdentity(2);
+            
+            m_windowProvider.InsertWindow(windowScreenA, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            m_windowProvider.InsertWindow(windowScreenB, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
 
             m_windowProvider.RemoveWindow(windowScreenA);
-            Assert.IsFalse(m_screenA.Children()[0].Children().Contains(windowScreenA));
+            Assert.AreEqual(0, m_screenA.Children()[0].Children().Count);
+            Assert.AreEqual(1, m_screenB.Children()[0].Children().Count);
 
             m_windowProvider.RemoveWindow(windowScreenB);
-            Assert.IsFalse(m_screenB.Children()[0].Children().Contains(windowScreenB));
+            Assert.AreEqual(0, m_screenA.Children()[0].Children().Count);
+            Assert.AreEqual(0, m_screenB.Children()[0].Children().Count);
         }
 
         [TestMethod]
         public void bounds_of_inserted_window_will_be_updated()
         {
-            Window windowScreenA = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
-            Window windowScreenB = new Window(null, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
+            MockWindowIdentity windowScreenA = new MockWindowIdentity(1);
+            MockWindowIdentity windowScreenB = new MockWindowIdentity(2);
 
-            m_windowProvider.InsertWindow(windowScreenA);
-            m_windowProvider.InsertWindow(windowScreenB);
+            m_windowProvider.InsertWindow(windowScreenA, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            m_windowProvider.InsertWindow(windowScreenB, new Kaboom.Abstract.Rectangle(100, 2000, 400, 400));
 
-            Assert.AreEqual(windowScreenA.Bounds, m_screenA.Bounds);
-            Assert.AreEqual(windowScreenB.Bounds, m_screenB.Bounds);
+            Assert.AreEqual(m_screenA.Bounds, ((Window)m_screenA.Children()[0].Children()[0]).Bounds);
+            Assert.AreEqual(m_screenB.Bounds, ((Window)m_screenB.Children()[0].Children()[0]).Bounds);
 
 
-            Window windowScreenA_new = new Window(null, new Kaboom.Abstract.Rectangle(100, 100, 400, 400));
+            MockWindowIdentity windowScreenA_new = new MockWindowIdentity(3);
             Kaboom.Abstract.Rectangle screenA_LeftHalf = new Kaboom.Abstract.Rectangle(
                 m_screenA.Bounds.X,
                 m_screenA.Bounds.Y,
@@ -91,10 +96,20 @@ namespace Testing
 
             m_windowProvider.InsertWindow(windowScreenA_new);
 
-            Assert.AreEqual(windowScreenA.Bounds, screenA_LeftHalf);
-            Assert.AreEqual(windowScreenA_new.Bounds, screenA_RightHalf);
+            Assert.AreEqual(screenA_LeftHalf, ((Window)m_screenA.Children()[0].Children()[0]).Bounds);
+            Assert.AreEqual(screenA_RightHalf, ((Window)m_screenA.Children()[0].Children()[1]).Bounds);
 
-            Assert.AreEqual(windowScreenB.Bounds, m_screenB.Bounds);
+            Assert.AreEqual(m_screenB.Bounds, ((Window)m_screenB.Children()[0].Children()[0]).Bounds);
+        }
+
+        [TestMethod]
+        public void inserting_new_window_triggers_ISetApplicationPosition_on_bounds_update()
+        {
+            MockWindowIdentity windowScreenA = new MockWindowIdentity(1);
+
+            m_windowProvider.InsertWindow(windowScreenA);
+
+            Assert.AreEqual(m_windowBoundsSetter.TheIdentitiesAndBoundsIHaveSet[windowScreenA], m_screenA.Bounds);
         }
     }
 }

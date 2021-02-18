@@ -1,10 +1,11 @@
 ﻿namespace Kaboom.Model
 {
-    public delegate void WindowCallback(Window window);
+    public delegate void NewWindowCallback(IWindowIdentity identity, Abstract.Rectangle bounds);
+    public delegate void RemoveWindowCallback(IWindowIdentity identity);
 
     public interface IProvideWindows
     {
-        void SetNewWindowCallback(WindowCallback callback);
-        void SetRemoveWindowCallback(WindowCallback callback);
+        void SetNewWindowCallback(NewWindowCallback callback);
+        void SetRemoveWindowCallback(RemoveWindowCallback callback);
     }
 }

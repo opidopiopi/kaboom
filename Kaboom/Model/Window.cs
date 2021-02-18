@@ -9,17 +9,23 @@ namespace Kaboom.Model
         private Rectangle m_bounds;
         private IWindowIdentity m_identity;
         private ITreeNode m_parent;
+        private ISetWindowBounds m_windowBoundsSetter;
 
-        public Window(IWindowIdentity identity, Rectangle bounds)
+        public Window(IWindowIdentity identity, Rectangle bounds, ISetWindowBounds windowBoundsSetter)
         {
             m_identity = identity;
             m_bounds = bounds;
+            m_windowBoundsSetter = windowBoundsSetter;
         }
 
         public Rectangle Bounds
         {
             get => m_bounds;
-            set => m_bounds = value;
+            set
+            {
+                m_bounds = value;
+                m_windowBoundsSetter.SetBoundsOfWindowWithIdentity(m_identity, Bounds);
+            }
         }
 
         public void Insert(ITreeNode child)
@@ -29,7 +35,7 @@ namespace Kaboom.Model
 
         public bool RemoveAndReturnSuccess(ITreeNode child)
         {
-            throw new System.NotImplementedException();
+            return false;   //has no children so we can't remove any
         }
 
         public void SetParent(ITreeNode parent)
@@ -45,6 +51,11 @@ namespace Kaboom.Model
         public List<ITreeNode> Children()
         {
             return new List<ITreeNode>();
+        }
+
+        public IWindowIdentity Identity()
+        {
+            return m_identity;
         }
     }
 }

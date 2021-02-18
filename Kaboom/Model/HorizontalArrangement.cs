@@ -12,6 +12,8 @@ namespace Kaboom.Model
 
         protected override void UpdateBoundsOfChildren()
         {
+            if (m_children.Count == 0) return;
+
             List<IHaveBounds> children = m_children.Cast<IHaveBounds>().ToList();   //I don't like
 
             int numberOfChildren = children.Count();
