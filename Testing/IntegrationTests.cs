@@ -6,7 +6,7 @@ using Testing.Mocks;
 namespace Testing
 {
     [TestClass]
-    public class TreeTest
+    public class IntegrationTests
     {
         Screen m_screenA;
         Screen m_screenB;
