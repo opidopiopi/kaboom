@@ -23,11 +23,14 @@ namespace Testing
             m_screenA = new Screen(new Kaboom.Abstract.Rectangle(0, 0, 1920, 1080));
             m_screenB = new Screen(new Kaboom.Abstract.Rectangle(0, 1080, 1920, 1080));
 
-            m_screenProvider = new MockScreenProvider(new List<Screen>(){ m_screenA, m_screenB });
+            m_screenProvider = new MockScreenProvider(new List<Kaboom.Abstract.Rectangle>(){ m_screenA.Bounds, m_screenB.Bounds });
             m_windowProvider = new MockWindowProvider();
             m_windowBoundsSetter = new MockWindowBoundsSetter();
 
             m_windowManager = new TilingWindowManager(m_windowProvider, m_screenProvider, m_windowBoundsSetter);
+
+            m_screenA = (Screen)m_windowManager.GetWorkspace().Children()[0];
+            m_screenB = (Screen)m_windowManager.GetWorkspace().Children()[1];
         }
 
 

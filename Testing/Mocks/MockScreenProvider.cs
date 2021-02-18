@@ -1,18 +1,19 @@
-﻿using Kaboom.Model;
+﻿using Kaboom.Abstract;
+using Kaboom.Model;
 using System.Collections.Generic;
 
 namespace Testing.Mocks
 {
     public class MockScreenProvider : IProvideScreens
     {
-        private List<Screen> m_screens;
+        private List<Rectangle> m_screens;
 
-        public MockScreenProvider(List<Screen> screens)
+        public MockScreenProvider(List<Rectangle> screens)
         {
             m_screens = screens;
         }
 
-        public List<Screen> GetScreens()
+        public List<Rectangle> GetScreenBounds()
         {
             return m_screens;
         }

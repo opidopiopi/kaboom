@@ -11,7 +11,7 @@ namespace Kaboom.Model
 
         public Workspace(IProvideScreens screenProvider)
         {
-            screenProvider.GetScreens().ForEach(Insert);
+            screenProvider.GetScreenBounds().ForEach(bounds => Insert(new Screen(bounds)));
         }
 
         public void Insert(Screen screen)

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Kaboom.Abstract;
+using System.Collections.Generic;
 
 namespace Kaboom.Model
 {
     public interface IProvideScreens
     {
-        List<Screen> GetScreens();
+        List<Rectangle> GetScreenBounds();
     }
 }
