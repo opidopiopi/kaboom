@@ -11,6 +11,10 @@ namespace Kaboom.Model
         private Dictionary<IWindowIdentity, Window> m_windows = new Dictionary<IWindowIdentity, Window>();
         private ISetWindowBounds m_windowBoundsSetter;
 
+#nullable enable
+        private Window? m_currentlySelected;
+#nullable disable
+
         public Workspace(IProvideScreens screenProvider, ISetWindowBounds windowBoundsSetter)
         {
             m_windowBoundsSetter = windowBoundsSetter;
@@ -36,6 +40,12 @@ namespace Kaboom.Model
             }
 
             Window newWindow = new Window(identity, bounds, m_windowBoundsSetter);
+
+            if(m_currentlySelected == null)
+            {
+                m_currentlySelected = newWindow;
+            }
+
             m_windows[identity] = newWindow;
             InsertWindowIntoTree(newWindow);
         }
@@ -45,6 +55,18 @@ namespace Kaboom.Model
             if (!m_windows.ContainsKey(identity))
             {
                 return;
+            }
+
+            if (m_currentlySelected == m_windows[identity])
+            {
+                if(m_windows.Count > 0)
+                {
+                    m_currentlySelected = m_windows.Values.First<Window>();
+                }
+                else
+                {
+                    m_currentlySelected = null;
+                }
             }
 
             RemoveWindowFromTree(m_windows[identity]);
@@ -88,6 +110,13 @@ namespace Kaboom.Model
         {
             return m_screens.Cast<ITreeNode>().ToList();
         }
+
+#nullable enable
+        public Window? CurrentlySelectedWindow()
+        {
+            return m_currentlySelected;
+        }
+#nullable disable
 
 
         //not very happy about the fact that we need to implement these methods
