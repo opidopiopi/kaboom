@@ -5,23 +5,53 @@ using System.Linq;
 
 namespace Kaboom.Model
 {
-    public class Workspace : ITreeNode
+    public class Workspace : ITreeNode, IAcceptWindows
     {
         private List<Screen> m_screens = new List<Screen>();
+        private Dictionary<IWindowIdentity, Window> m_windows = new Dictionary<IWindowIdentity, Window>();
+        private ISetWindowBounds m_windowBoundsSetter;
 
-        public Workspace(IProvideScreens screenProvider)
+        public Workspace(IProvideScreens screenProvider, ISetWindowBounds windowBoundsSetter)
         {
-            screenProvider.GetScreenBounds().ForEach(bounds => Insert(new Screen(bounds)));
+            m_windowBoundsSetter = windowBoundsSetter;
+
+            screenProvider.GetScreenBounds().ForEach(CreateAndInsertScreenFromBounds);
         }
 
-        public void Insert(Screen screen)
+        private void CreateAndInsertScreenFromBounds(Rectangle bounds)
         {
-            m_screens.Add(screen);
-            screen.Insert(new HorizontalArrangement(new Rectangle(0, 0, 1, 1)));
-            screen.SetParent(this);
+            Screen newScreen = new Screen(bounds);
+
+            newScreen.Insert(new HorizontalArrangement());//replace with configurable choice
+            newScreen.SetParent(this);
+
+            m_screens.Add(newScreen);
         }
 
-        public void Insert(Window window)
+        public void InsertWindow(IWindowIdentity identity, Rectangle bounds)
+        {
+            if (m_windows.ContainsKey(identity))
+            {
+                return;
+            }
+
+            Window newWindow = new Window(identity, bounds, m_windowBoundsSetter);
+            m_windows[identity] = newWindow;
+            InsertWindowIntoTree(newWindow);
+        }
+
+        public void RemoveWindow(IWindowIdentity identity)
+        {
+            if (!m_windows.ContainsKey(identity))
+            {
+                return;
+            }
+
+            RemoveWindowFromTree(m_windows[identity]);
+            m_windows.Remove(identity);
+        }
+
+        private void InsertWindowIntoTree(Window window)
         {
             foreach (var screen in m_screens)
             {
@@ -42,22 +72,33 @@ namespace Kaboom.Model
             }
         }
 
-        public void Insert(ITreeNode child)
+        private void RemoveWindowFromTree(ITreeNode child)
         {
-            throw new InvalidChildForThisNode($"Unable to insert child of type {child.GetType()} into Workspace. Valid types are Screen and Window!");
-        }
-
-        public bool RemoveAndReturnSuccess(ITreeNode child)
-        {
-            //we assume that screens will not be removed since it is not currently a use case
+            //we assume that screens will not be removed since it is currently not a use case
             foreach (var screen in m_screens)
             {
                 if (screen.RemoveAndReturnSuccess(child))
                 {
-                    return true;
+                    return;
                 }
             }
-            return false;
+        }
+
+        public List<ITreeNode> Children()
+        {
+            return m_screens.Cast<ITreeNode>().ToList();
+        }
+
+
+        //not very happy about the fact that we need to implement these methods
+        public void Insert(ITreeNode child)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool RemoveAndReturnSuccess(ITreeNode child)
+        {
+            throw new System.NotImplementedException();
         }
 
         public void SetParent(ITreeNode parent)
@@ -68,11 +109,6 @@ namespace Kaboom.Model
         public ITreeNode GetParent()
         {
             throw new System.NotImplementedException();
-        }
-
-        public List<ITreeNode> Children()
-        {
-            return m_screens.Cast<ITreeNode>().ToList();
         }
     }
 }

@@ -9,11 +9,6 @@ namespace Kaboom.Model
         private ITreeNode m_parent;
         protected List<ITreeNode> m_children = new List<ITreeNode>();
 
-        public WindowArrangement(Rectangle bounds)
-        {
-            m_bounds = bounds;
-        }
-
         public Rectangle Bounds
         {
             get => m_bounds;

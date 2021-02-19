@@ -14,7 +14,8 @@ namespace Testing
         public void SetUp()
         {
             MockScreenProvider screenProvider = new MockScreenProvider(new List<Kaboom.Abstract.Rectangle>() { new Kaboom.Abstract.Rectangle(0, 0, 1080, 1920) });
-            m_workspace = new Workspace(screenProvider);
+            MockWindowBoundsSetter windowBoundsSetter = new MockWindowBoundsSetter();
+            m_workspace = new Workspace(screenProvider, windowBoundsSetter);
         }
 
         [TestMethod]

@@ -52,6 +52,7 @@
     <Compile Include="Model\Exceptions\NoScreensInWorkspace.cs" />
     <Compile Include="Model\Exceptions\ParentMustBeWorkspace.cs" />
     <Compile Include="Model\HorizontalArrangement.cs" />
+    <Compile Include="Model\IAcceptWindows.cs" />
     <Compile Include="Model\IProvideScreens.cs" />
     <Compile Include="Model\IProvideWindows.cs" />
     <Compile Include="Model\ISetWindowBounds.cs" />

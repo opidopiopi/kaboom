@@ -11,7 +11,8 @@ namespace Testing
         [TestInitialize]
         public void SetUp()
         {
-            m_arrangement = new MockArrangement(new Kaboom.Abstract.Rectangle(0, 0, 500, 500));
+            m_arrangement = new MockArrangement();
+            m_arrangement.Bounds = new Kaboom.Abstract.Rectangle(0, 0, 500, 500);
         }
 
         [TestMethod]
@@ -59,7 +60,8 @@ namespace Testing
         [TestMethod]
         public void removing_child_of_child_()
         {
-            MockArrangement childArrangement = new MockArrangement(new Kaboom.Abstract.Rectangle(5, 5, 55, 55));
+            MockArrangement childArrangement = new MockArrangement();
+            childArrangement.Bounds = new Kaboom.Abstract.Rectangle(5, 5, 55, 55);
             MockTreeNodeWithBounds childNode = new MockTreeNodeWithBounds();
 
             m_arrangement.Insert(childArrangement);

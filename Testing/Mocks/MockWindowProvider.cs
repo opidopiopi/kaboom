@@ -1,35 +1,30 @@
-﻿using Kaboom.Model;
+﻿using Kaboom.Abstract;
+using Kaboom.Model;
 
 namespace Testing.Mocks
 {
     public class MockWindowProvider : IProvideWindows
     {
-        private NewWindowCallback m_newWindowCallback;
-        private RemoveWindowCallback m_removeWindowCallback;
+        private IAcceptWindows m_windowAcceptor;
 
-        public void SetNewWindowCallback(NewWindowCallback callback)
+        public void SetWindowAcceptor(IAcceptWindows windowAcceptor)
         {
-            m_newWindowCallback = callback;
-        }
-
-        public void SetRemoveWindowCallback(RemoveWindowCallback callback)
-        {
-            m_removeWindowCallback = callback;
+            m_windowAcceptor = windowAcceptor;
         }
 
         public void InsertWindow(IWindowIdentity windowIdentity)
         {
-            m_newWindowCallback(windowIdentity, new Kaboom.Abstract.Rectangle(0, 0, 1, 1));
+            m_windowAcceptor.InsertWindow(windowIdentity, new Rectangle(0, 0, 1, 1));
         }
 
-        public void InsertWindow(IWindowIdentity windowIdentity, Kaboom.Abstract.Rectangle windowBounds)
+        public void InsertWindow(IWindowIdentity windowIdentity, Rectangle windowBounds)
         {
-            m_newWindowCallback(windowIdentity, windowBounds);
+            m_windowAcceptor.InsertWindow(windowIdentity, windowBounds);
         }
 
         public void RemoveWindow(IWindowIdentity windowIdentity)
         {
-            m_removeWindowCallback(windowIdentity);
+            m_windowAcceptor.RemoveWindow(windowIdentity);
         }
     }
 }

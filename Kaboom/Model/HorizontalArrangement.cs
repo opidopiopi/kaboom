@@ -6,10 +6,6 @@ namespace Kaboom.Model
 {
     public class HorizontalArrangement : WindowArrangement
     {
-        public HorizontalArrangement(Rectangle bounds) : base(bounds)
-        {
-        }
-
         protected override void UpdateBoundsOfChildren()
         {
             if (m_children.Count == 0) return;
