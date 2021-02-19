@@ -1,4 +1,5 @@
 ﻿using Kaboom.Model;
+using System;
 
 namespace Testing.Mocks
 {
@@ -9,6 +10,17 @@ namespace Testing.Mocks
         public MockWindowIdentity(int identity)
         {
             m_identity = identity;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MockWindowIdentity identity &&
+                   m_identity == identity.m_identity;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(m_identity);
         }
     }
 }

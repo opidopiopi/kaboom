@@ -24,6 +24,13 @@ namespace Testing
         [TestMethod]
         public void instantiating_workspace_creates_new_screen_with_root_arrangement()
         {
+            //arrange
+            //SetUp()
+
+            //act
+            //new Workspace(...)
+
+            //assert
             Assert.AreEqual(typeof(Screen), m_workspace.Children()[0].GetType());
             Assert.AreEqual(typeof(WindowArrangement), m_workspace.Children()[0].Children()[0].GetType().BaseType);
         }

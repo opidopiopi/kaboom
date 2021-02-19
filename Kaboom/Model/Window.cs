@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace Kaboom.Model
 {
-    public class Window : IHaveBounds, ITreeNode
+    public class Window : IHaveBounds, ITreeNode, ICanBeMoved
     {
         private Rectangle m_bounds;
         private IWindowIdentity m_identity;
-        private ITreeNode m_parent;
+        private WindowArrangement m_parent;
         private ISetWindowBounds m_windowBoundsSetter;
 
         public Window(IWindowIdentity identity, Rectangle bounds, ISetWindowBounds windowBoundsSetter)
@@ -40,7 +40,7 @@ namespace Kaboom.Model
 
         public void SetParent(ITreeNode parent)
         {
-            m_parent = parent;
+            m_parent = (WindowArrangement) parent;
         }
 
         public ITreeNode GetParent()
@@ -56,6 +56,31 @@ namespace Kaboom.Model
         public IWindowIdentity Identity()
         {
             return m_identity;
+        }
+
+        public void MoveUp()
+        {
+            m_parent.MoveChildUp(this, this);
+        }
+
+        public void MoveDown()
+        {
+            m_parent.MoveChildDown(this, this);
+        }
+
+        public void MoveLeft()
+        {
+            m_parent.MoveChildLeft(this, this);
+        }
+
+        public void MoveRight()
+        {
+            m_parent.MoveChildRight(this, this);
+        }
+
+        public bool IsLeaf()
+        {
+            return true;
         }
     }
 }

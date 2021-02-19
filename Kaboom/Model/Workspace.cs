@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Kaboom.Model
 {
-    public class Workspace : ITreeNode, IAcceptWindows
+    public class Workspace : ITreeNode, IAcceptWindows, ICanMoveMyChildren
     {
         private List<Screen> m_screens = new List<Screen>();
         private Dictionary<IWindowIdentity, Window> m_windows = new Dictionary<IWindowIdentity, Window>();
@@ -138,6 +138,39 @@ namespace Kaboom.Model
         public ITreeNode GetParent()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void MoveChildUp(ITreeNode child, ITreeNode caller)
+        {
+            int index = m_screens.IndexOf((Screen) caller);
+
+            m_screens[(index - 1 + m_screens.Count) % m_screens.Count].Insert(child);
+        }
+
+        public void MoveChildDown(ITreeNode child, ITreeNode caller)
+        {
+            int index = m_screens.IndexOf((Screen)caller);
+
+            m_screens[(index + 1 + m_screens.Count) % m_screens.Count].Insert(child);
+        }
+
+        public void MoveChildLeft(ITreeNode child, ITreeNode caller)
+        {
+            int index = m_screens.IndexOf((Screen)caller);
+
+            m_screens[(index - 1 + m_screens.Count) % m_screens.Count].Insert(child);
+        }
+
+        public void MoveChildRight(ITreeNode child, ITreeNode caller)
+        {
+            int index = m_screens.IndexOf((Screen)caller);
+
+            m_screens[(index + 1 + m_screens.Count) % m_screens.Count].Insert(child);
+        }
+
+        public bool IsLeaf()
+        {
+            return false;
         }
     }
 }

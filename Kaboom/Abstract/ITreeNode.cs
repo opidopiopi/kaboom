@@ -11,5 +11,7 @@ namespace Kaboom.Abstract
         ITreeNode GetParent();
 
         List<ITreeNode> Children();
+
+        bool IsLeaf();
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Kaboom.Model
 {
-    public class Screen : IHaveBounds, ITreeNode
+    public class Screen : IHaveBounds, ITreeNode, ICanMoveMyChildren
     {
         private Rectangle m_bounds;
         private Workspace m_workspace;
@@ -35,14 +35,9 @@ namespace Kaboom.Model
             }
         }
 
-        public void Insert(Window window)
-        {
-            m_rootArrangement.Insert(window);
-        }
-
         public void Insert(ITreeNode child)
         {
-            throw new System.NotImplementedException();
+            m_rootArrangement.Insert(child);
         }
 
         public bool RemoveAndReturnSuccess(ITreeNode child)
@@ -73,6 +68,31 @@ namespace Kaboom.Model
         public List<ITreeNode> Children()
         {
             return new List<ITreeNode>() { m_rootArrangement };
+        }
+
+        public virtual void MoveChildUp(ITreeNode child, ITreeNode caller)
+        {
+            m_workspace.MoveChildUp(child, this);
+        }
+
+        public virtual void MoveChildDown(ITreeNode child, ITreeNode caller)
+        {
+            m_workspace.MoveChildDown(child, this);
+        }
+
+        public virtual void MoveChildLeft(ITreeNode child, ITreeNode caller)
+        {
+            m_workspace.MoveChildLeft(child, this);
+        }
+
+        public virtual void MoveChildRight(ITreeNode child, ITreeNode caller)
+        {
+            m_workspace.MoveChildRight(child, this);
+        }
+
+        public bool IsLeaf()
+        {
+            return false;
         }
     }
 }

@@ -8,6 +8,12 @@ namespace Testing.Mocks
         private List<ITreeNode> m_children = new List<ITreeNode>();
         private ITreeNode m_parent;
         private Rectangle m_bounds;
+        private bool m_isLeaf;
+
+        public MockTreeNodeWithBounds(bool isLeaf = true)
+        {
+            m_isLeaf = isLeaf;
+        }
 
         public Rectangle Bounds
         {
@@ -28,6 +34,11 @@ namespace Testing.Mocks
         public void Insert(ITreeNode child)
         {
             m_children.Add(child);
+        }
+
+        public bool IsLeaf()
+        {
+            return m_isLeaf;
         }
 
         public bool RemoveAndReturnSuccess(ITreeNode child)
