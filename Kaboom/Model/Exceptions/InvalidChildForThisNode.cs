@@ -2,7 +2,7 @@
 
 namespace Kaboom.Model.Exceptions
 {
-    class InvalidChildForThisNode : Exception
+    public class InvalidChildForThisNode : Exception
     {
         public InvalidChildForThisNode()
         {

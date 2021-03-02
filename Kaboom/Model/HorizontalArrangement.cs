@@ -61,7 +61,7 @@ namespace Kaboom.Model
                 }
             }
 
-            base.MoveChildLeft(child, this);
+            base.MoveChildLeft(child, child);
         }
 
         public override void MoveChildRight(ITreeNode child, ITreeNode caller)
@@ -103,7 +103,7 @@ namespace Kaboom.Model
                     return;
                 }
             }
-            base.MoveChildRight(child, this);
+            base.MoveChildRight(child, child);
         }
     }
 }

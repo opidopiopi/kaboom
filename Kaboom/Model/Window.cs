@@ -82,5 +82,16 @@ namespace Kaboom.Model
         {
             return true;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Window window &&
+                   EqualityComparer<IWindowIdentity>.Default.Equals(m_identity, window.m_identity);
+        }
+
+        public override int GetHashCode()
+        {
+            return -2014730893 + EqualityComparer<IWindowIdentity>.Default.GetHashCode(m_identity);
+        }
     }
 }
