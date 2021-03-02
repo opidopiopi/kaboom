@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaboom", "Kaboom\Kaboom.csproj", "{FC346941-ED7B-48F7-B020-46C814994D32}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing", "Testing\Testing.csproj", "{01DE152B-ADAD-443C-9E1F-DE2D80471BEF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaboom.Testing", "Testing\Kaboom.Testing.csproj", "{01DE152B-ADAD-443C-9E1F-DE2D80471BEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaboom.Abstraction", "Abstraction\Kaboom.Abstraction.csproj", "{FA665282-FE02-4BD2-A083-F1DC1ADE8929}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaboom.Domain", "Domain\Kaboom.Domain.csproj", "{A269CA7C-9543-48AD-A9F1-2DAA19D749D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaboom.Application", "Application\Kaboom.Application.csproj", "{CC939290-3BD8-4F51-8830-506439086D69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kaboom.Adapters", "Adapters\Kaboom.Adapters.csproj", "{C397DFF0-AA98-4584-80A6-4B10F49E3299}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{01DE152B-ADAD-443C-9E1F-DE2D80471BEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01DE152B-ADAD-443C-9E1F-DE2D80471BEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01DE152B-ADAD-443C-9E1F-DE2D80471BEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA665282-FE02-4BD2-A083-F1DC1ADE8929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA665282-FE02-4BD2-A083-F1DC1ADE8929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA665282-FE02-4BD2-A083-F1DC1ADE8929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA665282-FE02-4BD2-A083-F1DC1ADE8929}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A269CA7C-9543-48AD-A9F1-2DAA19D749D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A269CA7C-9543-48AD-A9F1-2DAA19D749D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A269CA7C-9543-48AD-A9F1-2DAA19D749D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A269CA7C-9543-48AD-A9F1-2DAA19D749D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC939290-3BD8-4F51-8830-506439086D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC939290-3BD8-4F51-8830-506439086D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC939290-3BD8-4F51-8830-506439086D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC939290-3BD8-4F51-8830-506439086D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

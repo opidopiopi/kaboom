@@ -14,7 +14,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kaboom\Kaboom.csproj" />
+    <ProjectReference Include="..\Abstraction\Kaboom.Abstraction.csproj" />
+    <ProjectReference Include="..\Adapters\Kaboom.Adapters.csproj" />
+    <ProjectReference Include="..\Application\Kaboom.Application.csproj" />
+    <ProjectReference Include="..\Domain\Kaboom.Domain.csproj" />
   </ItemGroup>
 
 </Project>

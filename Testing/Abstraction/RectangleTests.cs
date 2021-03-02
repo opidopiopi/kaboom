@@ -1,8 +1,8 @@
-using Kaboom.Abstract;
-using Kaboom.Abstract.Exceptions;
+using Kaboom.Abstraction;
+using Kaboom.Abstraction.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Testing
+namespace Kaboom.Testing.Abstraction
 {
     [TestClass]
     public class RectangleTests
@@ -74,12 +74,12 @@ namespace Testing
 
                     foreach (var isOutside in theseAreOutside)
                     {
-                        Assert.IsFalse(main.IsOtherRectangleInside(isOutside), $"This rectangle: {isOutside} should be outside of this: {main}");
+                        Assert.IsFalse(main.AreCoordinatesInside(isOutside.X, isOutside.Y), $"This rectangle: {isOutside} should be outside of this: {main}");
                     }
 
                     foreach (var isInside in theseAreInside)
                     {
-                        Assert.IsTrue(main.IsOtherRectangleInside(isInside), $"This rectangle: {isInside} should be inside of this: {main}");
+                        Assert.IsTrue(main.AreCoordinatesInside(isInside.X, isInside.Y), $"This rectangle: {isInside} should be inside of this: {main}");
                     }
                 }
             }

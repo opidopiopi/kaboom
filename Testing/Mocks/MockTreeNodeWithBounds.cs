@@ -1,12 +1,11 @@
-﻿using Kaboom.Abstract;
+﻿using Kaboom.Abstraction;
 using System.Collections.Generic;
 
-namespace Testing.Mocks
+namespace Kaboom.Testing.Mocks
 {
     public class MockTreeNodeWithBounds : ITreeNode, IHaveBounds
     {
         private List<ITreeNode> m_children = new List<ITreeNode>();
-        private ITreeNode m_parent;
         private Rectangle m_bounds;
         private bool m_isLeaf;
 
@@ -26,12 +25,12 @@ namespace Testing.Mocks
             return m_children;
         }
 
-        public ITreeNode GetParent()
+        public void InsertAsFirst(ITreeNode child)
         {
-            return m_parent;
+            m_children.Insert(0, child);
         }
 
-        public void Insert(ITreeNode child)
+        public void InsertAsLast(ITreeNode child)
         {
             m_children.Add(child);
         }
@@ -41,14 +40,9 @@ namespace Testing.Mocks
             return m_isLeaf;
         }
 
-        public bool RemoveAndReturnSuccess(ITreeNode child)
+        public void Remove(ITreeNode child)
         {
-            return m_children.Remove(child);
-        }
-
-        public void SetParent(ITreeNode parent)
-        {
-            m_parent = parent;
+            m_children.Remove(child);
         }
     }
 }
