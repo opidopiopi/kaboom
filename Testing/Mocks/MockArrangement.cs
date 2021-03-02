@@ -23,5 +23,15 @@ namespace Kaboom.Testing.Mocks
         {
             return m_children;
         }
+
+        public override bool CanIMoveChild(Axis axis, Direction direction, ITreeNode child)
+        {
+            return true;
+        }
+
+        public override void MoveChild(Axis axis, Direction direction, ITreeNode child)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

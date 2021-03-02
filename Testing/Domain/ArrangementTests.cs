@@ -67,5 +67,23 @@ namespace Kaboom.Testing.Domain
             //Assert
             Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
         }
+
+
+        [TestMethod]
+        public void arrangement_children_can_be_removed()
+        {
+            //Arrange
+            List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
+            children.ForEach(child => m_arrangement.InsertAsLast(child));
+
+            //Act
+            m_arrangement.Remove(children[2]);
+
+            //Assert
+            Assert.IsFalse(m_arrangement.Children().Contains(children[2]));
+
+            children.RemoveAt(2);
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+        }
     }
 }
