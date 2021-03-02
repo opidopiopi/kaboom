@@ -76,5 +76,29 @@ namespace Testing
             Assert.IsTrue(m_arrangement.RemoveAndReturnSuccess(childNode));
             Assert.IsFalse(m_arrangement.Children()[0].Children().Contains(childNode));
         }
+
+        [TestMethod]
+        public void arrangement_is_no_leaf()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+            Assert.IsFalse(m_arrangement.IsLeaf());
+        }
+
+        [TestMethod]
+        public void arrangement_can_set_parent()
+        {
+            //Arrange
+            MockArrangement parent = new MockArrangement();
+
+            //Act
+            m_arrangement.SetParent(parent);
+
+            //Assert
+            Assert.AreEqual(parent, m_arrangement.GetParent());
+        }
     }
 }

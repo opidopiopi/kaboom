@@ -22,5 +22,10 @@ namespace Testing.Mocks
         {
             return HashCode.Combine(m_identity);
         }
+
+        public override string ToString()
+        {
+            return $"MockWindowIdentity({m_identity})";
+        }
     }
 }

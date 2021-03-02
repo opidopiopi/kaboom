@@ -1,4 +1,5 @@
 ﻿using Kaboom.Abstract;
+using System;
 using System.Collections.Generic;
 
 namespace Kaboom.Model
@@ -63,7 +64,7 @@ namespace Kaboom.Model
         public virtual void MoveChildUp(ITreeNode child, ITreeNode caller)
         {
             //no call to RemoveAndReturnSuccess because child cannot be child of a child
-            m_children.Remove(child);
+            if (child == caller) m_children.Remove(child);
             ((ICanMoveMyChildren) m_parent).MoveChildUp(child, this);
             UpdateBoundsOfChildren();
         }
@@ -71,7 +72,7 @@ namespace Kaboom.Model
         public virtual void MoveChildDown(ITreeNode child, ITreeNode caller)
         {
             //no call to RemoveAndReturnSuccess because child cannot be child of a child
-            m_children.Remove(child);
+            if (child == caller) m_children.Remove(child);
             ((ICanMoveMyChildren)m_parent).MoveChildDown(child, this);
             UpdateBoundsOfChildren();
         }
@@ -79,7 +80,7 @@ namespace Kaboom.Model
         public virtual void MoveChildLeft(ITreeNode child, ITreeNode caller)
         {
             //no call to RemoveAndReturnSuccess because child cannot be child of a child
-            m_children.Remove(child);
+            if (child == caller) m_children.Remove(child);
             ((ICanMoveMyChildren)m_parent).MoveChildLeft(child, this);
             UpdateBoundsOfChildren();
         }
@@ -87,7 +88,7 @@ namespace Kaboom.Model
         public virtual void MoveChildRight(ITreeNode child, ITreeNode caller)
         {
             //no call to RemoveAndReturnSuccess because child cannot be child of a child
-            m_children.Remove(child);
+            if(child == caller) m_children.Remove(child);
             ((ICanMoveMyChildren)m_parent).MoveChildRight(child, this);
             UpdateBoundsOfChildren();
         }
