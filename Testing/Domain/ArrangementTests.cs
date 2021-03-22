@@ -14,7 +14,7 @@ namespace Kaboom.Testing.Domain
         [TestInitialize]
         public void SetUp()
         {
-            m_arrangement = new MockArrangement(new Axis[] { });
+            m_arrangement = new MockArrangement(new MockTreeNodeRepository(), new Axis[] { });
         }
 
         [TestMethod]
@@ -48,11 +48,11 @@ namespace Kaboom.Testing.Domain
             List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
 
             //Act
-            children.ForEach(child => m_arrangement.InsertAsFirst(child));
+            children.ForEach(child => m_arrangement.InsertAsFirst(child.ID));
             children.Reverse();
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children.Select(child => child.ID)));
         }
 
         [TestMethod]
@@ -62,10 +62,10 @@ namespace Kaboom.Testing.Domain
             List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
 
             //Act
-            children.ForEach(child => m_arrangement.InsertAsLast(child));
+            children.ForEach(child => m_arrangement.InsertAsLast(child.ID));
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children.Select(child => child.ID)));
         }
 
 
@@ -74,16 +74,31 @@ namespace Kaboom.Testing.Domain
         {
             //Arrange
             List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
-            children.ForEach(child => m_arrangement.InsertAsLast(child));
+            children.ForEach(child => m_arrangement.InsertAsLast(child.ID));
 
             //Act
-            m_arrangement.Remove(children[2]);
+            m_arrangement.Remove(children[2].ID);
 
             //Assert
-            Assert.IsFalse(m_arrangement.Children().Contains(children[2]));
+            Assert.IsFalse(m_arrangement.Children.Contains(children[2].ID));
 
             children.RemoveAt(2);
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children.Select(child => child.ID)));
+        }
+
+        [TestMethod]
+        public void arrangement_can_get_first_and_last_child()
+        {
+            //Arrange
+            int num = 5;
+            List<MockTreeNodeWithBounds> children = Enumerable.Range(0, num).Select(i => new MockTreeNodeWithBounds()).ToList();
+            children.ForEach(child => m_arrangement.InsertAsLast(child.ID));
+
+            //Act
+
+            //Assert
+            Assert.AreEqual(children[0].ID, m_arrangement.FirstChild());
+            Assert.AreEqual(children[num -1].ID, m_arrangement.LastChild());
         }
     }
 }

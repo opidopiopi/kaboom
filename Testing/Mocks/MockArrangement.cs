@@ -1,6 +1,4 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.Arrangements;
-using System.Collections.Generic;
+﻿using Kaboom.Domain.WindowTree.Arrangements;
 using System.Linq;
 
 namespace Kaboom.Testing.Mocks
@@ -9,7 +7,8 @@ namespace Kaboom.Testing.Mocks
     {
         private Axis[] m_supportedAxes;
 
-        public MockArrangement(Axis[] axes)
+        public MockArrangement(ITreeNodeRepository treeNodeRepository, Axis[] axes)
+            : base(treeNodeRepository)
         {
             this.m_supportedAxes = axes;
         }
@@ -19,17 +18,12 @@ namespace Kaboom.Testing.Mocks
             return m_supportedAxes.ToList().Contains(axis);
         }
 
-        public List<ITreeNode> Children()
-        {
-            return m_children;
-        }
-
-        public override bool CanIMoveChild(Axis axis, Direction direction, ITreeNode child)
+        public override bool CanIMoveChild(Axis axis, Direction direction, TreeNodeID child)
         {
             return true;
         }
 
-        public override void MoveChild(Axis axis, Direction direction, ITreeNode child)
+        public override void MoveChild(Axis axis, Direction direction, TreeNodeID child)
         {
             throw new System.NotImplementedException();
         }
