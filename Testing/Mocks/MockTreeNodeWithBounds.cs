@@ -1,17 +1,13 @@
 ﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.Arrangements;
 using System.Collections.Generic;
 
 namespace Kaboom.Testing.Mocks
 {
     public class MockTreeNodeWithBounds : ITreeNode, IHaveBounds
     {
-        private List<TreeNodeID> m_children = new List<TreeNodeID>();
+        private List<ITreeNode> m_children = new List<ITreeNode>();
         private Rectangle m_bounds;
         private bool m_isLeaf;
-
-        public TreeNodeID ID { get; } = new TreeNodeID();
-        List<TreeNodeID> ITreeNode.Children => m_children;
 
         public MockTreeNodeWithBounds(bool isLeaf = true)
         {
@@ -24,12 +20,17 @@ namespace Kaboom.Testing.Mocks
             set => m_bounds = value;
         }
 
-        public void InsertAsFirst(TreeNodeID child)
+        public List<ITreeNode> Children()
+        {
+            return m_children;
+        }
+
+        public void InsertAsFirst(ITreeNode child)
         {
             m_children.Insert(0, child);
         }
 
-        public void InsertAsLast(TreeNodeID child)
+        public void InsertAsLast(ITreeNode child)
         {
             m_children.Add(child);
         }
@@ -39,17 +40,7 @@ namespace Kaboom.Testing.Mocks
             return m_isLeaf;
         }
 
-        public TreeNodeID FirstChild()
-        {
-            return m_children.Count > 0 ? m_children[0] : null;
-        }
-
-        public TreeNodeID LastChild()
-        {
-            return m_children.Count > 0 ? m_children[m_children.Count - 1] : null;
-        }
-
-        public void Remove(TreeNodeID child)
+        public void Remove(ITreeNode child)
         {
             m_children.Remove(child);
         }

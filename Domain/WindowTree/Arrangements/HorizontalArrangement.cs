@@ -1,24 +1,21 @@
-﻿namespace Kaboom.Domain.WindowTree.Arrangements
+﻿using Kaboom.Abstraction;
+
+namespace Kaboom.Domain.WindowTree.Arrangements
 {
     public class HorizontalArrangement : Arrangement
     {
-        public HorizontalArrangement(ITreeNodeRepository treeNodeRepo) : base(treeNodeRepo)
+        public override bool CanIMoveChild(Axis axis, Direction direction, ITreeNode child)
         {
-
-        }
-
-        public override bool CanIMoveChild(Axis axis, Direction direction, TreeNodeID child)
-        {
-            if (!SupportsAxis(axis) || !Children.Contains(child))
+            if (!SupportsAxis(axis) || !m_children.Contains(child))
             {
                 return false;
             }
 
-            if (Children.IndexOf(child) == 0)
+            if (m_children.IndexOf(child) == 0)
             {
                 return direction == Direction.NEGATIVE;
             }
-            else if(Children.IndexOf(child) == Children.Count - 1)
+            else if(m_children.IndexOf(child) == m_children.Count - 1)
             {
                 return direction == Direction.POSITIVE;
             }
@@ -26,29 +23,28 @@
             return true;
         }
 
-        public override void MoveChild(Axis axis, Direction direction, TreeNodeID child)
+        public override void MoveChild(Axis axis, Direction direction, ITreeNode child)
         {
             AssertSupportsAxisAndNodeIsDirectChild(axis, direction, child);
 
-            int index = Children.IndexOf(child);
+            int index = m_children.IndexOf(child);
 
             int indexToBe = index + ((direction == Direction.POSITIVE) ? -1 : 1);
 
-            ITreeNode nodeAtIndexToBe = m_treeNodeRepo.Find(Children[indexToBe]);
-            if (nodeAtIndexToBe.IsLeaf())
+            if (m_children[indexToBe].IsLeaf())
             {
-                Children.RemoveAt(index);
-                Children.Insert(indexToBe, child);
+                m_children.RemoveAt(index);
+                m_children.Insert(indexToBe, child);
             }
             else
             {
                 if(direction == Direction.POSITIVE)
                 {
-                    nodeAtIndexToBe.InsertAsLast(child);
+                    m_children[indexToBe].InsertAsLast(child);
                 }
                 else
                 {
-                    nodeAtIndexToBe.InsertAsFirst(child);
+                    m_children[indexToBe].InsertAsFirst(child);
                 }
                 Remove(child);
             }
