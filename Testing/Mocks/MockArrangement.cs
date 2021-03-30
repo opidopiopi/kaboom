@@ -14,24 +14,19 @@ namespace Kaboom.Testing.Mocks
             this.m_supportedAxes = axes;
         }
 
+        public override void MoveChild(ITreeNode child, Direction direction)
+        {
+            
+        }
+
+        public override ITreeNode NeighbourOfChildInDirection(ITreeNode treeNode, Direction direction)
+        {
+            return null;
+        }
+
         public override bool SupportsAxis(Axis axis)
         {
             return m_supportedAxes.ToList().Contains(axis);
-        }
-
-        public List<ITreeNode> Children()
-        {
-            return m_children;
-        }
-
-        public override bool CanIMoveChild(Axis axis, Direction direction, ITreeNode child)
-        {
-            return true;
-        }
-
-        public override void MoveChild(Axis axis, Direction direction, ITreeNode child)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

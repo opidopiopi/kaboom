@@ -9,6 +9,9 @@ namespace Kaboom.Abstraction
         void InsertAsFirst(ITreeNode child);
         void InsertAsLast(ITreeNode child);
 
+        ITreeNode FirstChild();
+        ITreeNode LastChild();
+
         bool IsLeaf();
     }
 }

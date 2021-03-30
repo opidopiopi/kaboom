@@ -56,5 +56,15 @@ namespace Kaboom.Domain.WindowTree.Window
         {
             visitor.Visit(this);
         }
+
+        public ITreeNode FirstChild()
+        {
+            throw new System.Exception("Window has no childs");
+        }
+
+        public ITreeNode LastChild()
+        {
+            throw new System.Exception("Window has no childs");
+        }
     }
 }

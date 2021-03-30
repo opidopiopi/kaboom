@@ -59,7 +59,7 @@ namespace Kaboom.Testing.Domain
         }
 
         [TestMethod]
-        public void arrangement_children_can_only_be_moved_in_supported_axes()
+        public void arrangement_can_find_child_neighbour_in_supported_axis()
         {
             //Arrange
             MockTreeNodeWithBounds first = new MockTreeNodeWithBounds();
@@ -72,24 +72,24 @@ namespace Kaboom.Testing.Domain
 
             //Act
             //Assert
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, middle));
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, middle));
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(middle, Direction.Left));
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(middle, Direction.Right));
 
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.POSITIVE, middle));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.NEGATIVE, middle));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(middle, Direction.Up));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(middle, Direction.Down));
         }
 
         [TestMethod]
-        public void arrangement_node_can_only_be_moved_if_direct_child()
+        public void arrangement_can_find_neighbour_of_direct_child_only()
         {
             //Arrange
             MockTreeNodeWithBounds notAChild = new MockTreeNodeWithBounds();
 
             //Assert
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, notAChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.NEGATIVE, notAChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, notAChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.NEGATIVE, notAChild));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(notAChild, Direction.Left));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(notAChild, Direction.Right));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(notAChild, Direction.Up));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(notAChild, Direction.Down));
 
             //Arrange
             HorizontalArrangement childArrangement = new HorizontalArrangement();
@@ -98,39 +98,15 @@ namespace Kaboom.Testing.Domain
             m_arrangement.InsertAsFirst(childArrangement);
 
             //Assert
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, childsChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.NEGATIVE, childsChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, childsChild));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.Y, Direction.NEGATIVE, childsChild));
-        }
-
-        [TestMethod]
-        public void arrangement_node_can_only_be_moved_inside_arrangement()
-        {
-            //Arrange
-            MockTreeNodeWithBounds first = new MockTreeNodeWithBounds();
-            MockTreeNodeWithBounds middle = new MockTreeNodeWithBounds();
-            MockTreeNodeWithBounds last = new MockTreeNodeWithBounds();
-
-            m_arrangement.InsertAsFirst(first);
-            m_arrangement.InsertAsLast(middle);
-            m_arrangement.InsertAsLast(last);
-
-            //Act
-            //Assert
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, first));
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, first));
-            
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, middle));
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, middle));
-
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, last));
-            Assert.IsFalse(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, last));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild, Direction.Left));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild, Direction.Right));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild, Direction.Up));
+            Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild, Direction.Down));
         }
 
 
         [TestMethod]
-        public void arrangement_can_move_children_swapping_positive()
+        public void arrangement_can_move_children_swapping_left()
         {
             //Arrange
             SetUpChildrenAllLeafs();
@@ -138,17 +114,17 @@ namespace Kaboom.Testing.Domain
             var expected = new List<ITreeNode> { m_middle, m_first, m_last };
 
             //Act
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, m_middle));
-            m_arrangement.MoveChild(Axis.X, Direction.POSITIVE, m_middle);
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(m_middle, Direction.Left));
+            m_arrangement.MoveChild(m_middle, Direction.Left);
 
             //Assert
-            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
-            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
-            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+                $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+                $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
         }
 
         [TestMethod]
-        public void arrangement_can_move_children_swapping_negative()
+        public void arrangement_can_move_children_swapping_right()
         {
             //Arrange
             SetUpChildrenAllLeafs();
@@ -156,17 +132,17 @@ namespace Kaboom.Testing.Domain
             var expected = new List<ITreeNode> { m_first, m_last, m_middle };
 
             //Act
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, m_middle));
-            m_arrangement.MoveChild(Axis.X, Direction.NEGATIVE, m_middle);
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(m_middle, Direction.Right));
+            m_arrangement.MoveChild(m_middle, Direction.Right);
 
             //Assert
-            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
-            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
-            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+                $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+                $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
         }
 
         [TestMethod]
-        public void arrangement_can_move_children_insert_at_neighbour_positive()
+        public void arrangement_can_move_children_insert_at_neighbour_left()
         {
             //Arrange
             SetUpChildrenMiddleLeaf();
@@ -174,19 +150,18 @@ namespace Kaboom.Testing.Domain
             var expected = new List<ITreeNode> { m_first, m_last };
 
             //Act
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, m_middle));
-            m_arrangement.MoveChild(Axis.X, Direction.POSITIVE, m_middle);
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(m_middle, Direction.Left));
+            m_arrangement.MoveChild(m_middle, Direction.Left);
 
             //Assert
-            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
-            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
-            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
-            //
-            //Assert.AreEqual(m_middle, m_first.FirstChild());
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+                $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+                $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            Assert.AreEqual(m_middle, m_first.LastChild());
         }
 
         [TestMethod]
-        public void arrangement_can_move_children_insert_at_neighbour_negative()
+        public void arrangement_can_move_children_insert_at_neighbour_right()
         {
             //Arrange
             SetUpChildrenMiddleLeaf();
@@ -194,15 +169,14 @@ namespace Kaboom.Testing.Domain
             var expected = new List<ITreeNode> { m_first, m_last };
 
             //Act
-            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, m_middle));
-            m_arrangement.MoveChild(Axis.X, Direction.NEGATIVE, m_middle);
+            Assert.IsNotNull(m_arrangement.NeighbourOfChildInDirection(m_middle, Direction.Right));
+            m_arrangement.MoveChild(m_middle, Direction.Right);
 
             //Assert
-            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
-            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
-            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
-            //
-            //Assert.AreEqual(m_middle, m_last.FirstChild());
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+                $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+                $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            Assert.AreEqual(m_middle, m_last.FirstChild());
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Kaboom.Testing.Domain
             children.Reverse();
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace Kaboom.Testing.Domain
             children.ForEach(child => m_arrangement.InsertAsLast(child));
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
         }
 
 
@@ -80,10 +80,10 @@ namespace Kaboom.Testing.Domain
             m_arrangement.Remove(children[2]);
 
             //Assert
-            Assert.IsFalse(m_arrangement.Children().Contains(children[2]));
+            Assert.IsFalse(m_arrangement.Children.Contains(children[2]));
 
             children.RemoveAt(2);
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children(), children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
         }
     }
 }

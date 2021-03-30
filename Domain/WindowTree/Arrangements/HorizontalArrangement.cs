@@ -4,50 +4,48 @@ namespace Kaboom.Domain.WindowTree.Arrangements
 {
     public class HorizontalArrangement : Arrangement
     {
-        public override bool CanIMoveChild(Axis axis, Direction direction, ITreeNode child)
+        public override void MoveChild(ITreeNode child, Direction direction)
         {
-            if (!SupportsAxis(axis) || !m_children.Contains(child))
+            AssertSupportsAxisAndNodeIsDirectChild(direction.Axis, child);
+
+            int index = Children.IndexOf(child);
+            int indexToBe = index + (direction.Equals(Direction.Left) ? -1 : 1);
+
+            if (Children[indexToBe].IsLeaf())
             {
-                return false;
-            }
-
-            if (m_children.IndexOf(child) == 0)
-            {
-                return direction == Direction.NEGATIVE;
-            }
-            else if(m_children.IndexOf(child) == m_children.Count - 1)
-            {
-                return direction == Direction.POSITIVE;
-            }
-
-            return true;
-        }
-
-        public override void MoveChild(Axis axis, Direction direction, ITreeNode child)
-        {
-            AssertSupportsAxisAndNodeIsDirectChild(axis, direction, child);
-
-            int index = m_children.IndexOf(child);
-
-            int indexToBe = index + ((direction == Direction.POSITIVE) ? -1 : 1);
-
-            if (m_children[indexToBe].IsLeaf())
-            {
-                m_children.RemoveAt(index);
-                m_children.Insert(indexToBe, child);
+                Children.RemoveAt(index);
+                Children.Insert(indexToBe, child);
             }
             else
             {
-                if(direction == Direction.POSITIVE)
+                if (direction == Direction.Left)
                 {
-                    m_children[indexToBe].InsertAsLast(child);
+                    Children[indexToBe].InsertAsLast(child);
                 }
-                else
+                else if(direction == Direction.Right)
                 {
-                    m_children[indexToBe].InsertAsFirst(child);
+                    Children[indexToBe].InsertAsFirst(child);
                 }
                 Remove(child);
             }
+        }
+
+        public override ITreeNode NeighbourOfChildInDirection(ITreeNode treeNode, Direction direction)
+        {
+            if (!SupportsAxis(direction.Axis) || !Children.Contains(treeNode))
+            {
+                return null;
+            }
+
+            int index = Children.IndexOf(treeNode);
+            int neighbourIndex = index + (direction.Equals(Direction.Left) ? -1 : 1);
+
+            if(neighbourIndex >= 0 && neighbourIndex <= Children.Count - 1)
+            {
+                return Children[neighbourIndex];
+            }
+
+            return null;
         }
 
         public override bool SupportsAxis(Axis axis)
