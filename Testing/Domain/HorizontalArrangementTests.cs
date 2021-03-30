@@ -1,7 +1,10 @@
-﻿using Kaboom.Domain.WindowTree.Arrangements;
+﻿using Kaboom.Abstraction;
+using Kaboom.Domain.WindowTree.Arrangements;
 using Kaboom.Domain.WindowTree.Exceptions;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kaboom.Testing.Domain
 {
@@ -10,10 +13,36 @@ namespace Kaboom.Testing.Domain
     {
         HorizontalArrangement m_arrangement;
 
+        MockTreeNodeWithBounds m_first;
+        MockTreeNodeWithBounds m_middle;
+        MockTreeNodeWithBounds m_last;
+
         [TestInitialize]
         public void SetUp()
         {
             m_arrangement = new HorizontalArrangement();
+        }
+
+        private void SetUpChildrenAllLeafs()
+        {
+            m_first = new MockTreeNodeWithBounds();
+            m_middle = new MockTreeNodeWithBounds();
+            m_last = new MockTreeNodeWithBounds();
+
+            m_arrangement.InsertAsFirst(m_first);
+            m_arrangement.InsertAsLast(m_middle);
+            m_arrangement.InsertAsLast(m_last);
+        }
+
+        private void SetUpChildrenMiddleLeaf()
+        {
+            m_first = new MockTreeNodeWithBounds(/*IsLeaf*/ false);
+            m_middle = new MockTreeNodeWithBounds();
+            m_last = new MockTreeNodeWithBounds(/*IsLeaf*/ false);
+
+            m_arrangement.InsertAsFirst(m_first);
+            m_arrangement.InsertAsLast(m_middle);
+            m_arrangement.InsertAsLast(m_last);
         }
 
 
@@ -101,15 +130,79 @@ namespace Kaboom.Testing.Domain
 
 
         [TestMethod]
-        public void arrangement_can_move_children()
+        public void arrangement_can_move_children_swapping_positive()
         {
             //Arrange
+            SetUpChildrenAllLeafs();
+
+            var expected = new List<ITreeNode> { m_middle, m_first, m_last };
 
             //Act
+            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, m_middle));
+            m_arrangement.MoveChild(Axis.X, Direction.POSITIVE, m_middle);
 
             //Assert
-            Assert.Fail();
+            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
         }
 
+        [TestMethod]
+        public void arrangement_can_move_children_swapping_negative()
+        {
+            //Arrange
+            SetUpChildrenAllLeafs();
+
+            var expected = new List<ITreeNode> { m_first, m_last, m_middle };
+
+            //Act
+            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, m_middle));
+            m_arrangement.MoveChild(Axis.X, Direction.NEGATIVE, m_middle);
+
+            //Assert
+            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+        }
+
+        [TestMethod]
+        public void arrangement_can_move_children_insert_at_neighbour_positive()
+        {
+            //Arrange
+            SetUpChildrenMiddleLeaf();
+
+            var expected = new List<ITreeNode> { m_first, m_last };
+
+            //Act
+            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.POSITIVE, m_middle));
+            m_arrangement.MoveChild(Axis.X, Direction.POSITIVE, m_middle);
+
+            //Assert
+            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            //
+            //Assert.AreEqual(m_middle, m_first.FirstChild());
+        }
+
+        [TestMethod]
+        public void arrangement_can_move_children_insert_at_neighbour_negative()
+        {
+            //Arrange
+            SetUpChildrenMiddleLeaf();
+
+            var expected = new List<ITreeNode> { m_first, m_last };
+
+            //Act
+            Assert.IsTrue(m_arrangement.CanIMoveChild(Axis.X, Direction.NEGATIVE, m_middle));
+            m_arrangement.MoveChild(Axis.X, Direction.NEGATIVE, m_middle);
+
+            //Assert
+            //Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, expected),
+            //    $"expected: [{expected.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n" +
+            //    $"actual: [{m_arrangement.Children.Select(id => id.ToString()).Aggregate((a, b) => a + ", " + b)}]\n");
+            //
+            //Assert.AreEqual(m_middle, m_last.FirstChild());
+        }
     }
 }

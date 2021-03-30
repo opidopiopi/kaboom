@@ -14,7 +14,7 @@ namespace Kaboom.Testing.Domain
         [TestInitialize]
         public void SetUp()
         {
-            m_window = new Window(new Kaboom.Abstraction.Rectangle(0, 0, 100, 100));
+            m_window = new Window(new Rectangle(0, 0, 100, 100));
         }
 
         [TestMethod]
