@@ -86,13 +86,14 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
                 int index = Children.IndexOf(child);
                 RemoveChild(childID);
 
-                var next = child.LastChild();
-                while (next != null)
+                if(child is Arrangement arrangement)
                 {
-                    child.Remove(next);
-                    Children.Insert(index, next);
+                    arrangement.Children.Reverse();
 
-                    next = child.LastChild();
+                    foreach (var c in arrangement.Children)
+                    {
+                        Children.Insert(index, c);
+                    }
                 }
             }
         }

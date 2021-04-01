@@ -7,7 +7,7 @@ namespace Kaboom.Testing.Mocks
 {
     public class MockArrangement : Arrangement
     {
-        public MockArrangement(Axis[] axes)
+        public MockArrangement(params Axis[] axes)
             : base(axes)
         {
             

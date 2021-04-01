@@ -16,5 +16,10 @@ namespace Kaboom.Abstraction
         {
             return 1213502048 + ID.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"(EntityID: {ID})";
+        }
     }
 }
