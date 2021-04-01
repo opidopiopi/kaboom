@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
-
-namespace Kaboom.Abstraction
+﻿namespace Kaboom.Abstraction
 {
-    public interface ITreeNode
+    public interface ITreeNode<T>
+        where T : ITreeNode<T>
     {
-        void Remove(ITreeNode child);
+        void InsertAsFirst(T child);
+        void InsertAsLast(T child);
 
-        void InsertAsFirst(ITreeNode child);
-        void InsertAsLast(ITreeNode child);
+        void InsertBefore(T node, T reference);
+        void InsertAfter(T node, T reference);
 
-        ITreeNode FirstChild();
-        ITreeNode LastChild();
+        void Remove(T node);
+
+        T FirstChild();
+        T LastChild();
 
         bool IsLeaf();
     }
+
 }

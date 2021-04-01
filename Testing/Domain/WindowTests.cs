@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Kaboom.Domain.WindowTree.Window;
 using Kaboom.Domain.WindowTree.Exceptions;
 using Kaboom.Testing.Mocks;
 using Kaboom.Abstraction;
+using Kaboom.Domain.WindowTree.ArrangementAggregate;
 
 namespace Kaboom.Testing.Domain
 {
@@ -14,7 +14,7 @@ namespace Kaboom.Testing.Domain
         [TestInitialize]
         public void SetUp()
         {
-            m_window = new Window(new Rectangle(0, 0, 100, 100));
+            m_window = new Window(new Rectangle(0, 0, 100, 100), "aTestWindow");
         }
 
         [TestMethod]
@@ -32,7 +32,7 @@ namespace Kaboom.Testing.Domain
         public void window_cannot_insert_child()
         {
             //Arrange
-            MockTreeNodeWithBounds child = new MockTreeNodeWithBounds();
+            MockTreeNode child = new MockTreeNode();
 
             //Act & Assert
             Assert.ThrowsException<CannotInsertChild>(() => m_window.InsertAsFirst(child));
@@ -45,7 +45,7 @@ namespace Kaboom.Testing.Domain
             //Arrange
 
             //Act & Assert
-            Assert.ThrowsException<CannotRemoveChild>(() => m_window.Remove(new MockTreeNodeWithBounds()));
+            Assert.ThrowsException<CannotRemoveChild>(() => m_window.Remove(new MockTreeNode()));
             Assert.ThrowsException<CannotRemoveChild>(() => m_window.Remove(null));
         }
 
@@ -53,28 +53,14 @@ namespace Kaboom.Testing.Domain
         public void windows_are_unique()
         {
             //Arrange
-            Window otherWindow = new Window(new Kaboom.Abstraction.Rectangle(0, 0, 10, 10));
+            Window otherWindow = new Window(new Rectangle(0, 0, 10, 10), "anotherTestWindow");
 
             //Act
 
             //Assert
             Assert.AreNotEqual(m_window, otherWindow);
-            Assert.AreNotEqual(m_window.Identity, otherWindow.Identity);
+            Assert.AreNotEqual(m_window.ID, otherWindow.ID);
         }
-
-        [TestMethod]
-        public void window_accepts_visitor()
-        {
-            //Arrange
-            VisitedFlagMockVisitor visitor = new VisitedFlagMockVisitor();
-
-            //Act
-            m_window.Accept(visitor);
-
-            //Assert
-            Assert.IsTrue(visitor.HasBeenVisited);
-        }
-
 
         [TestMethod]
         public void window_has_bounds()

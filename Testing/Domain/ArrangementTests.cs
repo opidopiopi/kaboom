@@ -1,4 +1,4 @@
-﻿using Kaboom.Domain.WindowTree.Arrangements;
+﻿using Kaboom.Domain.WindowTree.General;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
@@ -29,43 +29,30 @@ namespace Kaboom.Testing.Domain
         }
 
         [TestMethod]
-        public void arrangement_accepts_visitor()
-        {
-            //Arrange
-            VisitedFlagMockVisitor visitor = new VisitedFlagMockVisitor();
-
-            //Act
-            m_arrangement.Accept(visitor);
-
-            //Assert
-            Assert.IsTrue(visitor.HasBeenVisited);
-        }
-
-        [TestMethod]
         public void arrangement_insert_as_first()
         {
             //Arrange
-            List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
+            List<MockTreeNode> expected = Enumerable.Range(0, 5).Select(i => new MockTreeNode()).ToList();
 
             //Act
-            children.ForEach(child => m_arrangement.InsertAsFirst(child));
-            children.Reverse();
+            expected.ForEach(child => m_arrangement.InsertAsFirst(child));
+            expected.Reverse();
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.MyChildren, expected));
         }
 
         [TestMethod]
         public void arrangement_insert_as_last()
         {
             //Arrange
-            List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
+            List<MockTreeNode> expected = Enumerable.Range(0, 5).Select(i => new MockTreeNode()).ToList();
 
             //Act
-            children.ForEach(child => m_arrangement.InsertAsLast(child));
+            expected.ForEach(child => m_arrangement.InsertAsLast(child));
 
             //Assert
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.MyChildren, expected));
         }
 
 
@@ -73,17 +60,17 @@ namespace Kaboom.Testing.Domain
         public void arrangement_children_can_be_removed()
         {
             //Arrange
-            List<MockTreeNodeWithBounds> children = Enumerable.Range(0, 5).Select(i => new MockTreeNodeWithBounds()).ToList();
-            children.ForEach(child => m_arrangement.InsertAsLast(child));
+            List<MockTreeNode> expected = Enumerable.Range(0, 5).Select(i => new MockTreeNode()).ToList();
+            expected.ForEach(child => m_arrangement.InsertAsLast(child));
 
             //Act
-            m_arrangement.Remove(children[2]);
+            m_arrangement.Remove(expected[2]);
 
             //Assert
-            Assert.IsFalse(m_arrangement.Children.Contains(children[2]));
+            Assert.IsFalse(m_arrangement.MyChildren.Contains(expected[2]));
 
-            children.RemoveAt(2);
-            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.Children, children));
+            expected.RemoveAt(2);
+            Assert.IsTrue(Enumerable.SequenceEqual(m_arrangement.MyChildren, expected));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Kaboom.Domain.WindowTree.Arrangements
+﻿namespace Kaboom.Domain.WindowTree.General
 {
     public enum Axis
     {

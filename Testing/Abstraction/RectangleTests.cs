@@ -74,12 +74,12 @@ namespace Kaboom.Testing.Abstraction
 
                     foreach (var isOutside in theseAreOutside)
                     {
-                        Assert.IsFalse(main.AreCoordinatesInside(isOutside.X, isOutside.Y), $"This rectangle: {isOutside} should be outside of this: {main}");
+                        Assert.IsFalse(main.IsPointInside(isOutside.X, isOutside.Y), $"This rectangle: {isOutside} should be outside of this: {main}");
                     }
 
                     foreach (var isInside in theseAreInside)
                     {
-                        Assert.IsTrue(main.AreCoordinatesInside(isInside.X, isInside.Y), $"This rectangle: {isInside} should be inside of this: {main}");
+                        Assert.IsTrue(main.IsPointInside(isInside.X, isInside.Y), $"This rectangle: {isInside} should be inside of this: {main}");
                     }
                 }
             }

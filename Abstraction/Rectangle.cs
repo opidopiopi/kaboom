@@ -28,7 +28,7 @@ namespace Kaboom.Abstraction
             Height = height;
         }
 
-        public bool AreCoordinatesInside(int x, int y)
+        public bool IsPointInside(int x, int y)
         {
             return  (X <= x && x <= X + Width) &&
                     (Y <= y && y <= Y + Height);

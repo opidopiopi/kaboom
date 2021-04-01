@@ -1,32 +1,28 @@
 ﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.Arrangements;
+using Kaboom.Domain.WindowTree.ArrangementAggregate;
+using Kaboom.Domain.WindowTree.General;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Kaboom.Testing.Mocks
 {
     public class MockArrangement : Arrangement
     {
-        private Axis[] m_supportedAxes;
-
         public MockArrangement(Axis[] axes)
-        {
-            this.m_supportedAxes = axes;
-        }
-
-        public override void MoveChild(ITreeNode child, Direction direction)
+            : base(axes)
         {
             
         }
 
-        public override ITreeNode NeighbourOfChildInDirection(ITreeNode treeNode, Direction direction)
+        public override EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction)
         {
-            return null;
+            throw new System.NotImplementedException();
         }
 
-        public override bool SupportsAxis(Axis axis)
+        public override void UpdateBoundsOfChildren()
         {
-            return m_supportedAxes.ToList().Contains(axis);
+            throw new System.NotImplementedException();
         }
+
+        public List<IBoundedTreeNode> MyChildren => Children;
     }
 }
