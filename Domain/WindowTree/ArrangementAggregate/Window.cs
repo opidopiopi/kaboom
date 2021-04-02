@@ -1,4 +1,5 @@
 ﻿using Kaboom.Abstraction;
+using System.Collections.Generic;
 
 namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 {
@@ -12,6 +13,22 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             Bounds = initialBounds;
             Title = title;
             Visible = true;
+        }
+
+        public override string ToString()
+        {
+            return $"(Window Title: {Title}, ID: {ID}, Visible: {Visible})";
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Window window &&
+                   EqualityComparer<EntityID>.Default.Equals(ID, window.ID);
+        }
+
+        public override int GetHashCode()
+        {
+            return 1213502048 + EqualityComparer<EntityID>.Default.GetHashCode(ID);
         }
     }
 }

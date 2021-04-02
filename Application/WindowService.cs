@@ -75,7 +75,7 @@ namespace Kaboom.Application
                 var superParent = m_arrangements.FindParentOf(parent.ID);
                 while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
                 {
-                    neighbour = parent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
+                    neighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
 
                     if (neighbour != null)
                     {

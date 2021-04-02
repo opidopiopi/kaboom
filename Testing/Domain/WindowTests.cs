@@ -74,5 +74,18 @@ namespace Kaboom.Testing.Domain
             //Assert
             Assert.AreEqual(newBounds, m_window.Bounds);
         }
+
+
+        [TestMethod]
+        public void window_has_title()
+        {
+            //Arrange
+            Window otherWindow = new Window(new Rectangle(0, 0, 10, 10), "anotherTestWindow");
+
+            //Act
+
+            //Assert
+            Assert.AreEqual(otherWindow.Title, "anotherTestWindow");
+        }
     }
 }
