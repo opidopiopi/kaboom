@@ -1,5 +1,4 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Application
@@ -96,8 +95,7 @@ namespace Kaboom.Application
                     superParent = m_arrangements.FindParentOf(parent.ID);
                 }
 
-                //when we don't find any arrangement just insert it into the tree again
-                InsertWindowIntoTree(window);
+                throw new System.Exception("If this happenes we need to move the window to another root Arrangement but that is not implemented yet");
             }
         }
 

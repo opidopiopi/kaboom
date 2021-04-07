@@ -1,4 +1,5 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Abstraction;
+using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -99,6 +100,85 @@ namespace Kaboom.Testing.Domain
             Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild.ID, Direction.Right));
             Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild.ID, Direction.Up));
             Assert.IsNull(m_arrangement.NeighbourOfChildInDirection(childsChild.ID, Direction.Down));
+        }
+
+
+        [TestMethod]
+        public void arrangement_updates_bounds_of_children()
+        {
+            //Arrange
+            MockTreeLeaf windowA = new MockTreeLeaf();
+            MockTreeLeaf windowB = new MockTreeLeaf();
+            MockTreeLeaf windowC = new MockTreeLeaf();
+            MockTreeLeaf windowD = new MockTreeLeaf();
+            m_arrangement.Bounds = new Rectangle(-5, -55, 400, 420);
+
+            //Act
+            m_arrangement.InsertAsLast(windowA);
+            m_arrangement.UpdateBoundsOfChildren();
+
+            //Assert
+            Assert.AreEqual(windowA.Bounds, new Rectangle(-5, -55, 400, 420));
+
+            //Act
+            m_arrangement.InsertAsLast(windowB);
+            m_arrangement.UpdateBoundsOfChildren();
+
+            //Assert
+            Assert.AreEqual(new Rectangle(-5, -55, 200, 420), windowA.Bounds);
+            Assert.AreEqual(new Rectangle(195, -55, 200, 420), windowB.Bounds);
+
+            //Act
+            m_arrangement.InsertAsLast(windowC);
+            m_arrangement.InsertAsLast(windowD);
+            m_arrangement.UpdateBoundsOfChildren();
+
+            //Assert
+            Assert.AreEqual(new Rectangle(-5, -55, 100, 420), windowA.Bounds);
+            Assert.AreEqual(new Rectangle(95, -55, 100, 420), windowB.Bounds);
+            Assert.AreEqual(new Rectangle(195, -55, 100, 420), windowC.Bounds);
+            Assert.AreEqual(new Rectangle(295, -55, 100, 420), windowD.Bounds);
+        }
+
+
+        [TestMethod]
+        public void arrangement_updates_bounds_triggers_update_for_lower_arrangements()
+        {
+            /*  m_arrangement
+             *  |
+             *  |--anotherOne
+             *  |  |
+             *  |  |--bitesTheDust
+             *  |  |  |
+             *  |  |  |--windowC
+             *  |  |
+             *  |  |--winowB
+             *  |
+             *  |--windowA
+             */
+
+            //Arrange
+            HorizontalArrangement anotherOne = new HorizontalArrangement();
+            MockTreeLeaf windowA = new MockTreeLeaf();
+            m_arrangement.InsertAsLast(anotherOne);
+            m_arrangement.InsertAsLast(windowA);
+            m_arrangement.Bounds = new Rectangle(123, 456, 200, 69);
+
+            HorizontalArrangement bitesTheDust = new HorizontalArrangement();
+            MockTreeLeaf windowB = new MockTreeLeaf();
+            anotherOne.InsertAsLast(bitesTheDust);
+            anotherOne.InsertAsLast(windowB);
+
+            MockTreeLeaf windowC = new MockTreeLeaf();
+            bitesTheDust.InsertAsLast(windowC);
+
+            //Act
+            m_arrangement.UpdateBoundsOfChildren();
+
+            //Assert
+            Assert.AreEqual(new Rectangle(223, 456, 100, 69), windowA.Bounds);
+            Assert.AreEqual(new Rectangle(173, 456, 50, 69), windowB.Bounds);
+            Assert.AreEqual(new Rectangle(123, 456, 50, 69), windowC.Bounds);
         }
     }
 }

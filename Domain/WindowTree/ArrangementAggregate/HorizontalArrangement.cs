@@ -12,12 +12,13 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public override EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction)
         {
-            if (!SupportsAxis(direction.Axis) || FindChild(childID) == null)
+            var child = FindChild(childID);
+
+            if (!SupportsAxis(direction.Axis) || child == null)
             {
                 return null;
             }
 
-            var child = FindChild(childID);
             int index = Children.IndexOf(child);
             int neighbourIndex = index + (direction.Equals(Direction.Left) ? -1 : 1);
 
@@ -31,7 +32,18 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public override void UpdateBoundsOfChildren()
         {
-            throw new System.NotImplementedException();
+            int numChildren = Children.Count;
+            int widthPerChild = Bounds.Width / numChildren;
+
+            for(int i = 0; i < numChildren; i++)
+            {
+                Children[i].Bounds = new Rectangle(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
+
+                if(Children[i] is Arrangement arrangement)
+                {
+                    arrangement.UpdateBoundsOfChildren();
+                }
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Kaboom.Abstraction;
+﻿using Kaboom.Domain.WindowTree.General;
 using System.Collections.Generic;
 
 namespace Kaboom.Domain.WindowTree.ArrangementAggregate

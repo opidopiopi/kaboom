@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Kaboom.Abstraction
+namespace Kaboom.Domain.WindowTree.General
 {
     public class EntityID
     {

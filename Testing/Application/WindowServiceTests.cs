@@ -295,5 +295,20 @@ namespace Kaboom.Testing.Application
             Assert.AreEqual(m_levelOneA, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
             AssertSequenceEqual(m_levelOneA.MyChildren, new IBoundedTreeNode[] { anotherWindow, m_windows[5], m_levelTwoA, m_windows[3], otherWindow, m_levelTwoB, m_windows[1] });
         }
+
+        [TestMethod]
+        public void windowservice_can_move_to_different_root_arrangement()
+        {
+            //Arrange
+
+            //Act
+            m_windowService.MoveWindow(m_windows[5].ID, Direction.Up);
+            m_windowService.MoveWindow(m_windows[0].ID, Direction.Down);
+
+            //Assert
+            Assert.AreEqual(m_rootB, m_arrgangementRepo.FindParentOf(m_windows[0].ID));
+            Assert.AreEqual(m_rootB, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
+            AssertSequenceEqual(m_rootB.MyChildren, new IBoundedTreeNode[] { m_windows[0], m_windows[5] });
+        }
     }
 }

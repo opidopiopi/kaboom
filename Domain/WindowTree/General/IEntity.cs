@@ -1,4 +1,4 @@
-﻿namespace Kaboom.Abstraction
+﻿namespace Kaboom.Domain.WindowTree.General
 {
     public interface IEntity
     {
