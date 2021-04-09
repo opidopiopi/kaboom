@@ -29,6 +29,50 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             Children[indexB] = tempA;
         }
 
+        public EntityID FirstWindow()
+        {
+            foreach(var child in Children)
+            {
+                if (child is Window window)
+                {
+                    return window.ID;
+                }
+                else if(child is Arrangement arrangement)
+                {
+                    var result = arrangement.FirstWindow();
+
+                    if(result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public EntityID LastWindow()
+        {
+            foreach (var child in Children.Reverse<IBoundedTreeNode>())
+            {
+                if (child is Window window)
+                {
+                    return window.ID;
+                }
+                else if (child is Arrangement arrangement)
+                {
+                    var result = arrangement.LastWindow();
+
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public bool SupportsAxis(Axis axis)
         {
             return m_supportedAxis.Contains(axis);

@@ -95,8 +95,63 @@ namespace Kaboom.Application
                     superParent = m_arrangements.FindParentOf(parent.ID);
                 }
 
-                throw new System.Exception("If this happenes we need to move the window to another root Arrangement but that is not implemented yet");
+                throw new System.NotImplementedException("If this happenes we need to move the window to another root Arrangement");
             }
+        }
+
+        public EntityID NextWindowInDirection(Direction direction, EntityID currentlySelected)
+        {
+            var parent = m_arrangements.FindParentOf(currentlySelected);
+
+            if (parent == null)
+            {
+                throw new System.Exception("Somehow the currently selected entity has no parent....");
+            }
+
+            var nextSelected = parent.FindChild(parent.NeighbourOfChildInDirection(currentlySelected, direction));
+            if (nextSelected is Window win)
+            {
+                return win.ID;
+            }
+            else if (nextSelected is Arrangement arr)
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    return arr.LastWindow();
+                }
+                else
+                {
+                    return arr.FirstWindow();
+                }
+            }
+
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+            
+            while(superParent != null)
+            {
+                var parentNeighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
+
+                if(parentNeighbour is Window window)
+                {
+                    return window.ID;
+                }
+                else if (parentNeighbour is Arrangement arrangement)
+                {
+                    if (direction == Direction.Left || direction == Direction.Up)
+                    {
+                        return arrangement.LastWindow();
+                    }
+                    else
+                    {
+                        return arrangement.FirstWindow();
+                    }
+                }
+
+                parent = superParent;
+                superParent = m_arrangements.FindParentOf(parent.ID);
+            }
+
+            throw new System.NotImplementedException("If this happenes we need to check the other root arrangements");
         }
 
         private void UpdateTree(Arrangement parent)

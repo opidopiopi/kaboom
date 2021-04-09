@@ -310,5 +310,106 @@ namespace Kaboom.Testing.Application
             Assert.AreEqual(m_rootB, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
             AssertSequenceEqual(m_rootB.MyChildren, new IBoundedTreeNode[] { m_windows[0], m_windows[5] });
         }
+
+
+        [TestMethod]
+        public void windowservice_can_select_windows_on_same_level()
+        {
+            //Arrange
+            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            var anotherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "anotherWindow");
+            m_levelThree.InsertAsLast(otherWindow);
+            m_levelThree.InsertAsLast(anotherWindow);
+
+            //Act
+            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, otherWindow.ID);
+            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, otherWindow.ID);
+            var selectDown = m_windowService.NextWindowInDirection(Direction.Down, otherWindow.ID);
+            var selectRight = m_windowService.NextWindowInDirection(Direction.Right, otherWindow.ID);
+
+            //Assert
+            Assert.AreEqual(m_windows[5].ID, selectUp);
+            Assert.AreEqual(m_windows[5].ID, selectLeft);
+
+            Assert.AreEqual(anotherWindow.ID, selectDown);
+            Assert.AreEqual(anotherWindow.ID, selectRight);
+        }
+
+        [TestMethod]
+        public void windowservice_can_select_windows_on_different_level()
+        {
+            //Arrange
+            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            m_levelTwoA.InsertAsFirst(otherWindow);
+
+            //Act
+            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, m_windows[5].ID);
+            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, m_windows[5].ID);
+            var selectDown = m_windowService.NextWindowInDirection(Direction.Down, m_windows[5].ID);
+            var selectRight = m_windowService.NextWindowInDirection(Direction.Right, m_windows[5].ID);
+
+            //Assert
+            Assert.AreEqual(otherWindow.ID, selectUp);
+            Assert.AreEqual(otherWindow.ID, selectLeft);
+
+            Assert.AreEqual(m_windows[3].ID, selectDown);
+            Assert.AreEqual(m_windows[3].ID, selectRight);
+        }
+
+        [TestMethod]
+        public void windowservice_can_select_windows_on_lower_level_inside_other_arrangement()
+        {
+            //Arrange
+            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            m_levelTwoA.InsertAsFirst(otherWindow);
+
+            //Act
+            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, m_windows[3].ID);
+            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, m_windows[3].ID);
+            var selectDown = m_windowService.NextWindowInDirection(Direction.Down, otherWindow.ID);
+            var selectRight = m_windowService.NextWindowInDirection(Direction.Right, otherWindow.ID);
+
+            //Assert
+            Assert.AreEqual(m_windows[5].ID, selectUp);
+            Assert.AreEqual(m_windows[5].ID, selectLeft);
+
+            Assert.AreEqual(m_windows[5].ID, selectDown);
+            Assert.AreEqual(m_windows[5].ID, selectRight);
+        }
+
+        [TestMethod]
+        public void windowservice_can_select_windows_on_same_level_inside_other_arrangement()
+        {
+            //Arrange
+
+            //Act
+            var selectDown = m_windowService.NextWindowInDirection(Direction.Down, m_windows[3].ID);
+            var selectRight = m_windowService.NextWindowInDirection(Direction.Right, m_windows[3].ID);
+
+            //Assert
+            Assert.AreEqual(m_windows[4].ID, selectDown);
+            Assert.AreEqual(m_windows[4].ID, selectRight);
+        }
+
+        [TestMethod]
+        public void windowservice_can_select_windows_in_other_root_arrangement()
+        {
+            //Arrange
+            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            m_rootB.InsertAsFirst(otherWindow);
+
+            //Act
+            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, m_windows[5].ID);
+            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, m_windows[5].ID);
+            var selectDown = m_windowService.NextWindowInDirection(Direction.Down, m_windows[0].ID);
+            var selectRight = m_windowService.NextWindowInDirection(Direction.Right, m_windows[0].ID);
+
+            //Assert
+            Assert.AreEqual(m_rootB.ID, selectUp);
+            Assert.AreEqual(m_rootB.ID, selectLeft);
+
+            Assert.AreEqual(m_rootB.ID, selectDown);
+            Assert.AreEqual(m_rootB.ID, selectRight);
+        }
     }
 }
