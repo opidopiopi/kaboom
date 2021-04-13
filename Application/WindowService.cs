@@ -1,9 +1,10 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain.Services;
+using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Application
 {
-    public class WindowService
+    public class WindowService : IWindowService
     {
         private IArrangementRepository m_arrangements;
         private IWindowRenderer m_renderer;

@@ -11,36 +11,10 @@ namespace Kaboom.Testing.Domain
     {
         HorizontalArrangement m_arrangement;
 
-        IBoundedTreeNode m_first;
-        IBoundedTreeNode m_middle;
-        IBoundedTreeNode m_last;
-
         [TestInitialize]
         public void SetUp()
         {
             m_arrangement = new HorizontalArrangement();
-        }
-
-        private void SetUpChildrenAllLeafs()
-        {
-            m_first = new MockTreeLeaf();
-            m_middle = new MockTreeLeaf();
-            m_last = new MockTreeLeaf();
-
-            m_arrangement.InsertAsFirst(m_first);
-            m_arrangement.InsertAsLast(m_middle);
-            m_arrangement.InsertAsLast(m_last);
-        }
-
-        private void SetUpChildrenMiddleLeaf()
-        {
-            m_first = new MockTreeNode();
-            m_middle = new MockTreeLeaf();
-            m_last = new MockTreeNode();
-
-            m_arrangement.InsertAsFirst(m_first);
-            m_arrangement.InsertAsLast(m_middle);
-            m_arrangement.InsertAsLast(m_last);
         }
 
 
