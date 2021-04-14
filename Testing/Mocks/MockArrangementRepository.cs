@@ -3,7 +3,7 @@ using Kaboom.Domain.WindowTree.General;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kaboom.Testing.Mocks
+namespace Kaboom.Testing.Mock
 {
     public class MockArrangementRepository : IArrangementRepository
     {

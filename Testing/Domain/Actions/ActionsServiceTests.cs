@@ -1,5 +1,5 @@
 ﻿using Kaboom.Domain.ShortcutActions;
-using Kaboom.Testing.Mocks;
+using Kaboom.Testing.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kaboom.Testing.Domain.Actions

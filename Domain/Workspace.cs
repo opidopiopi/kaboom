@@ -55,7 +55,17 @@ namespace Kaboom.Application
             }
             else
             {
-                m_selectedWindow = m_arrangementRepository.AnyRoot().FirstWindow();
+                foreach(var id in m_arrangementRepository.RootArrangements())
+                {
+                    var arr = m_arrangementRepository.Find(id);
+                    var window = arr.FirstWindow();
+
+                    if(window != null)
+                    {
+                        m_selectedWindow = window;
+                        return;
+                    }
+                }
             }
         }
 

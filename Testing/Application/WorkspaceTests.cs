@@ -2,9 +2,10 @@
 using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mocks;
+using Kaboom.Testing.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System.Linq;
 
 namespace Kaboom.Testing.Application
 {
@@ -91,7 +92,8 @@ namespace Kaboom.Testing.Application
             var window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
             var arrangement = new Mock<Arrangement>(new Axis[] { });
             arrangement.Object.InsertAsFirst(window);
-            m_arrangementRepo.Setup(repo => repo.AnyRoot()).Returns(arrangement.Object);
+            m_arrangementRepo.Setup(repo => repo.RootArrangements()).Returns((new EntityID[]{ arrangement.Object.ID}).ToList());
+            m_arrangementRepo.Setup(repo => repo.Find(arrangement.Object.ID)).Returns(arrangement.Object);
 
             //Act
             m_workspace.MoveSelection(Direction.Up);

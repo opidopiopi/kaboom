@@ -1,6 +1,6 @@
 ﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
 
-namespace Kaboom.Testing.Mocks
+namespace Kaboom.Testing.Mock
 {
     public class MockTreeLeaf : BoundedTreeLeaf
     {

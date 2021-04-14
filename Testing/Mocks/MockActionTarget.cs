@@ -1,6 +1,6 @@
 ﻿using Kaboom.Domain.ShortcutActions;
 
-namespace Kaboom.Testing.Mocks
+namespace Kaboom.Testing.Mock
 {
     public class MockActionTarget : IActionTarget
     {

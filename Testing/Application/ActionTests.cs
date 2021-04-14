@@ -2,7 +2,7 @@
 using Kaboom.Application.WorkspaceActions;
 using Kaboom.Domain.ShortcutActions;
 using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mocks;
+using Kaboom.Testing.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
