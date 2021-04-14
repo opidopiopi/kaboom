@@ -4,7 +4,7 @@ namespace Kaboom.Application.WorkspaceActions
 {
     public class UnWrapWindowAction : WorkspaceAction
     {
-        public UnWrapWindowAction(Shortcut shortcut, Workspace workspace) : base(shortcut, workspace)
+        public UnWrapWindowAction(Shortcut shortcut, IWorkspace workspace) : base(shortcut, workspace)
         {
         }
 

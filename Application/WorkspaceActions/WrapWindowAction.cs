@@ -6,7 +6,7 @@ namespace Kaboom.Application.WorkspaceActions
     public class WrapWindowAction<ArrangementType> : WorkspaceAction
         where ArrangementType : Arrangement, new()
     {
-        public WrapWindowAction(Shortcut shortcut, Workspace workspace) : base(shortcut, workspace)
+        public WrapWindowAction(Shortcut shortcut, IWorkspace workspace) : base(shortcut, workspace)
         {
         }
 

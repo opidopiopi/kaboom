@@ -4,7 +4,7 @@ using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Application
 {
-    public class Workspace : IEntity
+    public class Workspace : IEntity, IWorkspace
     {
         public EntityID ID { get; } = new EntityID();
         public EntityID SelectedWindow { get => m_selectedWindow; }
@@ -21,7 +21,7 @@ namespace Kaboom.Application
 
         public void InsertWindow(Window window)
         {
-            if(m_selectedWindow == null)
+            if (m_selectedWindow == null)
             {
                 m_selectedWindow = window.ID;
             }
@@ -41,7 +41,7 @@ namespace Kaboom.Application
 
         public void MoveSelectedWindow(Direction direction)
         {
-            if(m_selectedWindow != null)
+            if (m_selectedWindow != null)
             {
                 m_windowService.MoveWindow(m_selectedWindow, direction);
             }
@@ -49,7 +49,7 @@ namespace Kaboom.Application
 
         public void MoveSelection(Direction direction)
         {
-            if(m_selectedWindow != null)
+            if (m_selectedWindow != null)
             {
                 m_selectedWindow = m_windowService.NextWindowInDirection(direction, m_selectedWindow);
             }
@@ -61,7 +61,7 @@ namespace Kaboom.Application
 
         public void WrapSelectedWindow(Arrangement wrapper)
         {
-            if(m_selectedWindow != null)
+            if (m_selectedWindow != null)
             {
                 m_arrangementRepository.FindParentOf(m_selectedWindow).WrapChildWithNode(m_selectedWindow, wrapper);
             }
@@ -69,7 +69,7 @@ namespace Kaboom.Application
 
         public void UnWrapSelectedWindow()
         {
-            if(m_selectedWindow != null)
+            if (m_selectedWindow != null)
             {
                 var parent = m_arrangementRepository.FindParentOf(m_selectedWindow);
                 m_arrangementRepository.FindParentOf(parent.ID).UnWrapChildToSelf(parent.ID);

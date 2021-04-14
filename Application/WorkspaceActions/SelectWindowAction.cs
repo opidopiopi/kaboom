@@ -7,7 +7,7 @@ namespace Kaboom.Application.WorkspaceActions
     {
         private Direction m_direction;
 
-        public SelectWindowAction(Shortcut shortcut, Workspace workspace, Direction direction) : base(shortcut, workspace)
+        public SelectWindowAction(Shortcut shortcut, IWorkspace workspace, Direction direction) : base(shortcut, workspace)
         {
             m_direction = direction;
         }
