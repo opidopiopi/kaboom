@@ -75,9 +75,7 @@ namespace Kaboom.Application
                 var superParent = m_arrangements.FindParentOf(parent.ID);
                 while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
                 {
-                    neighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
-
-                    if (neighbour != null)
+                    if (superParent.SupportsAxis(direction.Axis))
                     {
                         if (direction == Direction.Left || direction == Direction.Up)
                         {
@@ -96,7 +94,29 @@ namespace Kaboom.Application
                     superParent = m_arrangements.FindParentOf(parent.ID);
                 }
 
-                throw new System.NotImplementedException("If this happenes we need to move the window to another root Arrangement");
+                neighbour = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+                if(neighbour != null)
+                {
+                    if (direction == Direction.Left || direction == Direction.Up)
+                    {
+                        neighbour.InsertAsLast(window);
+                    }
+                    else
+                    {
+                        neighbour.InsertAsFirst(window);
+                    }
+                }
+                else
+                {
+                    if (direction == Direction.Left || direction == Direction.Up)
+                    {
+                        parent.InsertAsFirst(window);
+                    }
+                    else
+                    {
+                        parent.InsertAsLast(window);
+                    }
+                }
             }
         }
 
@@ -152,7 +172,29 @@ namespace Kaboom.Application
                 superParent = m_arrangements.FindParentOf(parent.ID);
             }
 
-            throw new System.NotImplementedException("If this happenes we need to check the other root arrangements");
+            var rootNeighbour = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+            if (rootNeighbour != null)
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    return rootNeighbour.LastWindow();
+                }
+                else
+                {
+                    return rootNeighbour.FirstWindow();
+                }
+            }
+            else
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    return parent.FirstWindow();
+                }
+                else
+                {
+                    return parent.LastWindow();
+                }
+            }
         }
 
         private void UpdateTree(Arrangement parent)

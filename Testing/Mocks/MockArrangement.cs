@@ -13,11 +13,10 @@ namespace Kaboom.Testing.Mocks
         public MockArrangement(params Axis[] axes)
             : base(axes)
         {
-            
         }
 
-        public MockArrangement(string title)
-            : base(new Axis[] { })
+        public MockArrangement(string title, params Axis[] axes)
+            : base(axes)
         {
             Title = title;
         }

@@ -60,24 +60,24 @@ namespace Kaboom.Testing.Application
              *  m_rootB
              */
 
-            m_rootA = new MockArrangement("m_rootA");
-            m_rootB = new MockArrangement("m_rootB");
+            m_rootA = new MockArrangement("m_rootA", Axis.X, Axis.Y);
+            m_rootB = new MockArrangement("m_rootB", Axis.X, Axis.Y);
             m_rootA.Bounds = new Kaboom.Abstraction.Rectangle(0, 0, 100, 100);
             m_rootB.Bounds = new Kaboom.Abstraction.Rectangle(100, 0, 100, 100);
             m_arrgangementRepo.InsertRoot(m_rootA);
             m_arrgangementRepo.InsertRoot(m_rootB);
 
-            m_levelOneA = new MockArrangement("m_levelOneA");
-            m_levelOneB = new MockArrangement("m_levelOneB");
+            m_levelOneA = new MockArrangement("m_levelOneA", Axis.X, Axis.Y);
+            m_levelOneB = new MockArrangement("m_levelOneB", Axis.X, Axis.Y);
             m_rootA.InsertAsLast(m_levelOneA);
             m_rootA.InsertAsLast(m_levelOneB);
 
-            m_levelTwoA = new MockArrangement("m_levelTwoA");
-            m_levelTwoB = new MockArrangement("m_levelTwoB");
+            m_levelTwoA = new MockArrangement("m_levelTwoA", Axis.X, Axis.Y);
+            m_levelTwoB = new MockArrangement("m_levelTwoB", Axis.X, Axis.Y);
             m_levelOneA.InsertAsLast(m_levelTwoA);
             m_levelOneA.InsertAsLast(m_levelTwoB);
 
-            m_levelThree = new MockArrangement("m_levelThree");
+            m_levelThree = new MockArrangement("m_levelThree", Axis.X, Axis.Y);
             m_levelTwoA.InsertAsLast(m_levelThree);
 
             m_windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), $"testWindow_{i}")).ToArray();
@@ -292,8 +292,8 @@ namespace Kaboom.Testing.Application
             //Assert
             Assert.AreEqual(m_levelOneA, m_arrgangementRepo.FindParentOf(otherWindow.ID));
             Assert.AreEqual(m_levelOneA, m_arrgangementRepo.FindParentOf(m_windows[3].ID));
-            Assert.AreEqual(m_levelOneA, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
-            AssertSequenceEqual(m_levelOneA.MyChildren, new IBoundedTreeNode[] { anotherWindow, m_windows[5], m_levelTwoA, m_windows[3], otherWindow, m_levelTwoB, m_windows[1] });
+            Assert.AreEqual(m_levelTwoA, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
+            AssertSequenceEqual(m_levelOneA.MyChildren, new IBoundedTreeNode[] { anotherWindow, m_levelTwoA, m_windows[3], otherWindow, m_levelTwoB, m_windows[1] });
         }
 
         [TestMethod]
@@ -302,13 +302,18 @@ namespace Kaboom.Testing.Application
             //Arrange
 
             //Act
-            m_windowService.MoveWindow(m_windows[5].ID, Direction.Up);
             m_windowService.MoveWindow(m_windows[0].ID, Direction.Down);
 
             //Assert
             Assert.AreEqual(m_rootB, m_arrgangementRepo.FindParentOf(m_windows[0].ID));
-            Assert.AreEqual(m_rootB, m_arrgangementRepo.FindParentOf(m_windows[5].ID));
-            AssertSequenceEqual(m_rootB.MyChildren, new IBoundedTreeNode[] { m_windows[0], m_windows[5] });
+            AssertSequenceEqual(m_rootB.MyChildren, new IBoundedTreeNode[] { m_windows[0] });
+
+            //Act
+            m_windowService.MoveWindow(m_windows[0].ID, Direction.Up);
+
+            //Assert
+            Assert.AreEqual(m_rootA, m_arrgangementRepo.FindParentOf(m_windows[0].ID));
+            AssertSequenceEqual(m_rootA.MyChildren, new IBoundedTreeNode[] { m_levelOneA, m_levelOneB, m_windows[0] });
         }
 
 
@@ -399,17 +404,17 @@ namespace Kaboom.Testing.Application
             m_rootB.InsertAsFirst(otherWindow);
 
             //Act
-            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, m_windows[5].ID);
-            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, m_windows[5].ID);
+            var selectUp = m_windowService.NextWindowInDirection(Direction.Up, otherWindow.ID);
+            var selectLeft = m_windowService.NextWindowInDirection(Direction.Left, otherWindow.ID);
             var selectDown = m_windowService.NextWindowInDirection(Direction.Down, m_windows[0].ID);
             var selectRight = m_windowService.NextWindowInDirection(Direction.Right, m_windows[0].ID);
 
             //Assert
-            Assert.AreEqual(m_rootB.ID, selectUp);
-            Assert.AreEqual(m_rootB.ID, selectLeft);
+            Assert.AreEqual(m_windows[0].ID, selectUp);
+            Assert.AreEqual(m_windows[0].ID, selectLeft);
 
-            Assert.AreEqual(m_rootB.ID, selectDown);
-            Assert.AreEqual(m_rootB.ID, selectRight);
+            Assert.AreEqual(otherWindow.ID, selectDown);
+            Assert.AreEqual(otherWindow.ID, selectRight);
         }
     }
 }

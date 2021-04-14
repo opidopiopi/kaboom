@@ -20,6 +20,21 @@ namespace Kaboom.Testing.Mocks
             return m_arrangements.Where(arr => arr.ID.Equals(arrangementID)).FirstOrDefault();
         }
 
+        public Arrangement FindNeighbourOfRootInDirection(EntityID arrangementID, Direction direction)
+        {
+            int index = m_arrangements.IndexOf(m_arrangements.Find(arr => arr.ID.Equals(arrangementID)));
+            index += (direction == Direction.Up || direction == Direction.Left) ? -1 : 1;
+
+            if(index >= 0 && index < m_arrangements.Count)
+            {
+                return m_arrangements[index];
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
         {
             foreach (var child in m_arrangements)
