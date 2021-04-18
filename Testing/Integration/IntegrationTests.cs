@@ -175,5 +175,165 @@ namespace Kaboom.Testing.Integration
                 Assert.AreEqual(wow.windowID, m_workspace.SelectedWindow, $"\nactual window: {m_arrangementRepository.FindParentOf(m_workspace.SelectedWindow).FindChild(m_workspace.SelectedWindow)}");
             });
         }
+
+
+        [TestMethod]
+        public void integration_move_selected_window()
+        {
+            //Arrange
+            ScenarioOne();
+
+            new Shortcut[]{
+                SelectLeft,
+                MoveRight,
+                MoveDown,
+            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenA.Bounds.X,
+                    m_screenA.Bounds.Y + m_screenA.Bounds.Height / 3,
+                    m_screenA.Bounds.Width,
+                    m_screenA.Bounds.Height / 3
+                ),
+                m_windows[0].Bounds
+            );
+
+            new Shortcut[]{
+                SelectDown,
+                MoveRight,
+                MoveRight,
+                MoveRight,
+                MoveRight,
+            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X + m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[2].Bounds
+            );
+        }
+
+
+        [TestMethod]
+        public void integration_wrap_window()
+        {
+            //Arrange
+            m_windows = new Window[] {
+                new Window(new Rectangle(1, 1, 1, 1), "window0"),
+                new Window(new Rectangle(1, 1, 1, 1), "window1"),
+                new Window(new Rectangle(1, 1, 1, 1), "window2"),
+            };
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[0].Bounds
+            );
+
+            Assert.AreEqual(m_windows[2].ID, m_workspace.SelectedWindow);
+
+            //Act
+            new Shortcut[]{
+                SelectLeft,
+                SelectLeft,
+                WrapVertical,
+                SelectRight,
+                MoveLeft,
+            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+
+            //Assert
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 2,
+                    m_screenB.Bounds.Height / 2
+                ),
+                m_windows[0].Bounds
+            );
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X,
+                    m_screenB.Bounds.Y + m_screenB.Bounds.Height / 2,
+                    m_screenB.Bounds.Width / 2,
+                    m_screenB.Bounds.Height / 2
+                ),
+                m_windows[1].Bounds
+            );
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X + m_screenB.Bounds.Width / 2,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 2,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[2].Bounds
+            );
+        }
+
+        [TestMethod]
+        public void integration_unwrap_window()
+        {
+            //Arrange
+            m_windows = new Window[] {
+                new Window(new Rectangle(1, 1, 1, 1), "window0"),
+                new Window(new Rectangle(1, 1, 1, 1), "window1"),
+                new Window(new Rectangle(1, 1, 1, 1), "window2"),
+            };
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
+
+            //Act
+            new Shortcut[]{
+                SelectLeft,
+                SelectLeft,
+                WrapVertical,
+                SelectRight,
+                MoveLeft,
+                UnWrap,
+            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+
+            //Assert
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[0].Bounds
+            );
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X + m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[1].Bounds
+            );
+
+            Assert.AreEqual(
+                new Rectangle(
+                    m_screenB.Bounds.X + (m_screenB.Bounds.Width / 3) * 2,
+                    m_screenB.Bounds.Y,
+                    m_screenB.Bounds.Width / 3,
+                    m_screenB.Bounds.Height
+                ),
+                m_windows[2].Bounds
+            );
+        }
     }
 }

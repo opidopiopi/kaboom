@@ -32,6 +32,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public override void UpdateBoundsOfChildren()
         {
+            if (Children.Count == 0) return;
+
             int numChildren = Children.Count;
             int heightPerChild = Bounds.Height / numChildren;
 

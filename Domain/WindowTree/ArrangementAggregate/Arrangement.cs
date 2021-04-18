@@ -139,6 +139,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
                     }
                 }
             }
+
+            UpdateBoundsOfChildren();
         }
 
         public IBoundedTreeNode FindChild(EntityID childID)

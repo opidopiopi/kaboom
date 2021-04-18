@@ -47,6 +47,91 @@ namespace Kaboom.Application
                 throw new System.Exception($"invalid windowID: {windowID}!");
             }
 
+            if(TryToMoveLocally(windowID, direction, ref parent))
+            {
+                return;
+            }
+
+            var window = parent.RemoveWindowAndReturn(windowID);
+            UpdateTree(parent);
+
+            if(TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
+            {
+                return;
+            }
+
+            if(TryToMoveToDifferentRoot(ref window, direction, ref parent))
+            {
+                return;
+            }
+            else
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    parent.InsertAsFirst(window);
+                }
+                else
+                {
+                    parent.InsertAsLast(window);
+                }
+
+                UpdateTree(parent);
+                return;
+            }
+        }
+
+        private bool TryToMoveToDifferentRoot(ref Window window, Direction direction, ref Arrangement parent)
+        {
+            var otherRoot = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+            if (otherRoot != null)
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    otherRoot.InsertAsLast(window);
+                }
+                else
+                {
+                    otherRoot.InsertAsFirst(window);
+                }
+
+                UpdateTree(otherRoot);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool TryToMoveUnderCurrentRoot(ref Window window, Direction direction, ref Arrangement parent)
+        {
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+            while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
+            {
+                if (superParent.SupportsAxis(direction.Axis))
+                {
+                    if (direction == Direction.Left || direction == Direction.Up)
+                    {
+                        superParent.InsertBefore(window, parent);
+                    }
+                    else
+                    {
+                        superParent.InsertAfter(window, parent);
+                    }
+
+                    UpdateTree(superParent);
+                    return true;
+                }
+
+                parent = superParent;
+                superParent = m_arrangements.FindParentOf(parent.ID);
+            }
+
+            return false;
+        }
+
+        private bool TryToMoveLocally(EntityID windowID, Direction direction, ref Arrangement parent)
+        {
             var neighbour = parent.FindChild(parent.NeighbourOfChildInDirection(windowID, direction));
             if (neighbour != null)  //we can move the window locally
             {
@@ -66,57 +151,12 @@ namespace Kaboom.Application
                     }
                 }
 
-                UpdateTree(m_arrangements.FindParentOf(windowID));
+                UpdateTree(parent);
+                return true;
             }
-            else  //we need to move the window to a different arrangement
+            else  //we can't move the child
             {
-                var window = parent.RemoveWindowAndReturn(windowID);
-
-                var superParent = m_arrangements.FindParentOf(parent.ID);
-                while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
-                {
-                    if (superParent.SupportsAxis(direction.Axis))
-                    {
-                        if (direction == Direction.Left || direction == Direction.Up)
-                        {
-                            superParent.InsertBefore(window, parent);
-                        }
-                        else
-                        {
-                            superParent.InsertAfter(window, parent);
-                        }
-
-                        UpdateTree(superParent);
-                        return;
-                    }
-
-                    parent = superParent;
-                    superParent = m_arrangements.FindParentOf(parent.ID);
-                }
-
-                neighbour = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
-                if(neighbour != null)
-                {
-                    if (direction == Direction.Left || direction == Direction.Up)
-                    {
-                        neighbour.InsertAsLast(window);
-                    }
-                    else
-                    {
-                        neighbour.InsertAsFirst(window);
-                    }
-                }
-                else
-                {
-                    if (direction == Direction.Left || direction == Direction.Up)
-                    {
-                        parent.InsertAsFirst(window);
-                    }
-                    else
-                    {
-                        parent.InsertAsLast(window);
-                    }
-                }
+                return false;
             }
         }
 
