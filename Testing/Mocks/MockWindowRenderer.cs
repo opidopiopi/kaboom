@@ -2,7 +2,7 @@
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using System.Collections.Generic;
 
-namespace Kaboom.Testing.Mocks
+namespace Kaboom.Testing.Mock
 {
     public class MockWindowRenderer : IWindowRenderer
     {

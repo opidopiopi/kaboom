@@ -1,23 +1,27 @@
 ﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 using System.Collections.Generic;
-using System.Linq;
 
-namespace Kaboom.Testing.Mocks
+namespace Kaboom.Testing.Mock
 {
     public class MockArrangement : Arrangement
     {
         public bool Updated = false;
         public string Title = "";
 
+
+        public MockArrangement()
+            : base(new Axis[] { })
+        {
+        }
+
         public MockArrangement(params Axis[] axes)
             : base(axes)
         {
-            
         }
 
-        public MockArrangement(string title)
-            : base(new Axis[] { })
+        public MockArrangement(string title, params Axis[] axes)
+            : base(axes)
         {
             Title = title;
         }

@@ -3,10 +3,10 @@ using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 {
-    public class HorizontalArrangement : Arrangement
+    public class VerticalArrangement : Arrangement
     {
-        public HorizontalArrangement()
-            : base(new Axis[] { Axis.X })
+        public VerticalArrangement()
+            : base(new Axis[] { Axis.Y })
         {
         }
 
@@ -20,7 +20,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             }
 
             int index = Children.IndexOf(child);
-            int neighbourIndex = index + (direction.Equals(Direction.Left) ? -1 : 1);
+            int neighbourIndex = index + (direction.Equals(Direction.Up) ? -1 : 1);
 
             if (neighbourIndex >= 0 && neighbourIndex <= Children.Count - 1)
             {
@@ -35,13 +35,13 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             if (Children.Count == 0) return;
 
             int numChildren = Children.Count;
-            int widthPerChild = Bounds.Width / numChildren;
+            int heightPerChild = Bounds.Height / numChildren;
 
-            for(int i = 0; i < numChildren; i++)
+            for (int i = 0; i < numChildren; i++)
             {
-                Children[i].Bounds = new Rectangle(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
+                Children[i].Bounds = new Rectangle(Bounds.X, Bounds.Y + i * heightPerChild, Bounds.Width, heightPerChild);
 
-                if(Children[i] is Arrangement arrangement)
+                if (Children[i] is Arrangement arrangement)
                 {
                     arrangement.UpdateBoundsOfChildren();
                 }

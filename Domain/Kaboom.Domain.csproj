@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Abstraction\Kaboom.Abstraction.csproj" />
+    <Compile Remove="Workspace\**" />
+    <EmbeddedResource Remove="Workspace\**" />
+    <None Remove="Workspace\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Workspace\Screen\" />
+    <ProjectReference Include="..\Abstraction\Kaboom.Abstraction.csproj" />
   </ItemGroup>
 
 </Project>
