@@ -12,3 +12,10 @@ Move Selection: Alt + (w, a, s, d)
 Wrap Window with Vertical Arrangement: Alt + v
 Wrap Window with Vertical Arrangement: Alt + h
 Unwrap parent of selected Window: Alt + u
+
+See I told you they suck...
+Some windows might not be catched and therefore not tiled.
+It is really a pain in the *** to find out which window we might want to catch and which not.
+I need to find a good solution for that one...
+
+If you have any suggestions feel free to open an issue.
