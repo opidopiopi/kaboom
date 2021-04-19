@@ -30,23 +30,18 @@ namespace Plugins
 
         public static Kaboom.Domain.ShortcutActions.Shortcut MapToShortcut(Keys key, KeyModifiers modifier)
         {
-            var keyChar = key.ToString();
-
-            if(keyChar.Length > 1)
-            {
-                throw new System.Exception($"Illegal key: '{key}' !!");
-            }
+            var keyChar = (char) key;
 
             switch (modifier)
             {
                 case KeyModifiers.Alt:
-                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.ALT, keyChar[0]);
+                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.ALT, keyChar);
                 case KeyModifiers.Control:
-                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.CTRL, keyChar[0]);
+                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.CTRL, keyChar);
                 case KeyModifiers.Shift:
-                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.SHIFT, keyChar[0]);
+                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.SHIFT, keyChar);
                 case KeyModifiers.Windows:
-                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.WINDOWS, keyChar[0]);
+                    return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.WINDOWS, keyChar);
                 default:
                     throw new System.Exception($"Illegal Modifier: {modifier} !");
             }

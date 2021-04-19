@@ -9,11 +9,6 @@ namespace Kaboom.Domain.ShortcutActions
 
         public Shortcut(Modifier modifier, char key)
         {
-            if(!char.IsLetterOrDigit(key))
-            {
-                throw new System.ArgumentException("Only alphanumeric characters are a valid key for the shortcut!");
-            }
-
             Modifier = modifier;
             Key = key;
         }
@@ -22,7 +17,7 @@ namespace Kaboom.Domain.ShortcutActions
         {
             return obj is Shortcut shortcut &&
                    EqualityComparer<Modifier>.Default.Equals(Modifier, shortcut.Modifier) &&
-                   char.ToLower(Key) == char.ToLower(shortcut.Key);
+                   Key == shortcut.Key;
         }
 
         public override int GetHashCode()

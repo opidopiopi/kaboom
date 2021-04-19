@@ -32,20 +32,20 @@ namespace Plugins
 
         public void Start()
         {
-            m_actionService.AddAction(new MoveWindowAction(new Shortcut(Modifier.ALT, 'j'), m_workspace, Direction.Left));
-            m_actionService.AddAction(new MoveWindowAction(new Shortcut(Modifier.ALT, 'l'), m_workspace, Direction.Right));
-            m_actionService.AddAction(new MoveWindowAction(new Shortcut(Modifier.ALT, 'i'), m_workspace, Direction.Up));
-            m_actionService.AddAction(new MoveWindowAction(new Shortcut(Modifier.ALT, 'k'), m_workspace, Direction.Down));
+            m_actionService.AddAction(new MoveWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Left, KeyModifiers.Alt), m_workspace, Direction.Left));
+            m_actionService.AddAction(new MoveWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Right, KeyModifiers.Alt), m_workspace, Direction.Right));
+            m_actionService.AddAction(new MoveWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Up, KeyModifiers.Alt), m_workspace, Direction.Up));
+            m_actionService.AddAction(new MoveWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Down, KeyModifiers.Alt), m_workspace, Direction.Down));
 
 
-            m_actionService.AddAction(new SelectWindowAction(new Shortcut(Modifier.ALT, 'a'), m_workspace, Direction.Left));
-            m_actionService.AddAction(new SelectWindowAction(new Shortcut(Modifier.ALT, 'd'), m_workspace, Direction.Right));
-            m_actionService.AddAction(new SelectWindowAction(new Shortcut(Modifier.ALT, 'w'), m_workspace, Direction.Up));
-            m_actionService.AddAction(new SelectWindowAction(new Shortcut(Modifier.ALT, 's'), m_workspace, Direction.Down));
+            m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Left, KeyModifiers.Control), m_workspace, Direction.Left));
+            m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Right, KeyModifiers.Control), m_workspace, Direction.Right));
+            m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Up, KeyModifiers.Control), m_workspace, Direction.Up));
+            m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Down, KeyModifiers.Control), m_workspace, Direction.Down));
 
-            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(new Shortcut(Modifier.ALT, 'v'), m_workspace));
-            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(new Shortcut(Modifier.ALT, 'h'), m_workspace));
-            m_actionService.AddAction(new UnWrapWindowAction(new Shortcut(Modifier.ALT, 'u'), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.V, KeyModifiers.Control), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.H, KeyModifiers.Control), m_workspace));
+            m_actionService.AddAction(new UnWrapWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.U, KeyModifiers.Control), m_workspace));
 
             m_windowCatcher.RunUpdateLoop();
         }

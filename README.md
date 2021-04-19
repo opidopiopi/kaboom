@@ -4,16 +4,15 @@ BUT, imagine aaalll the people, that thought jeez window explorer sucks. And the
 Yeah, I know not the most creative story ever...
 
 Anyhow, Kaboom is a tiling window manager for windows.
-It tiles windows. The shortcuts suck at this point, but dont worry I'll change that asap...
+It tiles windows. It tiles horizontally by default, a vertical arrangement is available too.
 
-If you insist on trying it now, here are the shortcuts:</br>
-Move windows: Alt + (j, k, l, i) </br>
-Move Selection: Alt + (w, a, s, d) </br>
-Wrap Window with Vertical Arrangement: Alt + v </br>
-Wrap Window with Vertical Arrangement: Alt + h </br>
-Unwrap parent of selected Window: Alt + u </br>
+The shortcuts are hardcoded for now: </br>
+Move windows: Alt + (arrow keys) </br>
+Move Selection: Ctrl + (arrow keys) </br>
+Wrap Window with Vertical Arrangement: Ctrl + v </br>
+Wrap Window with Vertical Arrangement: Ctrl + h </br>
+Unwrap parent of selected Window: Ctrl + u </br>
 
-See I told you they suck...
 Some windows might not be catched and therefore not tiled.
 It is really a pain in the *** to find out which window we might want to catch and which not.
 I need to find a good solution for that one...

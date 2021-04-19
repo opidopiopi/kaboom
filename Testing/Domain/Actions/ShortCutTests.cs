@@ -1,6 +1,5 @@
 ﻿using Kaboom.Domain.ShortcutActions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Kaboom.Testing.Domain.Actions
 {
@@ -9,7 +8,7 @@ namespace Kaboom.Testing.Domain.Actions
     {
 
         [TestMethod]
-        public void shortcut_only_alphanumeri_keys_allowed()
+        public void shortcut_all_keys_allowed()
         {
             new Shortcut(Modifier.WINDOWS, 'a');
             new Shortcut(Modifier.WINDOWS, 's');
@@ -23,14 +22,13 @@ namespace Kaboom.Testing.Domain.Actions
             new Shortcut(Modifier.WINDOWS, '4');
             new Shortcut(Modifier.WINDOWS, '7');
             new Shortcut(Modifier.WINDOWS, '9');
-
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '+'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '?'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '%'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '§'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '"'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '~'); });
-            Assert.ThrowsException<ArgumentException>(() => { new Shortcut(Modifier.WINDOWS, '-'); });
+            new Shortcut(Modifier.WINDOWS, '+');
+            new Shortcut(Modifier.WINDOWS, '?');
+            new Shortcut(Modifier.WINDOWS, '%');
+            new Shortcut(Modifier.WINDOWS, '§');
+            new Shortcut(Modifier.WINDOWS, '"');
+            new Shortcut(Modifier.WINDOWS, '~');
+            new Shortcut(Modifier.WINDOWS, '-');
         }
 
 
@@ -42,6 +40,8 @@ namespace Kaboom.Testing.Domain.Actions
 
             Assert.AreNotEqual(new Shortcut(Modifier.WINDOWS, 'a'), new Shortcut(Modifier.ALT, 'a'));
             Assert.AreNotEqual(new Shortcut(Modifier.ALT, 'b'), new Shortcut(Modifier.ALT, 'a'));
+
+            Assert.AreNotEqual(new Shortcut(Modifier.WINDOWS, 'a'), new Shortcut(Modifier.WINDOWS, 'A'));
         }
     }
 }
