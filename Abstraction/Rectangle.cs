@@ -30,8 +30,8 @@ namespace Kaboom.Abstraction
 
         public bool IsPointInside(int x, int y)
         {
-            return  (X <= x && x <= X + Width) &&
-                    (Y <= y && y <= Y + Height);
+            return  (X <= x && x < X + Width) &&
+                    (Y <= y && y < Y + Height);
         }
 
         public override String ToString()

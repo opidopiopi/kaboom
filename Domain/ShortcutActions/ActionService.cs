@@ -6,12 +6,10 @@ namespace Kaboom.Domain.ShortcutActions
     {
         private List<Action> m_actions = new List<Action>();
         private IListenToShortcuts m_shortcutListener;
-        private IActionTarget m_actionTarget;
 
-        public ActionService(IListenToShortcuts shortcutListener, IActionTarget actionTarget)
+        public ActionService(IListenToShortcuts shortcutListener)
         {
             m_shortcutListener = shortcutListener;
-            m_actionTarget = actionTarget;
 
             m_shortcutListener.ShortcutTriggered += (sender, args) =>
             {
@@ -25,7 +23,7 @@ namespace Kaboom.Domain.ShortcutActions
 
             if(action != null)
             {
-                action.Execute(m_actionTarget);
+                action.Execute();
             }
         }
 

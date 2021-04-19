@@ -9,5 +9,6 @@ namespace Kaboom.Domain.Services
         void RemoveWindow(EntityID windowID);
         void MoveWindow(EntityID windowID, Direction direction);
         EntityID NextWindowInDirection(Direction direction, EntityID currentlySelected);
+        void UnWrapWindowParent(EntityID windowID);
     }
 }

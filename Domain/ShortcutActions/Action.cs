@@ -9,6 +9,6 @@
             Shortcut = shortcut;
         }
 
-        public abstract void Execute(IActionTarget actionTarget);
+        public abstract void Execute();
     }
 }

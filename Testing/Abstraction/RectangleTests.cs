@@ -69,8 +69,8 @@ namespace Kaboom.Testing.Abstraction
                     Rectangle lowerLeftCorner = new Rectangle(x, y + h, 100, 100);
                     Rectangle lowerRightCorner = new Rectangle(x + w, y + h, 100, 100);
 
-                    Rectangle[] theseAreOutside = { tooFarLeft, tooFarRight, tooFarUp, tooFarDown };
-                    Rectangle[] theseAreInside = { inside, topLeftCorner, topRightCorner, lowerLeftCorner, lowerRightCorner };
+                    Rectangle[] theseAreOutside = { tooFarLeft, tooFarRight, tooFarUp, tooFarDown, topRightCorner, lowerLeftCorner, lowerRightCorner };
+                    Rectangle[] theseAreInside = { inside, topLeftCorner };
 
                     foreach (var isOutside in theseAreOutside)
                     {

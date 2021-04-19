@@ -136,12 +136,19 @@ namespace Kaboom.Testing.Application
             m_arrangementRepo.Setup(repo => repo.FindParentOf(wrapper.ID)).Returns(parent);
             m_workspace.InsertWindow(window);
 
+            m_windowService.Setup(service => service.UnWrapWindowParent(window.ID)).Callback(
+                new InvocationAction(id => {
+                    parent.Remove(wrapper);
+                    parent.InsertAsFirst(window);
+            }));
+
             //Act
             m_workspace.UnWrapSelectedWindow();
 
             //Assert
             Assert.IsTrue(parent.MyChildren.Contains(window));
             Assert.IsFalse(parent.MyChildren.Contains(wrapper));
+            m_windowService.Verify(service => service.UnWrapWindowParent(window.ID), Times.Once);
         }
     }
 }

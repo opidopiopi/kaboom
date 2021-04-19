@@ -54,7 +54,7 @@ namespace Kaboom.Testing.Integration
             m_workspace = new Workspace(m_windowService, m_arrangementRepository);
 
             m_shortcutListener = new MockShortcutListener();
-            m_actionService = new ActionService(m_shortcutListener, new Mock<IActionTarget>().Object);
+            m_actionService = new ActionService(m_shortcutListener);
             AddActions();
 
             //somewhat like this

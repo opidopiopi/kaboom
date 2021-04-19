@@ -22,7 +22,7 @@ namespace Kaboom.Domain.ShortcutActions
         {
             return obj is Shortcut shortcut &&
                    EqualityComparer<Modifier>.Default.Equals(Modifier, shortcut.Modifier) &&
-                   Key == shortcut.Key;
+                   char.ToLower(Key) == char.ToLower(shortcut.Key);
         }
 
         public override int GetHashCode()

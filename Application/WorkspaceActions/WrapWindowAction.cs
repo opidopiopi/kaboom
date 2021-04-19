@@ -10,7 +10,7 @@ namespace Kaboom.Application.WorkspaceActions
         {
         }
 
-        public override void Execute(IActionTarget actionTarget)
+        public override void Execute()
         {
             m_workspace.WrapSelectedWindow(new ArrangementType());
         }
