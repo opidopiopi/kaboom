@@ -1,6 +1,5 @@
 ﻿using Kaboom.Application;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using System;
 
 namespace Plugins
 {
