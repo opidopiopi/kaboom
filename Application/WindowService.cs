@@ -237,6 +237,15 @@ namespace Kaboom.Application
             }
         }
 
+        public void UnWrapWindowParent(EntityID windowID)
+        {
+            var parent = m_arrangements.FindParentOf(windowID);
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+            superParent.UnWrapChildToSelf(parent.ID);
+
+            UpdateTree(superParent);
+        }
+
         private void UpdateTree(Arrangement parent)
         {
             parent.UpdateBoundsOfChildren();

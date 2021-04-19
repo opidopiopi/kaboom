@@ -81,8 +81,7 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow != null)
             {
-                var parent = m_arrangementRepository.FindParentOf(m_selectedWindow);
-                m_arrangementRepository.FindParentOf(parent.ID).UnWrapChildToSelf(parent.ID);
+                m_windowService.UnWrapWindowParent(m_selectedWindow);
             }
         }
     }

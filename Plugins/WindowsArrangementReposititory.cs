@@ -49,13 +49,13 @@ namespace Plugins
                     return arrangement.Bounds.Y + arrangement.Bounds.Height >= root.Bounds.Y && arrangement.Bounds.Y <= root.Bounds.Y + root.Bounds.Height;
                 });
 
-                if(direction == Direction.Up)
+                if (direction == Direction.Left)
                 {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y < root.Bounds.Y);
+                    candidates = candidates.Where(arrangement => arrangement.Bounds.X < root.Bounds.X);
                 }
                 else
                 {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y > root.Bounds.Y);
+                    candidates = candidates.Where(arrangement => arrangement.Bounds.X > root.Bounds.X);
                 }
             }
             else
@@ -65,13 +65,13 @@ namespace Plugins
                     return arrangement.Bounds.X + arrangement.Bounds.Width >= root.Bounds.X && arrangement.Bounds.X <= root.Bounds.X + root.Bounds.Width;
                 });
 
-                if (direction == Direction.Left)
+                if (direction == Direction.Up)
                 {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.X < root.Bounds.X);
+                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y < root.Bounds.Y);
                 }
                 else
                 {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.X > root.Bounds.X);
+                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y > root.Bounds.Y);
                 }
             }
 
