@@ -15,6 +15,12 @@ namespace Plugins
         }
 
         /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/MoveWindow.html
+         */
+        [DllImport("User32.dll")]
+        public static extern bool MoveWindow(IntPtr handle, int x, int y, int width, int height, bool redraw);
+
+        /* 
          * Origin: http://pinvoke.net/default.aspx/user32/IsWindow.html
          */
         [DllImport("user32.dll")]

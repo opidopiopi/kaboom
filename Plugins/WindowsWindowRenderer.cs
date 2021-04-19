@@ -15,14 +15,13 @@ namespace Plugins
 
         public void Render(Window window)
         {
-            Win32Wrapper.SetWindowPos(
+            Win32Wrapper.MoveWindow(
                 m_mapper.MapToWindowHandle(window.ID),
-                new IntPtr(0),
                 window.Bounds.X,
                 window.Bounds.Y,
                 window.Bounds.Width,
                 window.Bounds.Height,
-                0
+                true
             );
         }
     }
