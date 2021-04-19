@@ -8,16 +8,14 @@ namespace Kaboom.Testing.Domain.Actions
     public class ActionsServiceTests
     {
         private ActionService m_actionService;
-        private MockActionTarget m_actionTarget;
         private MockShortcutListener m_shortcutListener;
 
         [TestInitialize]
         public void SetUp()
         {
-            m_actionTarget = new MockActionTarget();
             m_shortcutListener = new MockShortcutListener();
 
-            m_actionService = new ActionService(m_shortcutListener, m_actionTarget);
+            m_actionService = new ActionService(m_shortcutListener);
         }
 
 

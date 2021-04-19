@@ -12,7 +12,7 @@ namespace Kaboom.Application.WorkspaceActions
             m_direction = direction;
         }
 
-        public override void Execute(IActionTarget actionTarget)
+        public override void Execute()
         {
             m_workspace.MoveSelectedWindow(m_direction);
         }

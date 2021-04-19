@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaboom.Application", "Appli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kaboom.Adapters", "Adapters\Kaboom.Adapters.csproj", "{C397DFF0-AA98-4584-80A6-4B10F49E3299}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugins", "Plugins\Plugins.csproj", "{1FE2625B-8E08-45F8-ACAC-03E4DD0FE54C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C397DFF0-AA98-4584-80A6-4B10F49E3299}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE2625B-8E08-45F8-ACAC-03E4DD0FE54C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE2625B-8E08-45F8-ACAC-03E4DD0FE54C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE2625B-8E08-45F8-ACAC-03E4DD0FE54C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE2625B-8E08-45F8-ACAC-03E4DD0FE54C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -20,7 +20,7 @@ namespace Kaboom.Testing.Application
             var action = new MoveWindowAction(new Shortcut(Modifier.CTRL, 'M'), workspaceMock.Object, Direction.Up);
 
             //Act
-            action.Execute(new Mock<IActionTarget>().Object);
+            action.Execute();
 
             //Assert
             workspaceMock.Verify(workspace => workspace.MoveSelectedWindow(Direction.Up), Times.Once());
@@ -34,7 +34,7 @@ namespace Kaboom.Testing.Application
             var action = new SelectWindowAction(new Shortcut(Modifier.CTRL, 'M'), workspaceMock.Object, Direction.Up);
 
             //Act
-            action.Execute(new Mock<IActionTarget>().Object);
+            action.Execute();
 
             //Assert
             workspaceMock.Verify(workspace => workspace.MoveSelection(Direction.Up), Times.Once());
@@ -48,7 +48,7 @@ namespace Kaboom.Testing.Application
             var action = new WrapWindowAction<MockArrangement>(new Shortcut(Modifier.CTRL, 'M'), workspaceMock.Object);
 
             //Act
-            action.Execute(new Mock<IActionTarget>().Object);
+            action.Execute();
 
             //Assert
             workspaceMock.Verify(workspace => workspace.WrapSelectedWindow(It.IsAny<MockArrangement>()), Times.Once());
@@ -63,7 +63,7 @@ namespace Kaboom.Testing.Application
             var action = new UnWrapWindowAction(new Shortcut(Modifier.CTRL, 'M'), workspaceMock.Object);
 
             //Act
-            action.Execute(new Mock<IActionTarget>().Object);
+            action.Execute();
 
             //Assert
             workspaceMock.Verify(workspace => workspace.UnWrapSelectedWindow(), Times.Once());

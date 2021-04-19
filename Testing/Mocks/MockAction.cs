@@ -10,7 +10,7 @@ namespace Kaboom.Testing.Mock
         {
         }
 
-        public override void Execute(IActionTarget actionTarget)
+        public override void Execute()
         {
             TriggerCount++;
         }
