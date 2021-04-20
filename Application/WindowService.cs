@@ -251,5 +251,13 @@ namespace Kaboom.Application
             parent.UpdateBoundsOfChildren();
             parent.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
         }
+
+        public void HightlightWindow(EntityID windowID)
+        {
+            if(windowID != null)
+            {
+                m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
+            }
+        }
     }
 }

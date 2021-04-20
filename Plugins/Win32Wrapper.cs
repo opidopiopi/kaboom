@@ -15,6 +15,25 @@ namespace Plugins
         }
 
         /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/SetWinEventHook.html
+         */
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+        public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        public const uint EVENT_OBJECT_LOCATIONCHANGE = 0x800B; // hwnd ID idChild is moved/sized item
+        public const uint WINEVENT_OUTOFCONTEXT = 0x0000; // Events are ASYNC
+        public const uint WINEVENT_SKIPOWNTHREAD = 0x0001; // Don't call back for events on installer's thread
+        public const uint WINEVENT_SKIPOWNPROCESS = 0x0002; // Don't call back for events on installer's process
+        public const uint WINEVENT_INCONTEXT = 0x0004; // Events are SYNC, this causes your dll to be injected into every process
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/UnhookWinEvent.html
+         */
+        [DllImport("user32.dll")]
+        public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        /* 
          * Origin: http://pinvoke.net/default.aspx/user32/ShowWindow.html
          */
         [DllImport("user32.dll")]

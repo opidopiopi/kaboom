@@ -85,6 +85,7 @@ namespace Plugins
             return (
                 Win32Wrapper.IsWindowVisible(windowHandle) &&
                 string.IsNullOrEmpty(name) == false &&
+                !name.Equals(WindowsWindowRenderer.OVERLAY_NAME) &&
                 (info.dwStyle & (uint)Win32Wrapper.WindowStyles.WS_POPUP) == 0 &&
                 Win32Wrapper.IsWindow(windowHandle) == true
             );
