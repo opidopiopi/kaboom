@@ -34,12 +34,19 @@ namespace Plugins
 
         public void Render(Window window)
         {
+            var handle = m_mapper.MapToWindowHandle(window.ID);
+
+            //windows might have invisible border that we want to get rid of
+            Win32Wrapper.RECT withBorder, noBorder;
+            Win32Wrapper.GetWindowRect(handle, out withBorder);
+            Win32Wrapper.DwmGetWindowAttribute(handle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out noBorder, sizeof(int) * 4);
+
             Win32Wrapper.MoveWindow(
-                m_mapper.MapToWindowHandle(window.ID),
-                window.Bounds.X,
-                window.Bounds.Y,
-                window.Bounds.Width,
-                window.Bounds.Height,
+                handle,
+                window.Bounds.X + withBorder.X - noBorder.X,
+                window.Bounds.Y + withBorder.Y - noBorder.Y,
+                window.Bounds.Width + withBorder.Width - noBorder.Width,
+                window.Bounds.Height + withBorder.Height - noBorder.Height,
                 true
             );
         }

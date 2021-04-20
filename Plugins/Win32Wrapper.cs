@@ -15,6 +15,41 @@ namespace Plugins
         }
 
         /* 
+         * Origin: http://pinvoke.net/default.aspx/Enums/DwmGetWindowAttribute.html
+         */
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hWnd, DwmWindowAttribute dwAttribute, out RECT lpRect, int cbAttribute);
+        public enum DwmWindowAttribute
+        {
+            DWMWA_NCRENDERING_ENABLED = 1,
+            DWMWA_NCRENDERING_POLICY,
+            DWMWA_TRANSITIONS_FORCEDISABLED,
+            DWMWA_ALLOW_NCPAINT,
+            DWMWA_CAPTION_BUTTON_BOUNDS,
+            DWMWA_NONCLIENT_RTL_LAYOUT,
+            DWMWA_FORCE_ICONIC_REPRESENTATION,
+            DWMWA_FLIP3D_POLICY,
+            DWMWA_EXTENDED_FRAME_BOUNDS,
+            DWMWA_HAS_ICONIC_BITMAP,
+            DWMWA_DISALLOW_PEEK,
+            DWMWA_EXCLUDED_FROM_PEEK,
+            DWMWA_CLOAK,
+            DWMWA_CLOAKED,
+            DWMWA_FREEZE_REPRESENTATION,
+            DWMWA_LAST
+        };
+
+        /* 
+        * Origin: http://pinvoke.net/default.aspx/user32/GetForegroundWindow.html
+        */
+        [DllImport("user32.dll")]
+        public static extern bool AdjustWindowRectEx(ref RECT lpRect, uint dwStyle, bool bMenu, uint dwExStyle);
+
+        //see https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlonga
+        public const int GWL_STYLE = -16;
+        public const int GWL_EXSTYLE = -20;
+
+        /* 
         * Origin: http://pinvoke.net/default.aspx/user32/GetForegroundWindow.html
         */
         [DllImport("user32.dll")]
@@ -119,6 +154,12 @@ namespace Plugins
          */
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/coredll/GetWindowLong.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetWindowLong(IntPtr window, int index);
 
         /* 
          * Origin: http://pinvoke.net/default.aspx/user32/SetWindowLong.html

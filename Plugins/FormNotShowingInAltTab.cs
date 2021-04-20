@@ -49,7 +49,7 @@ namespace Plugins
             if (m_selectedWindowHandle != IntPtr.Zero && Win32Wrapper.IsWindow(m_selectedWindowHandle))
             {
                 Win32Wrapper.RECT rect;
-                Win32Wrapper.GetWindowRect(m_selectedWindowHandle, out rect);
+                Win32Wrapper.DwmGetWindowAttribute(m_selectedWindowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, sizeof(int) * 4);
 
                 var form = sender as FormNotShowingInAltTab;
                 var graphics = e.Graphics;
