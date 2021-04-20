@@ -13,6 +13,8 @@ namespace Plugins
         private List<IntPtr> m_eventHooks = new List<IntPtr>();
         private Win32Wrapper.WinEventDelegate m_eventDelegate;
 
+        private long m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
         public WindowCatcher(WindowMapper windowMapper, IWorkspace workspace)
         {
             m_windowMapper = windowMapper;
@@ -114,7 +116,11 @@ namespace Plugins
         {
             if(eventType == Win32Wrapper.EVENT_OBJECT_CREATE || eventType == Win32Wrapper.EVENT_OBJECT_DESTROY)
             {
-                UpdateWindowsAndTriggerEvents();
+                if(DateTimeOffset.Now.ToUnixTimeMilliseconds() - m_lastUpdate > 10)
+                {
+                    UpdateWindowsAndTriggerEvents();
+                    m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                }
             }
             else if (eventType == Win32Wrapper.EVENT_SYSTEM_FOREGROUND && m_windows.Contains(hwnd))
             {
