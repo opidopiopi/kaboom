@@ -15,6 +15,12 @@ namespace Plugins
         }
 
         /* 
+        * Origin: http://pinvoke.net/default.aspx/user32/GetForegroundWindow.html
+        */
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        /* 
          * Origin: https://www.pinvoke.net/default.aspx/user32/DispatchMessage.html
          */
         [DllImport("user32.dll")]
@@ -99,6 +105,8 @@ namespace Plugins
         public const uint WINEVENT_SKIPOWNPROCESS = 0x0002; // Don't call back for events on installer's process
         public const uint WINEVENT_INCONTEXT = 0x0004; // Events are SYNC, this causes your dll to be injected into every process
         public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        public const uint EVENT_OBJECT_CREATE = 0x8000; // hwnd ID idChild is created item
+        public const uint EVENT_OBJECT_DESTROY = 0x8001; // hwnd ID idChild is destroyed item
 
         /* 
          * Origin: http://pinvoke.net/default.aspx/user32/UnhookWinEvent.html

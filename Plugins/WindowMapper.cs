@@ -40,5 +40,10 @@ namespace Plugins
         {
             m_windowInfo.Remove(handle);
         }
+
+        internal bool HasMappingFor(IntPtr handle)
+        {
+            return m_windowInfo.ContainsKey(handle);
+        }
     }
 }

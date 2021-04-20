@@ -24,7 +24,10 @@ namespace Plugins
             var handle = m_mapper.MapToWindowHandle(selectedWindow.ID);
             m_graphicsForm.SetSelectedWindowHandle(handle);
 
-            Win32Wrapper.SetForegroundWindow(handle);
+            if (Win32Wrapper.GetForegroundWindow() != handle)
+            {
+                Win32Wrapper.SetForegroundWindow(handle);
+            }
 
             Render(selectedWindow);
         }
