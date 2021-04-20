@@ -8,16 +8,19 @@ namespace Plugins
 {
     public class WindowCatcher
     {
-        private const int UPDATE_INTERVAL = 100;
+        private const int UPDATE_INTERVAL = 10;
 
         private IWorkspace m_workspace;
         private WindowMapper m_windowMapper;
         private List<IntPtr> m_windows = new List<IntPtr>();
+        private IntPtr m_eventHook;
 
         public WindowCatcher(WindowMapper windowMapper, IWorkspace workspace)
         {
             m_windowMapper = windowMapper;
             m_workspace = workspace;
+
+            HookEvent();
         }
 
         public void RunUpdateLoop()
@@ -26,6 +29,13 @@ namespace Plugins
             {
                 UpdateWindowsAndTriggerEvents();
                 Thread.Sleep(UPDATE_INTERVAL);
+
+                Win32Wrapper.MSG msg;
+                while (Win32Wrapper.GetMessage(out msg, IntPtr.Zero, 0, 0) > 0)
+                {
+                    Win32Wrapper.TranslateMessage(ref msg);
+                    Win32Wrapper.DispatchMessage(ref msg);
+                }
             }
         }
 
@@ -117,6 +127,32 @@ namespace Plugins
                 window.Bounds.Width,
                 window.Bounds.Height,
                 0x0040);
+        }
+
+        public void ForegroundWindowCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
+        {
+            if (m_windows.Contains(hwnd))
+            {
+                m_workspace.SelectWindow(m_windowMapper.MapToDomain(hwnd).ID);
+            }
+        }
+
+        private void HookEvent()
+        {
+            m_eventHook = Win32Wrapper.SetWinEventHook(
+                Win32Wrapper.EVENT_SYSTEM_FOREGROUND,
+                Win32Wrapper.EVENT_SYSTEM_FOREGROUND,
+                IntPtr.Zero,
+                ForegroundWindowCallback,
+                0, 0,
+                Win32Wrapper.WINEVENT_OUTOFCONTEXT
+                );
+        }
+
+        private void UnHookEvent()
+        {
+            Win32Wrapper.UnhookWinEvent(m_eventHook);
+            m_eventHook = IntPtr.Zero;
         }
     }
 }

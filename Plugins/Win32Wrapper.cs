@@ -15,6 +15,78 @@ namespace Plugins
         }
 
         /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/DispatchMessage.html
+         */
+        [DllImport("user32.dll")]
+        public static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/TranslateMessage.html
+         */
+        [DllImport("user32.dll")]
+        public static extern bool TranslateMessage([In] ref MSG lpMsg);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/Structures/POINT.html
+         */
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public POINT(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+
+            public static implicit operator System.Drawing.Point(POINT p)
+            {
+                return new System.Drawing.Point(p.X, p.Y);
+            }
+
+            public static implicit operator POINT(System.Drawing.Point p)
+            {
+                return new POINT(p.X, p.Y);
+            }
+        }
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/Structures/MSG.html
+         */
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MSG
+        {
+            IntPtr hwnd;
+            uint message;
+            UIntPtr wParam;
+            IntPtr lParam;
+            int time;
+            POINT pt;
+            int lPrivate;
+        }
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/GetMessage.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/SetForegroundWindow.html
+         */
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/SetActiveWindow.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        /* 
          * Origin: http://pinvoke.net/default.aspx/user32/SetWinEventHook.html
          */
         [DllImport("user32.dll")]
@@ -26,6 +98,7 @@ namespace Plugins
         public const uint WINEVENT_SKIPOWNTHREAD = 0x0001; // Don't call back for events on installer's thread
         public const uint WINEVENT_SKIPOWNPROCESS = 0x0002; // Don't call back for events on installer's process
         public const uint WINEVENT_INCONTEXT = 0x0004; // Events are SYNC, this causes your dll to be injected into every process
+        public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
 
         /* 
          * Origin: http://pinvoke.net/default.aspx/user32/UnhookWinEvent.html

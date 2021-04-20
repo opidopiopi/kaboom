@@ -21,7 +21,11 @@ namespace Plugins
 
         public void HighlightWindow(Window selectedWindow)
         {
-            m_graphicsForm.SetSelectedWindowHandle(m_mapper.MapToWindowHandle(selectedWindow.ID));
+            var handle = m_mapper.MapToWindowHandle(selectedWindow.ID);
+            m_graphicsForm.SetSelectedWindowHandle(handle);
+
+            Win32Wrapper.SetForegroundWindow(handle);
+
             Render(selectedWindow);
         }
 
