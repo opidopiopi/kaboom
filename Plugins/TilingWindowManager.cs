@@ -43,9 +43,9 @@ namespace Plugins
             m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Up, KeyModifiers.Control), m_workspace, Direction.Up));
             m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Down, KeyModifiers.Control), m_workspace, Direction.Down));
 
-            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.V, KeyModifiers.Control), m_workspace));
-            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.H, KeyModifiers.Control), m_workspace));
-            m_actionService.AddAction(new UnWrapWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.U, KeyModifiers.Control), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.V, KeyModifiers.Alt), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.H, KeyModifiers.Alt), m_workspace));
+            m_actionService.AddAction(new UnWrapWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.U, KeyModifiers.Alt), m_workspace));
 
             m_windowCatcher.RunUpdateLoop();
         }
