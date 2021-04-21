@@ -7,6 +7,7 @@ namespace Plugins
 {
     public class WindowsWindowRenderer : IWindowRenderer
     {
+        public const int WINDOW_BORDER_WIDTH = 5;
         public static string OVERLAY_NAME = "Kaboom_overlay";
 
         private WindowMapper m_mapper;
@@ -41,12 +42,17 @@ namespace Plugins
             Win32Wrapper.GetWindowRect(handle, out withBorder);
             Win32Wrapper.DwmGetWindowAttribute(handle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out noBorder, sizeof(int) * 4);
 
+            int xOffset = withBorder.X - noBorder.X;
+            int yOffset = withBorder.Y - noBorder.Y;
+            int widthOffset = withBorder.Width - noBorder.Width;
+            int heightOffset = withBorder.Height - noBorder.Height;
+
             Win32Wrapper.MoveWindow(
                 handle,
-                window.Bounds.X + withBorder.X - noBorder.X,
-                window.Bounds.Y + withBorder.Y - noBorder.Y,
-                window.Bounds.Width + withBorder.Width - noBorder.Width,
-                window.Bounds.Height + withBorder.Height - noBorder.Height,
+                window.Bounds.X + xOffset + WINDOW_BORDER_WIDTH,
+                window.Bounds.Y + yOffset + WINDOW_BORDER_WIDTH,
+                window.Bounds.Width + widthOffset - 2 * WINDOW_BORDER_WIDTH,
+                window.Bounds.Height + heightOffset - 2 * WINDOW_BORDER_WIDTH,
                 true
             );
         }

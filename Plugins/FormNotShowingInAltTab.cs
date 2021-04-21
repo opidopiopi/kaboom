@@ -48,17 +48,28 @@ namespace Plugins
         {
             if (m_selectedWindowHandle != IntPtr.Zero && Win32Wrapper.IsWindow(m_selectedWindowHandle))
             {
-                Win32Wrapper.RECT rect;
-                Win32Wrapper.DwmGetWindowAttribute(m_selectedWindowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, sizeof(int) * 4);
+                Win32Wrapper.RECT windowRect;
+                Win32Wrapper.DwmGetWindowAttribute(m_selectedWindowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out windowRect, sizeof(int) * 4);
 
                 var form = sender as FormNotShowingInAltTab;
+                windowRect.X -= form.Bounds.X;
+                windowRect.Y -= form.Bounds.Y;
+
                 var graphics = e.Graphics;
                 var pen = new Pen(Color.WhiteSmoke)
                 {
                     Width = SELECTED_WINDOW_BORDER_WIDTH,
                     Alignment = System.Drawing.Drawing2D.PenAlignment.Inset,
                 };
-                graphics.DrawRectangle(pen, rect.X - form.Bounds.X, rect.Y - form.Bounds.Y, rect.Width, rect.Height);
+
+                graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                graphics.DrawRectangle(
+                    pen,
+                    windowRect.X - WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
+                    windowRect.Y - WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
+                    windowRect.Width + 2 * WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
+                    windowRect.Height + 2 * WindowsWindowRenderer.WINDOW_BORDER_WIDTH
+                );
             }
             else
             {
