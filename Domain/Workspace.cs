@@ -21,19 +21,19 @@ namespace Kaboom.Application
 
         public void InsertWindow(Window window)
         {
+            m_windowService.InsertWindowIntoTree(window);
+
             if (m_selectedWindow == null)
             {
-                m_selectedWindow = window.ID;
+                SelectWindow(window.ID);
             }
-
-            m_windowService.InsertWindowIntoTree(window);
         }
 
         public void RemoveWindow(EntityID windowID)
         {
             if (m_selectedWindow != null && m_selectedWindow.Equals(windowID))
             {
-                m_selectedWindow = null;
+                SelectWindow(null);
             }
 
             m_windowService.RemoveWindow(windowID);
@@ -51,7 +51,7 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow != null)
             {
-                m_selectedWindow = m_windowService.NextWindowInDirection(direction, m_selectedWindow);
+                SelectWindow(m_windowService.NextWindowInDirection(direction, m_selectedWindow));
             }
             else
             {
@@ -62,7 +62,7 @@ namespace Kaboom.Application
 
                     if(window != null)
                     {
-                        m_selectedWindow = window;
+                        SelectWindow(window);
                         return;
                     }
                 }
@@ -83,6 +83,12 @@ namespace Kaboom.Application
             {
                 m_windowService.UnWrapWindowParent(m_selectedWindow);
             }
+        }
+
+        public void SelectWindow(EntityID windowID)
+        {
+            m_selectedWindow = windowID;
+            m_windowService.HightlightWindow(m_selectedWindow);
         }
     }
 }

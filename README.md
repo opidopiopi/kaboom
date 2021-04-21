@@ -9,9 +9,9 @@ It tiles windows. It tiles horizontally by default, a vertical arrangement is av
 The shortcuts are hardcoded for now: </br>
 Move windows: Alt + (arrow keys) </br>
 Move Selection: Ctrl + (arrow keys) </br>
-Wrap Window with Vertical Arrangement: Ctrl + v </br>
-Wrap Window with Vertical Arrangement: Ctrl + h </br>
-Unwrap parent of selected Window: Ctrl + u </br>
+Wrap Window with Vertical Arrangement: Alt + v </br>
+Wrap Window with Vertical Arrangement: Alt + h </br>
+Unwrap parent of selected Window: Alt + u </br>
 
 Some windows might not be catched and therefore not tiled.
 It is really a pain in the *** to find out which window we might want to catch and which not.
