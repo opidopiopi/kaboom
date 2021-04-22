@@ -15,10 +15,151 @@ namespace Plugins
         }
 
         /* 
+         * Origin: http://pinvoke.net/default.aspx/Enums/DwmGetWindowAttribute.html
+         */
+        [DllImport("dwmapi.dll")]
+        public static extern int DwmGetWindowAttribute(IntPtr hWnd, DwmWindowAttribute dwAttribute, out RECT lpRect, int cbAttribute);
+        public enum DwmWindowAttribute
+        {
+            DWMWA_NCRENDERING_ENABLED = 1,
+            DWMWA_NCRENDERING_POLICY,
+            DWMWA_TRANSITIONS_FORCEDISABLED,
+            DWMWA_ALLOW_NCPAINT,
+            DWMWA_CAPTION_BUTTON_BOUNDS,
+            DWMWA_NONCLIENT_RTL_LAYOUT,
+            DWMWA_FORCE_ICONIC_REPRESENTATION,
+            DWMWA_FLIP3D_POLICY,
+            DWMWA_EXTENDED_FRAME_BOUNDS,
+            DWMWA_HAS_ICONIC_BITMAP,
+            DWMWA_DISALLOW_PEEK,
+            DWMWA_EXCLUDED_FROM_PEEK,
+            DWMWA_CLOAK,
+            DWMWA_CLOAKED,
+            DWMWA_FREEZE_REPRESENTATION,
+            DWMWA_LAST
+        };
+
+        /* 
+        * Origin: http://pinvoke.net/default.aspx/user32/GetForegroundWindow.html
+        */
+        [DllImport("user32.dll")]
+        public static extern bool AdjustWindowRectEx(ref RECT lpRect, uint dwStyle, bool bMenu, uint dwExStyle);
+
+        //see https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlonga
+        public const int GWL_STYLE = -16;
+        public const int GWL_EXSTYLE = -20;
+
+        /* 
+        * Origin: http://pinvoke.net/default.aspx/user32/GetForegroundWindow.html
+        */
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/DispatchMessage.html
+         */
+        [DllImport("user32.dll")]
+        public static extern IntPtr DispatchMessage([In] ref MSG lpmsg);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/TranslateMessage.html
+         */
+        [DllImport("user32.dll")]
+        public static extern bool TranslateMessage([In] ref MSG lpMsg);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/Structures/POINT.html
+         */
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public POINT(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+
+            public static implicit operator System.Drawing.Point(POINT p)
+            {
+                return new System.Drawing.Point(p.X, p.Y);
+            }
+
+            public static implicit operator POINT(System.Drawing.Point p)
+            {
+                return new POINT(p.X, p.Y);
+            }
+        }
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/Structures/MSG.html
+         */
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MSG
+        {
+            IntPtr hwnd;
+            uint message;
+            UIntPtr wParam;
+            IntPtr lParam;
+            int time;
+            POINT pt;
+            int lPrivate;
+        }
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/GetMessage.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetMessage(out MSG lpMsg, IntPtr hWnd, uint wMsgFilterMin, uint wMsgFilterMax);
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/SetForegroundWindow.html
+         */
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        /* 
+         * Origin: https://www.pinvoke.net/default.aspx/user32/SetActiveWindow.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/SetWinEventHook.html
+         */
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+        public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        public const uint EVENT_OBJECT_LOCATIONCHANGE = 0x800B; // hwnd ID idChild is moved/sized item
+        public const uint WINEVENT_OUTOFCONTEXT = 0x0000; // Events are ASYNC
+        public const uint WINEVENT_SKIPOWNTHREAD = 0x0001; // Don't call back for events on installer's thread
+        public const uint WINEVENT_SKIPOWNPROCESS = 0x0002; // Don't call back for events on installer's process
+        public const uint WINEVENT_INCONTEXT = 0x0004; // Events are SYNC, this causes your dll to be injected into every process
+        public const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        public const uint EVENT_OBJECT_CREATE = 0x8000; // hwnd ID idChild is created item
+        public const uint EVENT_OBJECT_DESTROY = 0x8001; // hwnd ID idChild is destroyed item
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/user32/UnhookWinEvent.html
+         */
+        [DllImport("user32.dll")]
+        public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        /* 
          * Origin: http://pinvoke.net/default.aspx/user32/ShowWindow.html
          */
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/coredll/GetWindowLong.html
+         */
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr GetWindowLong(IntPtr window, int index);
 
         /* 
          * Origin: http://pinvoke.net/default.aspx/user32/SetWindowLong.html

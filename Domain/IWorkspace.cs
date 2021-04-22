@@ -13,5 +13,6 @@ namespace Kaboom.Application
         void RemoveWindow(EntityID windowID);
         void UnWrapSelectedWindow();
         void WrapSelectedWindow(Arrangement wrapper);
+        void SelectWindow(EntityID windowID);
     }
 }

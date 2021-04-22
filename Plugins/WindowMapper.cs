@@ -21,7 +21,7 @@ namespace Plugins
             {
                 StringBuilder name = new StringBuilder(255);
                 Win32Wrapper.RECT rect;
-                Win32Wrapper.GetWindowRect(windowHandle, out rect);
+                Win32Wrapper.DwmGetWindowAttribute(windowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, sizeof(int) * 4);
                 Win32Wrapper.GetWindowTextW(windowHandle, name, name.Capacity + 1);
 
                 Window window = new Window(new Kaboom.Abstraction.Bounds(rect.X, rect.Y, rect.Width, rect.Height), name.ToString());
@@ -39,6 +39,11 @@ namespace Plugins
         internal void RemoveMappingForHandle(IntPtr handle)
         {
             m_windowInfo.Remove(handle);
+        }
+
+        internal bool HasMappingFor(IntPtr handle)
+        {
+            return m_windowInfo.ContainsKey(handle);
         }
     }
 }

@@ -18,16 +18,12 @@ namespace Plugins
         private WindowsShortcutListener m_shortcutListener = new WindowsShortcutListener();
         private ActionService m_actionService;
 
-        private WindowCatcher m_windowCatcher;
-
         public TilingWindowManager()
         {
             m_windowRenderer = new WindowsWindowRenderer(m_windowMapper);
             m_windowService = new WindowService(m_arrangementRepository, m_windowRenderer);
             m_workspace = new Workspace(m_windowService, m_arrangementRepository);
             m_actionService = new ActionService(m_shortcutListener);
-
-            m_windowCatcher = new WindowCatcher(m_windowMapper, m_workspace);
         }
 
         public void Start()
@@ -43,11 +39,14 @@ namespace Plugins
             m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Up, KeyModifiers.Control), m_workspace, Direction.Up));
             m_actionService.AddAction(new SelectWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.Down, KeyModifiers.Control), m_workspace, Direction.Down));
 
-            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.V, KeyModifiers.Control), m_workspace));
-            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.H, KeyModifiers.Control), m_workspace));
-            m_actionService.AddAction(new UnWrapWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.U, KeyModifiers.Control), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.V, KeyModifiers.Alt), m_workspace));
+            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.H, KeyModifiers.Alt), m_workspace));
+            m_actionService.AddAction(new UnWrapWindowAction(ShortcutMapper.MapToShortcut(System.Windows.Forms.Keys.U, KeyModifiers.Alt), m_workspace));
 
-            m_windowCatcher.RunUpdateLoop();
+            using(var windowCatcher = new WindowCatcher(m_windowMapper, m_workspace))
+            {
+                windowCatcher.RunUpdateLoop();
+            }
         }
 
         static void Main(string[] args)
