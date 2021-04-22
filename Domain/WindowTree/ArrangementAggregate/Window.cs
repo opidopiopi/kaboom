@@ -9,7 +9,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         public string Title { get; }
         public bool Visible { get; set; }
 
-        public Window(Rectangle initialBounds, string title)
+        public Window(Bounds initialBounds, string title)
         {
             Bounds = initialBounds;
             Title = title;

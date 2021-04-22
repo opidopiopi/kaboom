@@ -67,11 +67,11 @@ namespace Kaboom.Testing.Integration
              *          |---------|
              */
             m_screenA = new VerticalArrangement();
-            m_screenA.Bounds = new Rectangle(-1080, 0, 1080, 1920);
+            m_screenA.Bounds = new Bounds(-1080, 0, 1080, 1920);
             m_screenB = new HorizontalArrangement();
-            m_screenB.Bounds = new Rectangle(0, 0, 1920, 1080);
+            m_screenB.Bounds = new Bounds(0, 0, 1920, 1080);
             m_screenC = new HorizontalArrangement();
-            m_screenC.Bounds = new Rectangle(0, 1080, 1280, 720);
+            m_screenC.Bounds = new Bounds(0, 1080, 1280, 720);
 
             m_arrangementRepository.InsertRoot(m_screenA);
             m_arrangementRepository.InsertRoot(m_screenB);
@@ -110,13 +110,13 @@ namespace Kaboom.Testing.Integration
 
             m_windows = new Window[]
             {
-                new Window(new Rectangle(0, 0, 1, 1), "window0"),
-                new Window(new Rectangle(0, 0, 1, 1), "window1"),
-                new Window(new Rectangle(0, 0, 1, 1), "window2"),
-                new Window(new Rectangle(0, 0, 1, 1), "window3"),
-                new Window(new Rectangle(0, 0, 1, 1), "window4"),
-                new Window(new Rectangle(0, 0, 1, 1), "window5"),
-                new Window(new Rectangle(0, 0, 1, 1), "window6"),
+                new Window(new Bounds(0, 0, 1, 1), "window0"),
+                new Window(new Bounds(0, 0, 1, 1), "window1"),
+                new Window(new Bounds(0, 0, 1, 1), "window2"),
+                new Window(new Bounds(0, 0, 1, 1), "window3"),
+                new Window(new Bounds(0, 0, 1, 1), "window4"),
+                new Window(new Bounds(0, 0, 1, 1), "window5"),
+                new Window(new Bounds(0, 0, 1, 1), "window6"),
             };
 
             m_screenA.InsertAsLast(m_childArrangements[0]);
@@ -190,7 +190,7 @@ namespace Kaboom.Testing.Integration
             }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenA.Bounds.X,
                     m_screenA.Bounds.Y + m_screenA.Bounds.Height / 3,
                     m_screenA.Bounds.Width,
@@ -208,7 +208,7 @@ namespace Kaboom.Testing.Integration
             }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X + m_screenB.Bounds.Width / 3,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 3,
@@ -224,14 +224,14 @@ namespace Kaboom.Testing.Integration
         {
             //Arrange
             m_windows = new Window[] {
-                new Window(new Rectangle(1, 1, 1, 1), "window0"),
-                new Window(new Rectangle(1, 1, 1, 1), "window1"),
-                new Window(new Rectangle(1, 1, 1, 1), "window2"),
+                new Window(new Bounds(1, 1, 1, 1), "window0"),
+                new Window(new Bounds(1, 1, 1, 1), "window1"),
+                new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
             m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 3,
@@ -253,7 +253,7 @@ namespace Kaboom.Testing.Integration
 
             //Assert
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 2,
@@ -263,7 +263,7 @@ namespace Kaboom.Testing.Integration
             );
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X,
                     m_screenB.Bounds.Y + m_screenB.Bounds.Height / 2,
                     m_screenB.Bounds.Width / 2,
@@ -273,7 +273,7 @@ namespace Kaboom.Testing.Integration
             );
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X + m_screenB.Bounds.Width / 2,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 2,
@@ -288,9 +288,9 @@ namespace Kaboom.Testing.Integration
         {
             //Arrange
             m_windows = new Window[] {
-                new Window(new Rectangle(1, 1, 1, 1), "window0"),
-                new Window(new Rectangle(1, 1, 1, 1), "window1"),
-                new Window(new Rectangle(1, 1, 1, 1), "window2"),
+                new Window(new Bounds(1, 1, 1, 1), "window0"),
+                new Window(new Bounds(1, 1, 1, 1), "window1"),
+                new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
             m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
 
@@ -306,7 +306,7 @@ namespace Kaboom.Testing.Integration
 
             //Assert
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 3,
@@ -316,7 +316,7 @@ namespace Kaboom.Testing.Integration
             );
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X + m_screenB.Bounds.Width / 3,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 3,
@@ -326,7 +326,7 @@ namespace Kaboom.Testing.Integration
             );
 
             Assert.AreEqual(
-                new Rectangle(
+                new Bounds(
                     m_screenB.Bounds.X + (m_screenB.Bounds.Width / 3) * 2,
                     m_screenB.Bounds.Y,
                     m_screenB.Bounds.Width / 3,

@@ -62,8 +62,8 @@ namespace Kaboom.Testing.Application
 
             m_rootA = new MockArrangement("m_rootA", Axis.X, Axis.Y);
             m_rootB = new MockArrangement("m_rootB", Axis.X, Axis.Y);
-            m_rootA.Bounds = new Kaboom.Abstraction.Rectangle(0, 0, 100, 100);
-            m_rootB.Bounds = new Kaboom.Abstraction.Rectangle(100, 0, 100, 100);
+            m_rootA.Bounds = new Kaboom.Abstraction.Bounds(0, 0, 100, 100);
+            m_rootB.Bounds = new Kaboom.Abstraction.Bounds(100, 0, 100, 100);
             m_arrgangementRepo.InsertRoot(m_rootA);
             m_arrgangementRepo.InsertRoot(m_rootB);
 
@@ -80,7 +80,7 @@ namespace Kaboom.Testing.Application
             m_levelThree = new MockArrangement("m_levelThree", Axis.X, Axis.Y);
             m_levelTwoA.InsertAsLast(m_levelThree);
 
-            m_windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), $"testWindow_{i}")).ToArray();
+            m_windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), $"testWindow_{i}")).ToArray();
 
             m_rootA.InsertAsLast(m_windows[0]);
             m_levelOneA.InsertAsLast(m_windows[1]);
@@ -102,9 +102,9 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_insert_windows()
         {
             //Arrange
-            Window newWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 20, 20), "windowInRootA");
-            Window anotherNewWindow = new Window(new Kaboom.Abstraction.Rectangle(110, 10, 20, 20), "windowInRootB");
-            Window onceAgainANewWindow = new Window(new Kaboom.Abstraction.Rectangle(69, 420, 20, 20), "windowOutsideOfBothRootsBoundsSoItShouldLandInRootA");
+            Window newWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 20, 20), "windowInRootA");
+            Window anotherNewWindow = new Window(new Kaboom.Abstraction.Bounds(110, 10, 20, 20), "windowInRootB");
+            Window onceAgainANewWindow = new Window(new Kaboom.Abstraction.Bounds(69, 420, 20, 20), "windowOutsideOfBothRootsBoundsSoItShouldLandInRootA");
 
             //Act
             m_windowService.InsertWindowIntoTree(newWindow);
@@ -144,7 +144,7 @@ namespace Kaboom.Testing.Application
             //Arrange
 
             //Act
-            var newWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "wow");
+            var newWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "wow");
             m_windowService.InsertWindowIntoTree(newWindow);
 
             //Assert
@@ -187,7 +187,7 @@ namespace Kaboom.Testing.Application
             m_levelThree.Updated = false;
 
             //Act
-            var newWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "wow");
+            var newWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "wow");
             m_windowService.InsertWindowIntoTree(newWindow);
 
             //Assert
@@ -228,7 +228,7 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_move_child_swapping()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "asdf");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "asdf");
             m_levelTwoA.InsertAsLast(otherWindow);
 
             var expected = new IBoundedTreeNode[] { m_levelThree, m_windows[3], otherWindow };
@@ -253,7 +253,7 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_move_child_inserting()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "asdf");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "asdf");
             m_levelTwoA.InsertAsFirst(otherWindow);
 
             var expected = new IBoundedTreeNode[] { otherWindow, m_levelThree, m_windows[3]};
@@ -278,8 +278,8 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_move_child_move_to_parent()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
-            var anotherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "anotherWindow");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
+            var anotherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "anotherWindow");
 
             m_levelTwoB.InsertAsFirst(otherWindow);
             m_levelOneA.InsertAsFirst(anotherWindow);
@@ -321,8 +321,8 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_select_windows_on_same_level()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
-            var anotherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "anotherWindow");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
+            var anotherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "anotherWindow");
             m_levelThree.InsertAsLast(otherWindow);
             m_levelThree.InsertAsLast(anotherWindow);
 
@@ -344,7 +344,7 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_select_windows_on_different_level()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
             m_levelTwoA.InsertAsFirst(otherWindow);
 
             //Act
@@ -365,7 +365,7 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_select_windows_on_lower_level_inside_other_arrangement()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
             m_levelTwoA.InsertAsFirst(otherWindow);
 
             //Act
@@ -400,7 +400,7 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_select_windows_in_other_root_arrangement()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Rectangle(10, 10, 10, 10), "otherWindow");
+            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
             m_rootB.InsertAsFirst(otherWindow);
 
             //Act

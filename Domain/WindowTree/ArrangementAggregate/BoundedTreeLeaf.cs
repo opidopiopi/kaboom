@@ -8,7 +8,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
     public abstract class BoundedTreeLeaf : IBoundedTreeNode
     {
         public EntityID ID { get; } = new EntityID();
-        public Rectangle Bounds { get; set; }
+        public Bounds Bounds { get; set; }
 
 
         public void InsertAsFirst(IBoundedTreeNode child) => throw new CannotInsertChild("Cannot insert children into Leaf node!");

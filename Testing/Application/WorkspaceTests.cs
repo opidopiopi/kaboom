@@ -29,7 +29,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_insert_window()
         {
             //Arrange
-            Window window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
 
             //Act
             m_workspace.InsertWindow(window);
@@ -43,7 +43,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_remove_window()
         {
             //Arrange
-            Window window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
 
             //Act
             m_workspace.RemoveWindow(window.ID);
@@ -57,7 +57,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_move_selected_window()
         {
             //Arrange
-            Window window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             m_workspace.InsertWindow(window);
 
             //Act
@@ -71,7 +71,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_move_window_selection()
         {
             //Arrange
-            Window window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             m_workspace.InsertWindow(window);
 
             EntityID neighbour = new EntityID();
@@ -89,7 +89,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_move_window_selection_selected_window_null()
         {
             //Arrange
-            var window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             var arrangement = new Mock<Arrangement>(new Axis[] { });
             arrangement.Object.InsertAsFirst(window);
             m_arrangementRepo.Setup(repo => repo.RootArrangements()).Returns((new EntityID[]{ arrangement.Object.ID}).ToList());
@@ -107,7 +107,7 @@ namespace Kaboom.Testing.Application
         public void workspace_can_wrap_selected_window()
         {
             //Arrange
-            var window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             var arrangement = new MockArrangement();
             arrangement.InsertAsFirst(window);
             m_arrangementRepo.Setup(repo => repo.FindParentOf(window.ID)).Returns(arrangement);
@@ -128,7 +128,7 @@ namespace Kaboom.Testing.Application
             //Arrange
             var parent = new MockArrangement();
             var wrapper = new MockArrangement();
-            var window = new Window(new Kaboom.Abstraction.Rectangle(1, 1, 1, 1), "window");
+            var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             parent.InsertAsFirst(wrapper);
             wrapper.InsertAsFirst(window);
 

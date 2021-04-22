@@ -11,7 +11,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         protected List<IBoundedTreeNode> Children = new List<IBoundedTreeNode>();
 
         public EntityID ID { get; } = new EntityID();
-        public Rectangle Bounds { get; set; }
+        public Bounds Bounds { get; set; }
 
         public void InsertAsFirst(IBoundedTreeNode child) => Children.Insert(0, child);
         public void InsertAsLast(IBoundedTreeNode child) => Children.Add(child);

@@ -85,22 +85,22 @@ namespace Kaboom.Testing.Domain
             MockTreeLeaf windowB = new MockTreeLeaf();
             MockTreeLeaf windowC = new MockTreeLeaf();
             MockTreeLeaf windowD = new MockTreeLeaf();
-            m_arrangement.Bounds = new Rectangle(-55, -5, 420, 400);
+            m_arrangement.Bounds = new Bounds(-55, -5, 420, 400);
 
             //Act
             m_arrangement.InsertAsLast(windowA);
             m_arrangement.UpdateBoundsOfChildren();
 
             //Assert
-            Assert.AreEqual(windowA.Bounds, new Rectangle(-55, -5, 420, 400));
+            Assert.AreEqual(windowA.Bounds, new Bounds(-55, -5, 420, 400));
 
             //Act
             m_arrangement.InsertAsLast(windowB);
             m_arrangement.UpdateBoundsOfChildren();
 
             //Assert
-            Assert.AreEqual(new Rectangle(-55, -5, 420, 200), windowA.Bounds);
-            Assert.AreEqual(new Rectangle(-55, 195, 420, 200), windowB.Bounds);
+            Assert.AreEqual(new Bounds(-55, -5, 420, 200), windowA.Bounds);
+            Assert.AreEqual(new Bounds(-55, 195, 420, 200), windowB.Bounds);
 
             //Act
             m_arrangement.InsertAsLast(windowC);
@@ -108,10 +108,10 @@ namespace Kaboom.Testing.Domain
             m_arrangement.UpdateBoundsOfChildren();
 
             //Assert
-            Assert.AreEqual(new Rectangle(-55, - 5, 420, 100), windowA.Bounds);
-            Assert.AreEqual(new Rectangle(-55,  95, 420, 100), windowB.Bounds);
-            Assert.AreEqual(new Rectangle(-55, 195, 420, 100), windowC.Bounds);
-            Assert.AreEqual(new Rectangle(-55, 295, 420, 100), windowD.Bounds);
+            Assert.AreEqual(new Bounds(-55, - 5, 420, 100), windowA.Bounds);
+            Assert.AreEqual(new Bounds(-55,  95, 420, 100), windowB.Bounds);
+            Assert.AreEqual(new Bounds(-55, 195, 420, 100), windowC.Bounds);
+            Assert.AreEqual(new Bounds(-55, 295, 420, 100), windowD.Bounds);
         }
 
 
@@ -136,7 +136,7 @@ namespace Kaboom.Testing.Domain
             MockTreeLeaf windowA = new MockTreeLeaf();
             m_arrangement.InsertAsLast(anotherOne);
             m_arrangement.InsertAsLast(windowA);
-            m_arrangement.Bounds = new Rectangle(456, 123, 69, 200);
+            m_arrangement.Bounds = new Bounds(456, 123, 69, 200);
 
             VerticalArrangement bitesTheDust = new VerticalArrangement();
             MockTreeLeaf windowB = new MockTreeLeaf();
@@ -150,9 +150,9 @@ namespace Kaboom.Testing.Domain
             m_arrangement.UpdateBoundsOfChildren();
 
             //Assert
-            Assert.AreEqual(new Rectangle(456, 223, 69, 100), windowA.Bounds);
-            Assert.AreEqual(new Rectangle(456, 173, 69, 50), windowB.Bounds);
-            Assert.AreEqual(new Rectangle(456, 123, 69, 50), windowC.Bounds);
+            Assert.AreEqual(new Bounds(456, 223, 69, 100), windowA.Bounds);
+            Assert.AreEqual(new Bounds(456, 173, 69, 50), windowB.Bounds);
+            Assert.AreEqual(new Bounds(456, 123, 69, 50), windowC.Bounds);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Plugins
             {
                 return new DefaultArrangementType
                 {
-                    Bounds = new Kaboom.Abstraction.Rectangle(screen.Bounds.X, screen.Bounds.Y, screen.Bounds.Width, screen.Bounds.Height)
+                    Bounds = new Kaboom.Abstraction.Bounds(screen.Bounds.X, screen.Bounds.Y, screen.Bounds.Width, screen.Bounds.Height)
                 };
             }).ToList<Arrangement>();
         }

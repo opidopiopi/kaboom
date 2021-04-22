@@ -14,7 +14,7 @@ namespace Kaboom.Testing.Domain
         [TestInitialize]
         public void SetUp()
         {
-            m_window = new Window(new Rectangle(0, 0, 100, 100), "aTestWindow");
+            m_window = new Window(new Bounds(0, 0, 100, 100), "aTestWindow");
         }
 
         [TestMethod]
@@ -53,7 +53,7 @@ namespace Kaboom.Testing.Domain
         public void windows_are_unique()
         {
             //Arrange
-            Window otherWindow = new Window(new Rectangle(0, 0, 10, 10), "anotherTestWindow");
+            Window otherWindow = new Window(new Bounds(0, 0, 10, 10), "anotherTestWindow");
 
             //Act
 
@@ -66,7 +66,7 @@ namespace Kaboom.Testing.Domain
         public void window_has_bounds()
         {
             //Arrange
-            Rectangle newBounds = new Rectangle(5, 5, 13, 45);
+            Bounds newBounds = new Bounds(5, 5, 13, 45);
 
             //Act
             m_window.Bounds = newBounds;
@@ -80,7 +80,7 @@ namespace Kaboom.Testing.Domain
         public void window_has_title()
         {
             //Arrange
-            Window otherWindow = new Window(new Rectangle(0, 0, 10, 10), "anotherTestWindow");
+            Window otherWindow = new Window(new Bounds(0, 0, 10, 10), "anotherTestWindow");
 
             //Act
 

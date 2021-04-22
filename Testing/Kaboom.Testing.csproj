@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Domain\Kaboom.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstraction\" />
+  </ItemGroup>
+
 </Project>

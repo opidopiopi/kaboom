@@ -39,7 +39,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
             for(int i = 0; i < numChildren; i++)
             {
-                Children[i].Bounds = new Rectangle(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
+                Children[i].Bounds = new Bounds(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
 
                 if(Children[i] is Arrangement arrangement)
                 {

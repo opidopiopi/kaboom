@@ -3,14 +3,14 @@ using System;
 
 namespace Kaboom.Abstraction
 {
-    public class Rectangle
+    public class Bounds
     {
         public int X { get; }
         public int Y { get; }
         public int Width { get; }
         public int Height { get; }
 
-        public Rectangle(int x, int y, int width, int height)
+        public Bounds(int x, int y, int width, int height)
         {
             if (width <= 0 || height <= 0)
             {
@@ -36,12 +36,12 @@ namespace Kaboom.Abstraction
 
         public override String ToString()
         {
-            return $"Rectangle(X: {X}, Y: {Y}, Width: {Width}, Height: {Height})";
+            return $"Bounds(X: {X}, Y: {Y}, Width: {Width}, Height: {Height})";
         }
 
         public override bool Equals(object obj)
         {
-            return obj is Rectangle rectangle &&
+            return obj is Bounds rectangle &&
                    X == rectangle.X &&
                    Y == rectangle.Y &&
                    Width == rectangle.Width &&
