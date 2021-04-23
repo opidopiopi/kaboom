@@ -122,9 +122,9 @@ namespace Plugins
     public enum KeyModifiers
     {
         Alt = 1,
-        Control = 2,
+        Ctrl = 2,
         Shift = 4,
-        Windows = 8,
+        Win = 8,
         NoRepeat = 0x4000
     }
 }

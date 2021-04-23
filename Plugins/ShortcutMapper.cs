@@ -16,11 +16,11 @@ namespace Plugins
             switch (shortcut.Modifier)
             {
                 case Modifier.WINDOWS:
-                    return KeyModifiers.Windows;
+                    return KeyModifiers.Win;
                 case Modifier.SHIFT:
                     return KeyModifiers.Shift;
                 case Modifier.CTRL:
-                    return KeyModifiers.Control;
+                    return KeyModifiers.Ctrl;
                 case Modifier.ALT:
                     return KeyModifiers.Alt;
                 default:
@@ -36,11 +36,11 @@ namespace Plugins
             {
                 case KeyModifiers.Alt:
                     return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.ALT, keyChar);
-                case KeyModifiers.Control:
+                case KeyModifiers.Ctrl:
                     return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.CTRL, keyChar);
                 case KeyModifiers.Shift:
                     return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.SHIFT, keyChar);
-                case KeyModifiers.Windows:
+                case KeyModifiers.Win:
                     return new Kaboom.Domain.ShortcutActions.Shortcut(Modifier.WINDOWS, keyChar);
                 default:
                     throw new System.Exception($"Illegal Modifier: {modifier} !");
