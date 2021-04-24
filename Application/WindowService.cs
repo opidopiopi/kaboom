@@ -241,23 +241,26 @@ namespace Kaboom.Application
         {
             var parent = m_arrangements.FindParentOf(windowID);
             var superParent = m_arrangements.FindParentOf(parent.ID);
-            superParent.UnWrapChildToSelf(parent.ID);
 
-            UpdateTree(superParent);
+            if(superParent != null)
+            {
+                superParent.UnWrapChildToSelf(parent.ID);
+                UpdateTree(superParent);
+            }
+        }
+
+        public void HightlightWindow(EntityID windowID)
+        {
+            if (windowID != null)
+            {
+                m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
+            }
         }
 
         private void UpdateTree(Arrangement parent)
         {
             parent.UpdateBoundsOfChildren();
             parent.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
-        }
-
-        public void HightlightWindow(EntityID windowID)
-        {
-            if(windowID != null)
-            {
-                m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
-            }
         }
     }
 }
