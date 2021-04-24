@@ -54,15 +54,16 @@ namespace Kaboom.Application
             }
 
             var window = parent.RemoveWindowAndReturn(windowID);
-            UpdateTree();
 
             if(TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
             {
+                UpdateTree();
                 return;
             }
 
             if(TryToMoveToDifferentRoot(ref window, direction, ref parent))
             {
+                UpdateTree();
                 return;
             }
             else
