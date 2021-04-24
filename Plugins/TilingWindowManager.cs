@@ -1,14 +1,14 @@
 ﻿using Kaboom.Application;
-using Kaboom.Application.WorkspaceActions;
 using Kaboom.Domain.ShortcutActions;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
 using Plugins.ConfigurationManagement;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace Plugins
 {
+    [ExcludeFromCodeCoverage]
     class TilingWindowManager
     {
         private WindowsArrangementReposititory<HorizontalArrangement> m_arrangementRepository = new WindowsArrangementReposititory<HorizontalArrangement>();

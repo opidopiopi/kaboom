@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Plugins
 {
+    [ExcludeFromCodeCoverage]
     public class Win32Wrapper
     {
         public static string GetWindowName(IntPtr windowHandle)

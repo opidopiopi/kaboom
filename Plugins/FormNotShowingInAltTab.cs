@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace Plugins
 {
+    [ExcludeFromCodeCoverage]
     public class FormNotShowingInAltTab : Form
     {
         private const int SELECTED_WINDOW_BORDER_WIDTH = 5;

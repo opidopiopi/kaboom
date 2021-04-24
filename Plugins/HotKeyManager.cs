@@ -2,12 +2,14 @@
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plugins
 {
     /* 
      * Origin: https://stackoverflow.com/questions/3568513/how-to-create-keyboard-shortcut-in-windows-that-call-function-in-my-app/3569097#3569097
      */
+    [ExcludeFromCodeCoverage]
     public static class HotKeyManager
     {
         public static event EventHandler<HotKeyEventArgs> HotKeyPressed;
@@ -98,7 +100,7 @@ namespace Plugins
         private static int _id = 0;
     }
 
-
+    [ExcludeFromCodeCoverage]
     public class HotKeyEventArgs : EventArgs
     {
         public readonly Keys Key;

@@ -15,8 +15,6 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public void InsertAsFirst(IBoundedTreeNode child) => Children.Insert(0, child);
         public void InsertAsLast(IBoundedTreeNode child) => Children.Add(child);
-        public IBoundedTreeNode FirstChild() => Children.First();
-        public IBoundedTreeNode LastChild() => Children.Last();
         public void Remove(IBoundedTreeNode node) => Children.Remove(node);
         public bool IsLeaf() => false;
 

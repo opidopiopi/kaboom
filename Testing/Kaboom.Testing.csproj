@@ -22,6 +22,7 @@
     <ProjectReference Include="..\Adapters\Kaboom.Adapters.csproj" />
     <ProjectReference Include="..\Application\Kaboom.Application.csproj" />
     <ProjectReference Include="..\Domain\Kaboom.Domain.csproj" />
+    <ProjectReference Include="..\Plugins\Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

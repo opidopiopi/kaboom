@@ -19,9 +19,6 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public void Remove(IBoundedTreeNode node) => throw new CannotRemoveChild("Leaf nodes have no children to remove!");
 
-        public IBoundedTreeNode FirstChild() => throw new Exception("Leaf nodes have no children!");
-        public IBoundedTreeNode LastChild() => throw new Exception("Leaf nodes have no children!");
-
         public bool IsLeaf() => true;
 
         public abstract void Accept(IVisitor visitor);
