@@ -31,10 +31,16 @@ namespace Kaboom.Application
         public void RemoveWindow(EntityID windowID)
         {
             var parent = m_arrangements.FindParentOf(windowID);
-
             if (parent == null) return;
 
             parent.RemoveChild(windowID);
+
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+            if(superParent != null)
+            {
+                parent = superParent;
+            } 
+
             UpdateTree(parent);
         }
 
@@ -259,6 +265,7 @@ namespace Kaboom.Application
 
         private void UpdateTree(Arrangement parent)
         {
+            parent.RemoveEmptyChildArrangements();
             parent.UpdateBoundsOfChildren();
             parent.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
         }

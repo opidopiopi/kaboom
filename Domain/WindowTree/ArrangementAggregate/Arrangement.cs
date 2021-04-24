@@ -15,6 +15,14 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             m_supportedAxis = supportedAxis;
         }
 
+        public void RemoveEmptyChildArrangements()
+        {
+            Children.RemoveAll(
+            child => {
+                return (child is Arrangement arrangement && arrangement.Children.Count == 0);
+            });
+        }
+
         public abstract void UpdateBoundsOfChildren();
         public abstract EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction);
         public void SwapChildren(EntityID childA, EntityID childB)
