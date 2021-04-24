@@ -193,5 +193,10 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             }
             return null;
         }
+
+        public override void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

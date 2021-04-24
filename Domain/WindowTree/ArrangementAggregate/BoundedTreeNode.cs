@@ -44,5 +44,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
                 Children.Insert(Children.IndexOf(reference), node);
             }
         }
+
+        public abstract void Accept(IVisitor visitor);
+        public void VisitAllChildren(IVisitor visitor) => Children.ForEach(child => child.Accept(visitor));
     }
 }

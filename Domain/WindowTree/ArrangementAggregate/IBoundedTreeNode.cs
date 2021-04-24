@@ -6,5 +6,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
     public interface IBoundedTreeNode : ITreeNode<IBoundedTreeNode>, IEntity
     {
         Bounds Bounds { get; set; }
+
+        void Accept(IVisitor visitor);
+        void VisitAllChildren(IVisitor visitor);
     }
 }

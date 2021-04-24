@@ -23,5 +23,12 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         public IBoundedTreeNode LastChild() => throw new Exception("Leaf nodes have no children!");
 
         public bool IsLeaf() => true;
+
+        public abstract void Accept(IVisitor visitor);
+
+        public void VisitAllChildren(IVisitor visitor)
+        {
+            //nodes have no children
+        }
     }
 }
