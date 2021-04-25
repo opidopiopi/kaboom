@@ -1,7 +1,6 @@
 ﻿using Kaboom.Abstraction;
 using Kaboom.Domain.WindowTree.Exceptions;
 using Kaboom.Domain.WindowTree.General;
-using System;
 
 namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 {
