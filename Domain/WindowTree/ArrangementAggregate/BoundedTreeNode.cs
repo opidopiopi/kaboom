@@ -2,7 +2,6 @@
 using Kaboom.Domain.WindowTree.General;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 {
@@ -15,8 +14,6 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public void InsertAsFirst(IBoundedTreeNode child) => Children.Insert(0, child);
         public void InsertAsLast(IBoundedTreeNode child) => Children.Add(child);
-        public IBoundedTreeNode FirstChild() => Children.First();
-        public IBoundedTreeNode LastChild() => Children.Last();
         public void Remove(IBoundedTreeNode node) => Children.Remove(node);
         public bool IsLeaf() => false;
 
@@ -44,5 +41,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
                 Children.Insert(Children.IndexOf(reference), node);
             }
         }
+
+        public abstract void Accept(IVisitor visitor);
+        public void VisitAllChildren(IVisitor visitor) => Children.ForEach(child => child.Accept(visitor));
     }
 }

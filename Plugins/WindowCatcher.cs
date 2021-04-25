@@ -1,10 +1,12 @@
 ﻿using Kaboom.Application;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace Plugins
 {
+    [ExcludeFromCodeCoverage]
     public class WindowCatcher : IDisposable
     {
         private IWorkspace m_workspace;

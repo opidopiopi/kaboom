@@ -31,5 +31,10 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         {
             return 1213502048 + EqualityComparer<EntityID>.Default.GetHashCode(ID);
         }
+
+        public override void Accept(IVisitor visitor)
+        {
+            visitor.Visit(this);
+        }
     }
 }

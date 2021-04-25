@@ -158,7 +158,7 @@ namespace Kaboom.Testing.Application
         }
 
         [TestMethod]
-        public void windowservice_rerenders_all_windows_downtree_after_remove()
+        public void windowservice_rerenders_all_windows_in_tree_after_removing_a_window()
         {
             //Arrange
 
@@ -166,13 +166,7 @@ namespace Kaboom.Testing.Application
             m_windowService.RemoveWindow(m_windows[1].ID);
 
             //Assert
-            Assert.IsFalse(m_renderer.RenderedWindows.Contains(m_windows[0]));
-            Assert.IsFalse(m_renderer.RenderedWindows.Contains(m_windows[1]));
-            Assert.IsFalse(m_renderer.RenderedWindows.Contains(m_windows[2]));
-
-            Assert.IsTrue(m_renderer.RenderedWindows.Contains(m_windows[3]));
-            Assert.IsTrue(m_renderer.RenderedWindows.Contains(m_windows[4]));
-            Assert.IsTrue(m_renderer.RenderedWindows.Contains(m_windows[5]));
+            m_windows.ToList().ForEach(window => m_renderer.RenderedWindows.Contains(window));
         }
 
         [TestMethod]
@@ -200,7 +194,7 @@ namespace Kaboom.Testing.Application
         }
 
         [TestMethod]
-        public void windowservice_updates_bounds_of_all_children_after_remove()
+        public void windowservice_updates_bounds_of_tree_after_removing_window()
         {
             //Arrange
             m_rootA.Updated = false;
@@ -214,10 +208,9 @@ namespace Kaboom.Testing.Application
             m_windowService.RemoveWindow(m_windows[1].ID);
 
             //Assert
-            Assert.IsFalse(m_rootA.Updated);
-            Assert.IsFalse(m_levelOneB.Updated);
-
+            Assert.IsTrue(m_rootA.Updated);
             Assert.IsTrue(m_levelOneA.Updated);
+            Assert.IsTrue(m_levelOneB.Updated);
             Assert.IsTrue(m_levelTwoA.Updated);
             Assert.IsTrue(m_levelTwoB.Updated);
             Assert.IsTrue(m_levelThree.Updated);
@@ -278,8 +271,8 @@ namespace Kaboom.Testing.Application
         public void windowservice_can_move_child_move_to_parent()
         {
             //Arrange
-            var otherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
-            var anotherWindow = new Window(new Kaboom.Abstraction.Bounds(10, 10, 10, 10), "anotherWindow");
+            var otherWindow = new Window(new Abstraction.Bounds(10, 10, 10, 10), "otherWindow");
+            var anotherWindow = new Window(new Abstraction.Bounds(10, 10, 10, 10), "anotherWindow");
 
             m_levelTwoB.InsertAsFirst(otherWindow);
             m_levelOneA.InsertAsFirst(anotherWindow);

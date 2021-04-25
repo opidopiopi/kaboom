@@ -11,10 +11,6 @@
 
         void Remove(T node);
 
-        T FirstChild();
-        T LastChild();
-
         bool IsLeaf();
     }
-
 }

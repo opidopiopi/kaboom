@@ -8,6 +8,7 @@ namespace Kaboom.Application
     {
         private IArrangementRepository m_arrangements;
         private IWindowRenderer m_renderer;
+        private RemoveEmptyArrangements m_emptyArrangementRemover = new RemoveEmptyArrangements();
 
         public WindowService(IArrangementRepository arrangements, IWindowRenderer renderer)
         {
@@ -25,17 +26,17 @@ namespace Kaboom.Application
             }
 
             parent.InsertAsFirst(newWindow);
-            UpdateTree(parent);
+            UpdateTree();
         }
 
         public void RemoveWindow(EntityID windowID)
         {
             var parent = m_arrangements.FindParentOf(windowID);
-
             if (parent == null) return;
 
             parent.RemoveChild(windowID);
-            UpdateTree(parent);
+
+            UpdateTree();
         }
 
         public void MoveWindow(EntityID windowID, Direction direction)
@@ -53,15 +54,16 @@ namespace Kaboom.Application
             }
 
             var window = parent.RemoveWindowAndReturn(windowID);
-            UpdateTree(parent);
 
             if(TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
             {
+                UpdateTree();
                 return;
             }
 
             if(TryToMoveToDifferentRoot(ref window, direction, ref parent))
             {
+                UpdateTree();
                 return;
             }
             else
@@ -75,7 +77,7 @@ namespace Kaboom.Application
                     parent.InsertAsLast(window);
                 }
 
-                UpdateTree(parent);
+                UpdateTree();
                 return;
             }
         }
@@ -94,7 +96,7 @@ namespace Kaboom.Application
                     otherRoot.InsertAsFirst(window);
                 }
 
-                UpdateTree(otherRoot);
+                UpdateTree();
                 return true;
             }
             else
@@ -119,7 +121,7 @@ namespace Kaboom.Application
                         superParent.InsertAfter(window, parent);
                     }
 
-                    UpdateTree(superParent);
+                    UpdateTree();
                     return true;
                 }
 
@@ -151,7 +153,7 @@ namespace Kaboom.Application
                     }
                 }
 
-                UpdateTree(parent);
+                UpdateTree();
                 return true;
             }
             else  //we can't move the child
@@ -241,23 +243,31 @@ namespace Kaboom.Application
         {
             var parent = m_arrangements.FindParentOf(windowID);
             var superParent = m_arrangements.FindParentOf(parent.ID);
-            superParent.UnWrapChildToSelf(parent.ID);
 
-            UpdateTree(superParent);
-        }
-
-        private void UpdateTree(Arrangement parent)
-        {
-            parent.UpdateBoundsOfChildren();
-            parent.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
+            if(superParent != null)
+            {
+                superParent.UnWrapChildToSelf(parent.ID);
+                UpdateTree();
+            }
         }
 
         public void HightlightWindow(EntityID windowID)
         {
-            if(windowID != null)
+            if (windowID != null)
             {
                 m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
             }
+        }
+
+        private void UpdateTree()
+        {
+            m_arrangements.RootArrangements().ForEach(arrangementID => {
+                var root = m_arrangements.Find(arrangementID);
+
+                m_emptyArrangementRemover.RemoveEmptyArrangementsFromTree(root);
+                root.UpdateBoundsOfChildren();
+                root.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
+            });
         }
     }
 }

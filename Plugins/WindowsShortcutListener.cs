@@ -1,8 +1,10 @@
 ﻿using Kaboom.Domain.ShortcutActions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Plugins
 {
+    [ExcludeFromCodeCoverage]
     public class WindowsShortcutListener : IListenToShortcuts
     {
         public event EventHandler<ShortcutTriggeredEventArgs> ShortcutTriggered;
@@ -18,7 +20,7 @@ namespace Plugins
             {
                 Shortcut = ShortcutMapper.MapToShortcut(args.Key, args.Modifiers)
             };
-            Console.WriteLine($"[ShortcutListener]     New Shortcut: {eventArgs.Shortcut}");
+            Console.WriteLine($"[ShortcutListener]     Shortcut pressed: {eventArgs.Shortcut}");
 
             ShortcutTriggered(this, eventArgs);
         }
