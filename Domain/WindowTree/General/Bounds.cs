@@ -1,7 +1,7 @@
 ﻿using Kaboom.Abstraction.Exceptions;
 using System;
 
-namespace Kaboom.Abstraction
+namespace Kaboom.Domain.WindowTree.General
 {
     public class Bounds
     {
@@ -30,11 +30,11 @@ namespace Kaboom.Abstraction
 
         public bool IsPointInside(int x, int y)
         {
-            return  (X <= x && x < X + Width) &&
-                    (Y <= y && y < Y + Height);
+            return X <= x && x < X + Width &&
+                    Y <= y && y < Y + Height;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return $"Bounds(X: {X}, Y: {Y}, Width: {Width}, Height: {Height})";
         }

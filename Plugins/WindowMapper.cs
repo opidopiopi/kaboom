@@ -24,7 +24,7 @@ namespace Plugins
                 Win32Wrapper.DwmGetWindowAttribute(windowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, sizeof(int) * 4);
                 Win32Wrapper.GetWindowTextW(windowHandle, name, name.Capacity + 1);
 
-                Window window = new Window(new Kaboom.Abstraction.Bounds(rect.X, rect.Y, rect.Width, rect.Height), name.ToString());
+                Window window = new Window(new Bounds(rect.X, rect.Y, rect.Width, rect.Height), name.ToString());
                 m_windowInfo[windowHandle] = window;
 
                 return window;

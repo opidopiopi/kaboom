@@ -1,5 +1,5 @@
-using Kaboom.Abstraction;
 using Kaboom.Abstraction.Exceptions;
+using Kaboom.Domain.WindowTree.General;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kaboom.Testing.Domain

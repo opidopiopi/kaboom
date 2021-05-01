@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Kaboom.Domain.WindowTree.Exceptions;
-using Kaboom.Abstraction;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Testing.Mocks;
+using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Testing.Domain
 {
