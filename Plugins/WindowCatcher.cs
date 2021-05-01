@@ -9,7 +9,7 @@ namespace Plugins
     [ExcludeFromCodeCoverage]
     public class WindowCatcher : IDisposable
     {
-        private IWorkspace m_workspace;
+        private ISelection m_selection;
         private WindowMapper m_windowMapper;
         private List<IntPtr> m_windows = new List<IntPtr>();
         private List<IntPtr> m_eventHooks = new List<IntPtr>();
@@ -17,10 +17,10 @@ namespace Plugins
 
         private long m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-        public WindowCatcher(WindowMapper windowMapper, IWorkspace workspace)
+        public WindowCatcher(WindowMapper windowMapper, ISelection selection)
         {
             m_windowMapper = windowMapper;
-            m_workspace = workspace;
+            m_selection = selection;
 
             m_eventDelegate = new Win32Wrapper.WinEventDelegate(WindowEventsCallback);
             HookEvents();
@@ -45,13 +45,13 @@ namespace Plugins
             newWindows.ForEach(handle =>
             {
                 PrepareWindow(handle);
-                m_workspace.InsertWindow(m_windowMapper.MapToDomain(handle));
+                m_selection.InsertWindow(m_windowMapper.MapToDomain(handle));
                 Console.WriteLine($"[WindowCatcher]         New Window: {Win32Wrapper.GetWindowName(handle)}");
             });
 
             removeWindows.ForEach(handle =>
             {
-                m_workspace.RemoveWindow(m_windowMapper.MapToDomain(handle).ID);
+                m_selection.RemoveWindow(m_windowMapper.MapToDomain(handle).ID);
                 m_windowMapper.RemoveMappingForHandle(handle);
                 Console.WriteLine($"[WindowCatcher]         Removed Window: {Win32Wrapper.GetWindowName(handle)}");
             });
@@ -128,9 +128,9 @@ namespace Plugins
             {
                 var window = m_windowMapper.MapToDomain(hwnd);
 
-                if (window != null && !window.ID.Equals(m_workspace.SelectedWindow))
+                if (window != null && !window.ID.Equals(m_selection.SelectedWindow))
                 {
-                    m_workspace.SelectWindow(window.ID);
+                    m_selection.SelectWindow(window.ID);
                 }
             }
         }

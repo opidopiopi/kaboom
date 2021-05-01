@@ -1,8 +1,8 @@
 ﻿using Kaboom.Application;
-using Kaboom.Domain.Services;
+using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mock;
+using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Linq;
@@ -10,9 +10,9 @@ using System.Linq;
 namespace Kaboom.Testing.Application
 {
     [TestClass]
-    public class WorkspaceTests
+    public class SelectionTests
     {
-        private Workspace m_workspace;
+        private Selection m_selection;
         private Mock<IWindowService> m_windowService;
         private Mock<IArrangementRepository> m_arrangementRepo;
 
@@ -21,72 +21,72 @@ namespace Kaboom.Testing.Application
         {
             m_windowService = new Mock<IWindowService>();
             m_arrangementRepo = new Mock<IArrangementRepository>();
-            m_workspace = new Workspace(m_windowService.Object, m_arrangementRepo.Object);
+            m_selection = new Selection(m_windowService.Object, m_arrangementRepo.Object);
         }
 
 
         [TestMethod]
-        public void workspace_can_insert_window()
+        public void selection_can_insert_window()
         {
             //Arrange
             Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
 
             //Act
-            m_workspace.InsertWindow(window);
+            m_selection.InsertWindow(window);
 
             //Assert
             m_windowService.Verify(service => service.InsertWindowIntoTree(window), Times.Once);
-            Assert.AreEqual(window.ID, m_workspace.SelectedWindow);
+            Assert.AreEqual(window.ID, m_selection.SelectedWindow);
         }
 
         [TestMethod]
-        public void workspace_can_remove_window()
+        public void selection_can_remove_window()
         {
             //Arrange
             Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
 
             //Act
-            m_workspace.RemoveWindow(window.ID);
+            m_selection.RemoveWindow(window.ID);
 
             //Assert
             m_windowService.Verify(service => service.RemoveWindow(window.ID), Times.Once);
-            Assert.AreEqual(null, m_workspace.SelectedWindow);
+            Assert.AreEqual(null, m_selection.SelectedWindow);
         }
 
         [TestMethod]
-        public void workspace_can_move_selected_window()
+        public void selection_can_move_selected_window()
         {
             //Arrange
             Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
-            m_workspace.InsertWindow(window);
+            m_selection.InsertWindow(window);
 
             //Act
-            m_workspace.MoveSelectedWindow(Direction.Up);
+            m_selection.MoveSelectedWindow(Direction.Up);
 
             //Assert
             m_windowService.Verify(service => service.MoveWindow(window.ID, Direction.Up), Times.Once);
         }
 
         [TestMethod]
-        public void workspace_can_move_window_selection()
+        public void selection_can_move_window_selection()
         {
             //Arrange
             Window window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
-            m_workspace.InsertWindow(window);
+            m_selection.InsertWindow(window);
 
             EntityID neighbour = new EntityID();
             m_windowService.Setup(winService => winService.NextWindowInDirection(Direction.Up, window.ID)).Returns(neighbour);
 
             //Act
-            m_workspace.MoveSelection(Direction.Up);
+            m_selection.MoveSelection(Direction.Up);
 
             //Assert
             m_windowService.Verify(service => service.NextWindowInDirection(Direction.Up, window.ID), Times.Once);
-            Assert.AreEqual(neighbour, m_workspace.SelectedWindow);
+            Assert.AreEqual(neighbour, m_selection.SelectedWindow);
         }
 
         [TestMethod]
-        public void workspace_can_move_window_selection_selected_window_null()
+        public void selection_can_move_window_selection_selected_window_null()
         {
             //Arrange
             var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
@@ -96,34 +96,34 @@ namespace Kaboom.Testing.Application
             m_arrangementRepo.Setup(repo => repo.Find(arrangement.Object.ID)).Returns(arrangement.Object);
 
             //Act
-            m_workspace.MoveSelection(Direction.Up);
+            m_selection.MoveSelection(Direction.Up);
 
             //Assert
-            Assert.AreEqual(window.ID, m_workspace.SelectedWindow);
+            Assert.AreEqual(window.ID, m_selection.SelectedWindow);
         }
 
 
         [TestMethod]
-        public void workspace_can_wrap_selected_window()
+        public void selection_can_wrap_selected_window()
         {
             //Arrange
             var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "window");
             var arrangement = new MockArrangement();
             arrangement.InsertAsFirst(window);
             m_arrangementRepo.Setup(repo => repo.FindParentOf(window.ID)).Returns(arrangement);
-            m_workspace.InsertWindow(window);
+            m_selection.InsertWindow(window);
 
             var wrapper = new Mock<Arrangement>(new Axis[] { });
 
             //Act
-            m_workspace.WrapSelectedWindow(wrapper.Object);
+            m_selection.WrapSelectedWindow(wrapper.Object);
 
             //Assert
             Assert.IsTrue(arrangement.MyChildren.Contains(wrapper.Object));
         }
 
         [TestMethod]
-        public void workspace_can_unwrap_selected_window()
+        public void selection_can_unwrap_selected_window()
         {
             //Arrange
             var parent = new MockArrangement();
@@ -134,7 +134,7 @@ namespace Kaboom.Testing.Application
 
             m_arrangementRepo.Setup(repo => repo.FindParentOf(window.ID)).Returns(wrapper);
             m_arrangementRepo.Setup(repo => repo.FindParentOf(wrapper.ID)).Returns(parent);
-            m_workspace.InsertWindow(window);
+            m_selection.InsertWindow(window);
 
             m_windowService.Setup(service => service.UnWrapWindowParent(window.ID)).Callback(
                 new InvocationAction(id => {
@@ -143,7 +143,7 @@ namespace Kaboom.Testing.Application
             }));
 
             //Act
-            m_workspace.UnWrapSelectedWindow();
+            m_selection.UnWrapSelectedWindow();
 
             //Assert
             Assert.IsTrue(parent.MyChildren.Contains(window));

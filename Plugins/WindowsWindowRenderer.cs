@@ -1,11 +1,11 @@
-﻿using Kaboom.Application;
+﻿using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace Plugins
 {
-    public class WindowsWindowRenderer : IWindowRenderer
+    public class WindowsWindowRenderer : IRenderService
     {
         public const int WINDOW_BORDER_WIDTH = 5;
         public static string OVERLAY_NAME = "Kaboom_overlay";
@@ -55,6 +55,11 @@ namespace Plugins
                 window.Bounds.Height + heightOffset - 2 * WINDOW_BORDER_WIDTH,
                 true
             );
+        }
+
+        public void Render(Arrangement arrangement)
+        {
+            throw new System.NotImplementedException();
         }
 
         private void PrepareForm()

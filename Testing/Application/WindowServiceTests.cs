@@ -1,7 +1,7 @@
-﻿using Kaboom.Application;
+﻿using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mock;
+using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;

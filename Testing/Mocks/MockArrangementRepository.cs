@@ -3,7 +3,7 @@ using Kaboom.Domain.WindowTree.General;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kaboom.Testing.Mock
+namespace Kaboom.Testing.Mocks
 {
     public class MockArrangementRepository : IArrangementRepository
     {
@@ -22,9 +22,9 @@ namespace Kaboom.Testing.Mock
         public Arrangement FindNeighbourOfRootInDirection(EntityID arrangementID, Direction direction)
         {
             int index = m_arrangements.IndexOf(m_arrangements.Find(arr => arr.ID.Equals(arrangementID)));
-            index += (direction == Direction.Up || direction == Direction.Left) ? -1 : 1;
+            index += direction == Direction.Up || direction == Direction.Left ? -1 : 1;
 
-            if(index >= 0 && index < m_arrangements.Count)
+            if (index >= 0 && index < m_arrangements.Count)
             {
                 return m_arrangements[index];
             }

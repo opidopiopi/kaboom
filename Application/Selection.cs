@@ -1,19 +1,18 @@
-﻿using Kaboom.Domain.Services;
+﻿using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Application
 {
-    public class Workspace : IEntity, IWorkspace
+    public class Selection : ISelection
     {
-        public EntityID ID { get; } = new EntityID();
         public EntityID SelectedWindow { get => m_selectedWindow; }
 
         private EntityID m_selectedWindow;
         private IArrangementRepository m_arrangementRepository;
         private IWindowService m_windowService;
 
-        public Workspace(IWindowService windowService, IArrangementRepository arrangementRepository)
+        public Selection(IWindowService windowService, IArrangementRepository arrangementRepository)
         {
             m_windowService = windowService;
             m_arrangementRepository = arrangementRepository;

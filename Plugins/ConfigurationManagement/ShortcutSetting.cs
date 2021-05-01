@@ -1,27 +1,32 @@
-﻿using Kaboom.Application.ConfigurationManagement;
+﻿using Kaboom.Application.Actions;
+using Kaboom.Application.ConfigurationManagement;
+using Plugins.Shortcuts;
 using System;
-using System.Windows.Forms;
 
 namespace Plugins.ConfigurationManagement
 {
-    public delegate void ApplyShortcutSetting(Kaboom.Domain.ShortcutActions.Shortcut shortcut);
-
     public class ShortcutSetting : Setting
     {
-        private ApplyShortcutSetting m_applyShortcut;
+        private IListenToShortcuts m_shortcutListener;
+        private IActionEventListener m_eventListener;
+        private IAction m_action;
 
-        public ShortcutSetting(string name, string defaultValue, ApplyShortcutSetting applyShortcut)
+        public ShortcutSetting(string name, string defaultValue, IListenToShortcuts shortcutListener, IActionEventListener eventListener, IAction action)
             : base(name, defaultValue)
         {
-            m_applyShortcut = applyShortcut;
+            m_shortcutListener = shortcutListener;
+            m_eventListener = eventListener;
+            m_action = action;
         }
 
         protected override void Apply(string value)
         {
-            m_applyShortcut(ParseShortcut(value));
+            var shortcut = ParseShortcut(value);
+            m_shortcutListener.RegisterShortcut(shortcut);
+            m_eventListener.RegisterActionForEvent(shortcut, m_action);
         }
 
-        private static Kaboom.Domain.ShortcutActions.Shortcut ParseShortcut(string shortcut)
+        private static Shortcut ParseShortcut(string shortcut)
         {
             var splitted = shortcut.Split(' ');
 
@@ -33,9 +38,9 @@ namespace Plugins.ConfigurationManagement
             try
             {
                 KeyModifiers modifier = (KeyModifiers)Enum.Parse(typeof(KeyModifiers), splitted[0]);
-                Keys key = (Keys)Enum.Parse(typeof(Keys), splitted[1]);
+                System.Windows.Forms.Keys key = (System.Windows.Forms.Keys)Enum.Parse(typeof(System.Windows.Forms.Keys), splitted[1]);
 
-                return ShortcutMapper.MapToShortcut(key, modifier);
+                return new Shortcut(modifier, key);
             }
             catch (Exception)
             {

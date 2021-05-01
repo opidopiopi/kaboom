@@ -1,7 +1,7 @@
 ﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 
-namespace Kaboom.Domain.Services
+namespace Kaboom.Application.Services
 {
     public interface IWindowService
     {

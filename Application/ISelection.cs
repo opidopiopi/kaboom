@@ -3,7 +3,7 @@ using Kaboom.Domain.WindowTree.General;
 
 namespace Kaboom.Application
 {
-    public interface IWorkspace
+    public interface ISelection
     {
         EntityID SelectedWindow { get; }
 

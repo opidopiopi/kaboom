@@ -1,23 +1,19 @@
-﻿using Kaboom.Domain.ShortcutActions;
+﻿using Kaboom.Application.Actions;
 
-namespace Kaboom.Testing.Mock
+namespace Kaboom.Testing.Mocks
 {
-    public class MockAction : Action
+    public class MockAction : IAction
     {
         public int TriggerCount = 0;
 
-        public MockAction(Shortcut shortcut) : base(shortcut)
-        {
-        }
-
-        public override void Execute()
+        public void Execute()
         {
             TriggerCount++;
         }
 
         public override string ToString()
         {
-            return $"(MockAction: Shortcut:{Shortcut})";
+            return $"(MockAction: TriggerCount:{TriggerCount})";
         }
     }
 }

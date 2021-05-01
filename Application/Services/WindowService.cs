@@ -1,16 +1,15 @@
-﻿using Kaboom.Domain.Services;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.General;
 
-namespace Kaboom.Application
+namespace Kaboom.Application.Services
 {
     public class WindowService : IWindowService
     {
         private IArrangementRepository m_arrangements;
-        private IWindowRenderer m_renderer;
+        private IRenderService m_renderer;
         private RemoveEmptyArrangements m_emptyArrangementRemover = new RemoveEmptyArrangements();
 
-        public WindowService(IArrangementRepository arrangements, IWindowRenderer renderer)
+        public WindowService(IArrangementRepository arrangements, IRenderService renderer)
         {
             m_arrangements = arrangements;
             m_renderer = renderer;
@@ -48,20 +47,20 @@ namespace Kaboom.Application
                 throw new System.Exception($"invalid windowID: {windowID}!");
             }
 
-            if(TryToMoveLocally(windowID, direction, ref parent))
+            if (TryToMoveLocally(windowID, direction, ref parent))
             {
                 return;
             }
 
             var window = parent.RemoveWindowAndReturn(windowID);
 
-            if(TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
+            if (TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
             {
                 UpdateTree();
                 return;
             }
 
-            if(TryToMoveToDifferentRoot(ref window, direction, ref parent))
+            if (TryToMoveToDifferentRoot(ref window, direction, ref parent))
             {
                 UpdateTree();
                 return;
@@ -189,12 +188,12 @@ namespace Kaboom.Application
             }
 
             var superParent = m_arrangements.FindParentOf(parent.ID);
-            
-            while(superParent != null)
+
+            while (superParent != null)
             {
                 var parentNeighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
 
-                if(parentNeighbour is Window window)
+                if (parentNeighbour is Window window)
                 {
                     return window.ID;
                 }
@@ -244,7 +243,7 @@ namespace Kaboom.Application
             var parent = m_arrangements.FindParentOf(windowID);
             var superParent = m_arrangements.FindParentOf(parent.ID);
 
-            if(superParent != null)
+            if (superParent != null)
             {
                 superParent.UnWrapChildToSelf(parent.ID);
                 UpdateTree();
@@ -261,7 +260,8 @@ namespace Kaboom.Application
 
         private void UpdateTree()
         {
-            m_arrangements.RootArrangements().ForEach(arrangementID => {
+            m_arrangements.RootArrangements().ForEach(arrangementID =>
+            {
                 var root = m_arrangements.Find(arrangementID);
 
                 m_emptyArrangementRemover.RemoveEmptyArrangementsFromTree(root);
