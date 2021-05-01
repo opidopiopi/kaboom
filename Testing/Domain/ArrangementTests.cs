@@ -1,7 +1,6 @@
 ﻿using Kaboom.Domain.WindowTree;
-using Kaboom.Domain.WindowTree.General;
-using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;

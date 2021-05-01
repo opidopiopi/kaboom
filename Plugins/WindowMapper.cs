@@ -1,6 +1,6 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
-using Kaboom.Domain.WindowTree.General;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
