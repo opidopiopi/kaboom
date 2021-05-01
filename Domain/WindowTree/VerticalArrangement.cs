@@ -1,7 +1,6 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain.WindowTree.ValueObjects;
 
-namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+namespace Kaboom.Domain.WindowTree
 {
     public class VerticalArrangement : Arrangement
     {

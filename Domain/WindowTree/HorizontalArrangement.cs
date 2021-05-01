@@ -1,7 +1,6 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain.WindowTree.ValueObjects;
 
-namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+namespace Kaboom.Domain.WindowTree
 {
     public class HorizontalArrangement : Arrangement
     {
@@ -37,11 +36,11 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             int numChildren = Children.Count;
             int widthPerChild = Bounds.Width / numChildren;
 
-            for(int i = 0; i < numChildren; i++)
+            for (int i = 0; i < numChildren; i++)
             {
                 Children[i].Bounds = new Bounds(Bounds.X + i * widthPerChild, Bounds.Y, widthPerChild, Bounds.Height);
 
-                if(Children[i] is Arrangement arrangement)
+                if (Children[i] is Arrangement arrangement)
                 {
                     arrangement.UpdateBoundsOfChildren();
                 }

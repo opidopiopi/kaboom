@@ -2,8 +2,8 @@
 using Kaboom.Application.Actions;
 using Kaboom.Application.Actions.WorkspaceActions;
 using Kaboom.Application.ConfigurationManagement;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using Plugins.Shortcuts;
 
 namespace Plugins.ConfigurationManagement

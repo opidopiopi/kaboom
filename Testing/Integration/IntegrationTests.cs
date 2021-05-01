@@ -2,8 +2,9 @@
 using Kaboom.Application;
 using Kaboom.Application.Actions.WorkspaceActions;
 using Kaboom.Application.Services;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
+using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;

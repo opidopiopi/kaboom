@@ -1,4 +1,4 @@
-﻿namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+﻿namespace Kaboom.Domain.WindowTree.Helpers
 {
     public interface IVisitor
     {

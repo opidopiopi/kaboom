@@ -1,7 +1,6 @@
 ﻿using Kaboom.Abstraction.Exceptions;
-using System;
 
-namespace Kaboom.Domain.WindowTree.General
+namespace Kaboom.Domain.WindowTree.ValueObjects
 {
     public class Bounds
     {

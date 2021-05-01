@@ -1,7 +1,8 @@
-﻿using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain.WindowTree.Helpers;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using System.Collections.Generic;
 
-namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+namespace Kaboom.Domain.WindowTree
 {
     public class Window : BoundedTreeLeaf
     {

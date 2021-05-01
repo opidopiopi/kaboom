@@ -1,8 +1,9 @@
-﻿using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain.WindowTree.Helpers;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using System;
 using System.Linq;
 
-namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+namespace Kaboom.Domain.WindowTree
 {
     public delegate void WindowCallback(Window window);
 
@@ -18,8 +19,9 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         public void RemoveEmptyChildArrangements()
         {
             Children.RemoveAll(
-            child => {
-                return (child is Arrangement arrangement && arrangement.Children.Count == 0);
+            child =>
+            {
+                return child is Arrangement arrangement && arrangement.Children.Count == 0;
             });
         }
 
@@ -39,17 +41,17 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public EntityID FirstWindow()
         {
-            foreach(var child in Children)
+            foreach (var child in Children)
             {
                 if (child is Window window)
                 {
                     return window.ID;
                 }
-                else if(child is Arrangement arrangement)
+                else if (child is Arrangement arrangement)
                 {
                     var result = arrangement.FirstWindow();
 
-                    if(result != null)
+                    if (result != null)
                     {
                         return result;
                     }
@@ -137,7 +139,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
                 int index = Children.IndexOf(child);
                 RemoveChild(childID);
 
-                if(child is Arrangement arrangement)
+                if (child is Arrangement arrangement)
                 {
                     arrangement.Children.Reverse();
 
@@ -158,7 +160,8 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
 
         public void ForAllUnderlyingWindows(WindowCallback callback)
         {
-            Children.ForEach((child) => {
+            Children.ForEach((child) =>
+            {
                 if (child is Window window)
                 {
                     callback(window);
@@ -180,7 +183,7 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
             {
                 foreach (var child in Children)
                 {
-                    if(child is Arrangement arrangement)
+                    if (child is Arrangement arrangement)
                     {
                         var res = arrangement.FindParentOf(arrangementOrWindow);
 

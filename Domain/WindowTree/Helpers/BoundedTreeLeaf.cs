@@ -1,7 +1,7 @@
 ﻿using Kaboom.Domain.WindowTree.Exceptions;
-using Kaboom.Domain.WindowTree.General;
+using Kaboom.Domain.WindowTree.ValueObjects;
 
-namespace Kaboom.Domain.WindowTree.ArrangementAggregate
+namespace Kaboom.Domain.WindowTree.Helpers
 {
     public abstract class BoundedTreeLeaf : IBoundedTreeNode
     {

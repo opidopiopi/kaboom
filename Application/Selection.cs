@@ -1,6 +1,7 @@
 ﻿using Kaboom.Application.Services;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
+using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
 
 namespace Kaboom.Application
 {

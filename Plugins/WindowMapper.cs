@@ -1,4 +1,5 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.General;
 using System;
 using System.Collections.Generic;

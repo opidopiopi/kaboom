@@ -1,4 +1,5 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 
 namespace Kaboom.Application
 {

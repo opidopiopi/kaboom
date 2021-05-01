@@ -1,5 +1,5 @@
 ﻿using Kaboom.Application.Services;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
+using Kaboom.Domain.WindowTree;
 using System.Threading;
 using System.Windows.Forms;
 

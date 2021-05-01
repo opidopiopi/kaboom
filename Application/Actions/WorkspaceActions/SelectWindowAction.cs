@@ -1,4 +1,4 @@
-﻿using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain.WindowTree.ValueObjects;
 
 namespace Kaboom.Application.Actions.WorkspaceActions
 {

@@ -1,6 +1,6 @@
 ﻿using Kaboom.Application;
 using Kaboom.Application.Services;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
+using Kaboom.Domain.WindowTree;
 using Plugins.ConfigurationManagement;
 using Plugins.Shortcuts;
 using System;

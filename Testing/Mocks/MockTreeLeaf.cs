@@ -1,4 +1,4 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Domain.WindowTree.Helpers;
 
 namespace Kaboom.Testing.Mocks
 {
