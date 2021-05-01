@@ -2,9 +2,9 @@
 
 namespace Kaboom.Application
 {
-    public class RemoveEmptyArrangements : IVisitor
+    public class EmptyArrangementRemover : IVisitor
     {
-        public void RemoveEmptyArrangementsFromTree(Arrangement rootArrangement)
+        public void ExecuteFromRoot(Arrangement rootArrangement)
         {
             Visit(rootArrangement);
         }

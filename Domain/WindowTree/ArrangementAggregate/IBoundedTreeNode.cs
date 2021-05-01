@@ -8,6 +8,5 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         Bounds Bounds { get; set; }
 
         void Accept(IVisitor visitor);
-        void VisitAllChildren(IVisitor visitor);
     }
 }

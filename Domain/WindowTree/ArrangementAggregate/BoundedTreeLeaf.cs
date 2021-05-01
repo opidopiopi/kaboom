@@ -20,10 +20,5 @@ namespace Kaboom.Domain.WindowTree.ArrangementAggregate
         public bool IsLeaf() => true;
 
         public abstract void Accept(IVisitor visitor);
-
-        public void VisitAllChildren(IVisitor visitor)
-        {
-            //nodes have no children
-        }
     }
 }

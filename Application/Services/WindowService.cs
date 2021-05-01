@@ -7,7 +7,7 @@ namespace Kaboom.Application.Services
     {
         private IArrangementRepository m_arrangements;
         private IRenderService m_renderer;
-        private RemoveEmptyArrangements m_emptyArrangementRemover = new RemoveEmptyArrangements();
+        private EmptyArrangementRemover m_emptyArrangementRemover = new EmptyArrangementRemover();
 
         public WindowService(IArrangementRepository arrangements, IRenderService renderer)
         {
@@ -264,7 +264,7 @@ namespace Kaboom.Application.Services
             {
                 var root = m_arrangements.Find(arrangementID);
 
-                m_emptyArrangementRemover.RemoveEmptyArrangementsFromTree(root);
+                m_emptyArrangementRemover.ExecuteFromRoot(root);
                 root.UpdateBoundsOfChildren();
                 root.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
             });

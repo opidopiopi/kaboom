@@ -49,23 +49,5 @@ namespace Kaboom.Testing.Domain
             Assert.ThrowsException<CannotRemoveChild>(() => treeLeafMock.Object.Remove(childMock));
             Assert.ThrowsException<CannotRemoveChild>(() => treeLeafMock.Object.Remove(null));
         }
-
-
-        [TestMethod]
-        public void bounded_tree_leaf_has_no_children_to_visit()
-        {
-            //Arrange
-            var treeLeafMock = new Mock<BoundedTreeLeaf>();
-            var visitorMock = new Mock<IVisitor>();
-            visitorMock.Setup(visitor => visitor.Visit(It.IsAny<Arrangement>()));
-            visitorMock.Setup(visitor => visitor.Visit(It.IsAny<Window>()));
-
-            //Act
-            treeLeafMock.Object.VisitAllChildren(visitorMock.Object);
-
-            //Assert
-            visitorMock.Verify(visitor => visitor.Visit(It.IsAny<Arrangement>()), Times.Never);
-            visitorMock.Verify(visitor => visitor.Visit(It.IsAny<Window>()), Times.Never);
-        }
     }
 }
