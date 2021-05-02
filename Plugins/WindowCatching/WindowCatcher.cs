@@ -1,4 +1,5 @@
-﻿using Kaboom.Application;
+﻿using Kaboom.Adapters;
+using Kaboom.Application;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -11,16 +12,18 @@ namespace Plugins
     {
         private ISelection m_selection;
         private WindowMapper m_windowMapper;
-        private List<IntPtr> m_windows = new List<IntPtr>();
+        private IWindowCatchingRule m_catchingRule;
+        private List<WindowsWindow> m_windows = new List<WindowsWindow>();
         private List<IntPtr> m_eventHooks = new List<IntPtr>();
         private Win32Wrapper.WinEventDelegate m_eventDelegate;
 
         private long m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-        public WindowCatcher(WindowMapper windowMapper, ISelection selection)
+        public WindowCatcher(WindowMapper windowMapper, ISelection selection, IWindowCatchingRule catchingRule)
         {
             m_windowMapper = windowMapper;
             m_selection = selection;
+            m_catchingRule = catchingRule;
 
             m_eventDelegate = new Win32Wrapper.WinEventDelegate(WindowEventsCallback);
             HookEvents();
@@ -42,34 +45,35 @@ namespace Plugins
             var newWindows = currentWindows.Except(m_windows).ToList();
             var removeWindows = m_windows.Except(currentWindows).ToList();
 
-            newWindows.ForEach(handle =>
+            newWindows.ForEach(window =>
             {
-                PrepareWindow(handle);
-                m_selection.InsertWindow(m_windowMapper.MapToDomain(handle));
-                Console.WriteLine($"[WindowCatcher]         New Window: {Win32Wrapper.GetWindowName(handle)}");
+                window.Prepare();
+                m_selection.InsertWindow(m_windowMapper.MapToDomain(window));
+                Console.WriteLine($"[WindowCatcher]         New Window: {window.WindowHandle}");
             });
 
-            removeWindows.ForEach(handle =>
+            removeWindows.ForEach(window =>
             {
-                m_selection.RemoveWindow(m_windowMapper.MapToDomain(handle).ID);
-                m_windowMapper.RemoveMappingForHandle(handle);
-                Console.WriteLine($"[WindowCatcher]         Removed Window: {Win32Wrapper.GetWindowName(handle)}");
+                m_selection.RemoveWindow(m_windowMapper.MapToDomain(window).ID);
+                m_windowMapper.RemoveMappingForWindow(window);
+                Console.WriteLine($"[WindowCatcher]         Removed Window: {window.WindowName()}");
             });
             
             m_windows = currentWindows;
         }
 
-        private List<IntPtr> FetchAllWindows()
+        private List<WindowsWindow> FetchAllWindows()
         {
-            List<IntPtr> handles = new List<IntPtr>();
+            List<WindowsWindow> handles = new List<WindowsWindow>();
 
             Win32Wrapper.EnumDesktopWindows(
                 IntPtr.Zero,
                 new Win32Wrapper.EnumDesktopWindowsDelegate((handle, paramhandle) =>
             {
-                if (DoWeWantToCatchThisWindow(handle))
+                var window = new WindowsWindow(handle);
+                if (m_catchingRule.DoWeWantToCatchThisWindow(window))
                 {
-                    handles.Add(handle);
+                    handles.Add(window);
                 }
 
                 return true;
@@ -78,41 +82,6 @@ namespace Plugins
             return handles;
         }
 
-        private bool DoWeWantToCatchThisWindow(IntPtr windowHandle)
-        {
-            Win32Wrapper.WINDOWINFO info = new Win32Wrapper.WINDOWINFO(null);
-            Win32Wrapper.GetWindowInfo(windowHandle, ref info);
-
-            string name = Win32Wrapper.GetWindowName(windowHandle);
-
-#if DEBUG
-            if (name.Contains("Microsoft Visual Studio")) return false;
-#endif
-
-            return (
-                info.dwStyle != 0 &&
-                Win32Wrapper.IsWindowVisible(windowHandle) &&
-                string.IsNullOrEmpty(name) == false &&
-                !name.Equals(WindowsWindowRenderer.OVERLAY_NAME) &&
-                (info.dwStyle & (uint)Win32Wrapper.WindowStyles.WS_POPUP) == 0 &&
-                Win32Wrapper.IsWindow(windowHandle) == true
-            );
-        }
-
-        private void PrepareWindow(IntPtr windowHandle)
-        {
-            Win32Wrapper.ShowWindow(windowHandle, /*SW_RESTORE*/ 9);
-
-            var window = m_windowMapper.MapToDomain(windowHandle);
-            Win32Wrapper.SetWindowPos(
-                windowHandle,
-                new IntPtr(0),
-                window.Bounds.X,
-                window.Bounds.Y,
-                window.Bounds.Width,
-                window.Bounds.Height,
-                0x0040);
-        }
 
         public void WindowEventsCallback(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
@@ -124,9 +93,9 @@ namespace Plugins
                     m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 }
             }
-            else if (eventType == Win32Wrapper.EVENT_SYSTEM_FOREGROUND && m_windows.Contains(hwnd))
+            else if (eventType == Win32Wrapper.EVENT_SYSTEM_FOREGROUND && m_windows.Exists(window => window.WindowHandle.Equals(hwnd)))
             {
-                var window = m_windowMapper.MapToDomain(hwnd);
+                var window = m_windowMapper.MapToDomain(new WindowsWindow(hwnd));
 
                 if (window != null && !window.ID.Equals(m_selection.SelectedWindow))
                 {

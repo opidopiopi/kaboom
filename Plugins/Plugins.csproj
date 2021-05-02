@@ -57,17 +57,19 @@
     <Compile Include="FormNotShowingInAltTab.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="WindowCatching\IWindowCatchingRule.cs" />
     <Compile Include="Shortcuts\HotKeyManager.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
     <Compile Include="Shortcuts\IListenToShortcuts.cs" />
     <Compile Include="TilingWindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32Wrapper.cs" />
-    <Compile Include="WindowCatcher.cs" />
-    <Compile Include="WindowMapper.cs" />
+    <Compile Include="WindowCatching\WindowCatcher.cs" />
+    <Compile Include="WindowCatching\DefaultCatchingRule.cs" />
     <Compile Include="WindowsArrangementReposititory.cs" />
     <Compile Include="Shortcuts\WindowsShortcutListener.cs" />
-    <Compile Include="WindowsWindowRenderer.cs" />
+    <Compile Include="WindowsWindow.cs" />
+    <Compile Include="WindowsRenderService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
