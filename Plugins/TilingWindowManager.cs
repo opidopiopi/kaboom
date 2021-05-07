@@ -50,7 +50,7 @@ namespace Plugins
             m_configuration.SaveAllSettings();
             m_configParser.Save();
 
-            using(var windowCatcher = new WindowCatcher(m_windowMapper, m_selection, new DefaultCatchingRule()))
+            using(var windowCatcher = new WindowCatcher(m_windowMapper, m_selection, m_windowService, new DefaultCatchingRule()))
             {
                 windowCatcher.RunUpdateLoop();
             }

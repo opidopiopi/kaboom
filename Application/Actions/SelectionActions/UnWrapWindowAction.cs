@@ -1,6 +1,8 @@
-﻿namespace Kaboom.Application.Actions.WorkspaceActions
+﻿using Kaboom.Domain;
+
+namespace Kaboom.Application.Actions.SelectionActions
 {
-    public class UnWrapWindowAction : WorkspaceAction
+    public class UnWrapWindowAction : SelectionAction
     {
         public UnWrapWindowAction(ISelection selection) : base(selection)
         {

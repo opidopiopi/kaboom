@@ -1,5 +1,5 @@
-﻿using Kaboom.Application;
-using Kaboom.Application.Actions.WorkspaceActions;
+﻿using Kaboom.Application.Actions.SelectionActions;
+using Kaboom.Domain;
 using Kaboom.Domain.WindowTree.ValueObjects;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

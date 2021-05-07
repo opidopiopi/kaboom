@@ -1,8 +1,9 @@
-﻿using Kaboom.Domain.WindowTree;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
 
-namespace Kaboom.Application.Actions.WorkspaceActions
+namespace Kaboom.Application.Actions.SelectionActions
 {
-    public class WrapWindowAction<ArrangementType> : WorkspaceAction
+    public class WrapWindowAction<ArrangementType> : SelectionAction
         where ArrangementType : Arrangement, new()
     {
         public WrapWindowAction(ISelection selection) : base(selection)

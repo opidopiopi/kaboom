@@ -1,6 +1,5 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Application;
-using Kaboom.Application.Actions.WorkspaceActions;
+﻿using Kaboom.Application;
+using Kaboom.Application.Actions.SelectionActions;
 using Kaboom.Application.Services;
 using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
@@ -225,7 +224,7 @@ namespace Kaboom.Testing.Integration
                 new Window(new Bounds(1, 1, 1, 1), "window1"),
                 new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
-            m_windows.Reverse<Window>().ToList().ForEach(window => m_selection.InsertWindow(window));
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_windowService.InsertWindowIntoTree(window, m_selection));
 
             Assert.AreEqual(
                 new Bounds(
@@ -289,7 +288,7 @@ namespace Kaboom.Testing.Integration
                 new Window(new Bounds(1, 1, 1, 1), "window1"),
                 new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
-            m_windows.Reverse<Window>().ToList().ForEach(window => m_selection.InsertWindow(window));
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_windowService.InsertWindowIntoTree(window, m_selection));
 
             //Act
             new MockActionEvent[]{

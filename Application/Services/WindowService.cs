@@ -1,4 +1,5 @@
 ﻿using Kaboom.Domain;
+using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.ValueObjects;
 
@@ -16,7 +17,7 @@ namespace Kaboom.Application.Services
             m_renderer = renderer;
         }
 
-        public void InsertWindowIntoTree(Window newWindow)
+        public void InsertWindowIntoTree(Window newWindow, ISelection selection)
         {
             var parent = m_arrangements.FindThatContainsPoint(newWindow.Bounds.X, newWindow.Bounds.Y);
 
@@ -27,9 +28,14 @@ namespace Kaboom.Application.Services
 
             parent.InsertAsFirst(newWindow);
             UpdateTree();
+
+            if(selection.SelectedWindow == null)
+            {
+                selection.SelectWindow(newWindow.ID);
+            }
         }
 
-        public void RemoveWindow(EntityID windowID)
+        public void RemoveWindowFromTree(EntityID windowID, ISelection selection)
         {
             var parent = m_arrangements.FindParentOf(windowID);
             if (parent == null) return;
@@ -37,6 +43,8 @@ namespace Kaboom.Application.Services
             parent.RemoveChild(windowID);
 
             UpdateTree();
+
+            selection.ClearSelection();
         }
 
         public void MoveWindow(EntityID windowID, Direction direction)

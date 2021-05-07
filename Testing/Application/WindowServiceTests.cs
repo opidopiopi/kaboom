@@ -1,9 +1,11 @@
 ﻿using Kaboom.Application.Services;
+using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,6 +14,7 @@ namespace Kaboom.Testing.Application
     [TestClass]
     public class WindowServiceTests
     {
+        private Mock<ISelection> m_selectionMock;
         private WindowService m_windowService;
         private MockArrangementRepository m_arrgangementRepo;
         private MockWindowRenderer m_renderer;
@@ -32,7 +35,9 @@ namespace Kaboom.Testing.Application
             m_renderer = new MockWindowRenderer();
             m_arrgangementRepo = new MockArrangementRepository();
             m_windowService = new WindowService(m_arrgangementRepo, m_renderer);
-
+            m_selectionMock = new Mock<ISelection>();
+            m_selectionMock.Setup(selection => selection.SelectWindow(It.IsAny<EntityID>()));
+            m_selectionMock.Setup(selection => selection.ClearSelection());
 
             /*  m_rootA
              *  |
@@ -108,9 +113,9 @@ namespace Kaboom.Testing.Application
             Window onceAgainANewWindow = new Window(new Bounds(69, 420, 20, 20), "windowOutsideOfBothRootsBoundsSoItShouldLandInRootA");
 
             //Act
-            m_windowService.InsertWindowIntoTree(newWindow);
-            m_windowService.InsertWindowIntoTree(anotherNewWindow);
-            m_windowService.InsertWindowIntoTree(onceAgainANewWindow);
+            m_windowService.InsertWindowIntoTree(newWindow, m_selectionMock.Object);
+            m_windowService.InsertWindowIntoTree(anotherNewWindow, m_selectionMock.Object);
+            m_windowService.InsertWindowIntoTree(onceAgainANewWindow, m_selectionMock.Object);
 
             //Assert
             Assert.AreEqual(m_arrgangementRepo.FindParentOf(newWindow.ID), m_rootA);
@@ -131,7 +136,7 @@ namespace Kaboom.Testing.Application
 
             //Act
             Assert.AreEqual(m_arrgangementRepo.FindParentOf(m_windows[3].ID), m_levelTwoA);
-            m_windowService.RemoveWindow(m_windows[3].ID);
+            m_windowService.RemoveWindowFromTree(m_windows[3].ID, m_selectionMock.Object);
 
             //Assert
             Assert.IsNull(m_arrgangementRepo.FindParentOf(m_windows[3].ID));
@@ -146,7 +151,7 @@ namespace Kaboom.Testing.Application
 
             //Act
             var newWindow = new Window(new Bounds(10, 10, 10, 10), "wow");
-            m_windowService.InsertWindowIntoTree(newWindow);
+            m_windowService.InsertWindowIntoTree(newWindow, m_selectionMock.Object);
 
             //Assert
             Assert.IsTrue(m_renderer.RenderedWindows.Contains(newWindow));
@@ -164,7 +169,7 @@ namespace Kaboom.Testing.Application
             //Arrange
 
             //Act
-            m_windowService.RemoveWindow(m_windows[1].ID);
+            m_windowService.RemoveWindowFromTree(m_windows[1].ID, m_selectionMock.Object);
 
             //Assert
             m_windows.ToList().ForEach(window => m_renderer.RenderedWindows.Contains(window));
@@ -183,7 +188,7 @@ namespace Kaboom.Testing.Application
 
             //Act
             var newWindow = new Window(new Bounds(10, 10, 10, 10), "wow");
-            m_windowService.InsertWindowIntoTree(newWindow);
+            m_windowService.InsertWindowIntoTree(newWindow, m_selectionMock.Object);
 
             //Assert
             Assert.IsTrue(m_rootA.Updated);
@@ -206,7 +211,7 @@ namespace Kaboom.Testing.Application
             m_levelThree.Updated = false;
 
             //Act
-            m_windowService.RemoveWindow(m_windows[1].ID);
+            m_windowService.RemoveWindowFromTree(m_windows[1].ID, m_selectionMock.Object);
 
             //Assert
             Assert.IsTrue(m_rootA.Updated);

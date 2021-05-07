@@ -1,5 +1,6 @@
 ﻿using Kaboom.Adapters;
-using Kaboom.Application;
+using Kaboom.Domain;
+using Kaboom.Domain.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -11,6 +12,7 @@ namespace Plugins
     public class WindowCatcher : IDisposable
     {
         private ISelection m_selection;
+        private IWindowService m_windowService;
         private WindowMapper m_windowMapper;
         private IWindowCatchingRule m_catchingRule;
         private List<WindowsWindow> m_windows = new List<WindowsWindow>();
@@ -19,7 +21,7 @@ namespace Plugins
 
         private long m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
-        public WindowCatcher(WindowMapper windowMapper, ISelection selection, IWindowCatchingRule catchingRule)
+        public WindowCatcher(WindowMapper windowMapper, ISelection selection, IWindowService windowService, IWindowCatchingRule catchingRule)
         {
             m_windowMapper = windowMapper;
             m_selection = selection;
@@ -27,6 +29,7 @@ namespace Plugins
 
             m_eventDelegate = new Win32Wrapper.WinEventDelegate(WindowEventsCallback);
             HookEvents();
+            m_windowService = windowService;
         }
 
         public void RunUpdateLoop()
@@ -48,13 +51,13 @@ namespace Plugins
             newWindows.ForEach(window =>
             {
                 window.Prepare();
-                m_selection.InsertWindow(m_windowMapper.MapToDomain(window));
+                m_windowService.InsertWindowIntoTree(m_windowMapper.MapToDomain(window), m_selection);
                 Console.WriteLine($"[WindowCatcher]         New Window: {window.WindowHandle}");
             });
 
             removeWindows.ForEach(window =>
             {
-                m_selection.RemoveWindow(m_windowMapper.MapToDomain(window).ID);
+                m_windowService.RemoveWindowFromTree(m_windowMapper.MapToDomain(window).ID, m_selection);
                 m_windowMapper.RemoveMappingForWindow(window);
                 Console.WriteLine($"[WindowCatcher]         Removed Window: {window.WindowName()}");
             });

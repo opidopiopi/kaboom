@@ -1,8 +1,9 @@
-﻿using Kaboom.Domain.WindowTree.ValueObjects;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.WindowTree.ValueObjects;
 
-namespace Kaboom.Application.Actions.WorkspaceActions
+namespace Kaboom.Application.Actions.SelectionActions
 {
-    public class SelectWindowAction : WorkspaceAction
+    public class SelectWindowAction : SelectionAction
     {
         private Direction m_direction;
 

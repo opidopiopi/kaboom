@@ -1,5 +1,5 @@
-﻿using Kaboom.Application.Services;
-using Kaboom.Domain;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.ValueObjects;
 
@@ -7,7 +7,9 @@ namespace Kaboom.Application
 {
     public class Selection : ISelection
     {
+        public EntityID ID { get; } = new EntityID();
         public EntityID SelectedWindow { get => m_selectedWindow; }
+
 
         private EntityID m_selectedWindow;
         private IArrangementRepository m_arrangementRepository;
@@ -17,26 +19,6 @@ namespace Kaboom.Application
         {
             m_windowService = windowService;
             m_arrangementRepository = arrangementRepository;
-        }
-
-        public void InsertWindow(Window window)
-        {
-            m_windowService.InsertWindowIntoTree(window);
-
-            if (m_selectedWindow == null)
-            {
-                SelectWindow(window.ID);
-            }
-        }
-
-        public void RemoveWindow(EntityID windowID)
-        {
-            if (m_selectedWindow != null && m_selectedWindow.Equals(windowID))
-            {
-                SelectWindow(null);
-            }
-
-            m_windowService.RemoveWindow(windowID);
         }
 
         public void MoveSelectedWindow(Direction direction)
@@ -55,17 +37,7 @@ namespace Kaboom.Application
             }
             else
             {
-                foreach(var id in m_arrangementRepository.RootArrangements())
-                {
-                    var arr = m_arrangementRepository.Find(id);
-                    var window = arr.FirstWindow();
-
-                    if(window != null)
-                    {
-                        SelectWindow(window);
-                        return;
-                    }
-                }
+                SelectFirstWindowInTree();
             }
         }
 
@@ -89,6 +61,29 @@ namespace Kaboom.Application
         {
             m_selectedWindow = windowID;
             m_windowService.HightlightWindow(m_selectedWindow);
+        }
+        public void ClearSelection()
+        {
+            m_selectedWindow = null;
+            m_windowService.HightlightWindow(null);
+        }
+
+        private void SelectFirstWindowInTree()
+        {
+            if (m_selectedWindow == null)
+            {
+                foreach (var id in m_arrangementRepository.RootArrangements())
+                {
+                    var arr = m_arrangementRepository.Find(id);
+                    var window = arr.FirstWindow();
+
+                    if (window != null)
+                    {
+                        SelectWindow(window);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

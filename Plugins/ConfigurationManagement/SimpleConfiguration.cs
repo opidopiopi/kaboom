@@ -1,7 +1,7 @@
-﻿using Kaboom.Application;
-using Kaboom.Application.Actions;
-using Kaboom.Application.Actions.WorkspaceActions;
+﻿using Kaboom.Application.Actions;
+using Kaboom.Application.Actions.SelectionActions;
 using Kaboom.Application.ConfigurationManagement;
+using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.ValueObjects;
 using Plugins.Shortcuts;
