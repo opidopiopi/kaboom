@@ -151,41 +151,6 @@ namespace Kaboom.Testing.Domain
             Assert.IsNull(m_arrangement.RemoveWindowAndReturn(expected.First().ID));
         }
 
-
-        [TestMethod]
-        public void arrangement_for_all_underlying_windows()
-        {
-            //Arrange
-            var levelOneA = new MockArrangement(new Axis[] { });
-            var levelOneB = new MockArrangement(new Axis[] { });
-            m_arrangement.InsertAsLast(levelOneA);
-            m_arrangement.InsertAsLast(levelOneB);
-
-            var levelTwoA = new MockArrangement(new Axis[] { });
-            var levelTwoB = new MockArrangement(new Axis[] { });
-            levelOneA.InsertAsLast(levelTwoA);
-            levelOneA.InsertAsLast(levelTwoB);
-
-            var levelThree = new MockArrangement(new Axis[] { });
-            levelTwoA.InsertAsLast(levelThree);
-
-            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Bounds(1, 1, 1, 1), "test")).ToArray();
-
-            m_arrangement.InsertAsLast(windows[0]);
-            levelOneA.InsertAsLast(windows[1]);
-            levelOneB.InsertAsLast(windows[2]);
-            levelTwoA.InsertAsLast(windows[3]);
-            levelTwoB.InsertAsLast(windows[4]);
-            levelThree.InsertAsLast(windows[5]);
-
-            //Act
-            List<Window> allWindows = new List<Window>();
-            m_arrangement.ForAllUnderlyingWindows((window) => allWindows.Add(window));
-
-            //Assert
-            CollectionAssert.AreEquivalent(windows, allWindows);
-        }
-
         [TestMethod]
         public void arrangement_can_find_parent_of_child()
         {

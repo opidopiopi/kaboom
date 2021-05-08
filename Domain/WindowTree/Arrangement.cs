@@ -158,21 +158,6 @@ namespace Kaboom.Domain.WindowTree
             return Children.Find(node => node.ID.Equals(childID));
         }
 
-        public void ForAllUnderlyingWindows(WindowCallback callback)
-        {
-            Children.ForEach((child) =>
-            {
-                if (child is Window window)
-                {
-                    callback(window);
-                }
-                else if (child is Arrangement arrangement)
-                {
-                    arrangement.ForAllUnderlyingWindows(callback);
-                }
-            });
-        }
-
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
         {
             if (FindChild(arrangementOrWindow) != null)

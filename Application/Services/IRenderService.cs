@@ -1,11 +1,11 @@
 ﻿using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 
 namespace Kaboom.Application.Services
 {
-    public interface IRenderService
+    public interface IRenderService : IVisitor
     {
-        void Render(Arrangement arrangement);
-        void Render(Window window);
+        void ExecuteFromRoot(Arrangement rootArrangement);
         void HighlightWindow(Window selectedWindow);
     }
 }

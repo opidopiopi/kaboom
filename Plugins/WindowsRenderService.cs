@@ -9,7 +9,7 @@ namespace Plugins
     public class WindowsRenderService : IRenderService
     {
         public const int WINDOW_BORDER_Size = 5;
-        public static string OVERLAY_NAME = "Kaboom_overlay";
+        public const string OVERLAY_NAME = "Kaboom_overlay";
 
         private WindowMapper m_mapper;
         private FormNotShowingInAltTab m_graphicsForm;
@@ -21,6 +21,11 @@ namespace Plugins
             PrepareForm();
         }
 
+        public void ExecuteFromRoot(Arrangement rootArrangement)
+        {
+            rootArrangement.Accept(this);
+        }
+
         public void HighlightWindow(Window selectedWindow)
         {
             var iWindow = m_mapper.MapToIWindow(selectedWindow);
@@ -30,14 +35,19 @@ namespace Plugins
             Render(selectedWindow);
         }
 
-        public void Render(Window window)
+        public void Visit(Arrangement arrangement)
         {
-            m_mapper.MapToIWindow(window).ApplyPreferredRect(WINDOW_BORDER_Size);
+            arrangement.VisitAllChildren(this);
         }
 
-        public void Render(Arrangement arrangement)
+        public void Visit(Window window)
         {
-            throw new System.NotImplementedException();
+            Render(window);
+        }
+
+        private void Render(Window window)
+        {
+            m_mapper.MapToIWindow(window).ApplyPreferredRect(WINDOW_BORDER_Size);
         }
 
         private void PrepareForm()

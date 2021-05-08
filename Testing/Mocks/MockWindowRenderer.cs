@@ -8,19 +8,24 @@ namespace Kaboom.Testing.Mocks
     {
         public List<Window> RenderedWindows = new List<Window>();
 
+        public void ExecuteFromRoot(Arrangement rootArrangement)
+        {
+            rootArrangement.Accept(this);
+        }
+
         public void HighlightWindow(Window selectedWindow)
         {
 
         }
 
-        public void Render(Window window)
+        public void Visit(Arrangement arrangement)
         {
-            RenderedWindows.Add(window);
+            arrangement.VisitAllChildren(this);
         }
 
-        public void Render(Arrangement arrangement)
+        public void Visit(Window window)
         {
-            throw new System.NotImplementedException();
+            RenderedWindows.Add(window);
         }
     }
 }

@@ -275,7 +275,7 @@ namespace Kaboom.Application.Services
 
                 m_emptyArrangementRemover.ExecuteFromRoot(root);
                 root.UpdateBoundsOfChildren();
-                root.ForAllUnderlyingWindows((window) => m_renderer.Render(window));
+                m_renderer.ExecuteFromRoot(root);
             });
         }
     }
