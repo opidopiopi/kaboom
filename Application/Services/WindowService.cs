@@ -197,7 +197,7 @@ namespace Kaboom.Application.Services
         }
         private bool TryToMoveToDifferentRoot(ref Window window, Direction direction, ref Arrangement parent)
         {
-            var otherRoot = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+            var otherRoot = m_arrangements.FindNeighbourOfRoot(parent.ID, direction);
             if (otherRoot != null)
             {
                 if (direction == Direction.Left || direction == Direction.Up)
@@ -239,40 +239,28 @@ namespace Kaboom.Application.Services
 
             return null;
         }
-        private EntityID TryToGetNextUnderCurrentRoot(Direction direction, Arrangement startParent, out Arrangement endParent)
+        private EntityID TryToGetNextUnderCurrentRoot(Direction direction, Arrangement startParent, out Arrangement lastParent)
         {
             var superParent = m_arrangements.FindParentOf(startParent.ID);
-            endParent = startParent;
+            lastParent = startParent;
 
             while (superParent != null)
             {
-                var parentNeighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(endParent.ID, direction));
-
-                if (parentNeighbour is Window window)
+                var res = TryToGetNextLocally(direction, lastParent.ID, ref superParent);
+                if(res != null)
                 {
-                    return window.ID;
-                }
-                else if (parentNeighbour is Arrangement arrangement)
-                {
-                    if (direction == Direction.Left || direction == Direction.Up)
-                    {
-                        return arrangement.LastWindow();
-                    }
-                    else
-                    {
-                        return arrangement.FirstWindow();
-                    }
+                    return res;
                 }
 
-                endParent = superParent;
-                superParent = m_arrangements.FindParentOf(endParent.ID);
+                lastParent = superParent;
+                superParent = m_arrangements.FindParentOf(lastParent.ID);
             }
 
             return null;
         }
         private EntityID TryToGetNextFromDifferentRoot(Direction direction, ref Arrangement rootArrangement)
         {
-            var rootNeighbour = m_arrangements.FindNeighbourOfRootInDirection(rootArrangement.ID, direction);
+            var rootNeighbour = m_arrangements.FindNeighbourOfRoot(rootArrangement.ID, direction);
             if (rootNeighbour != null)
             {
                 if (direction == Direction.Left || direction == Direction.Up)

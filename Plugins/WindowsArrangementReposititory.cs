@@ -34,46 +34,22 @@ namespace Plugins
             return m_rootArrangements.Where(arr => arr.ID.Equals(arrangementID)).FirstOrDefault();
         }
 
-        public Arrangement FindNeighbourOfRootInDirection(EntityID arrangementID, Direction direction)
+        public Arrangement FindNeighbourOfRoot(EntityID arrangementID, Direction direction)
         {
             var root = m_rootArrangements.Find(arr => arr.ID.Equals(arrangementID));
             if(root == null)
             {
-                throw new System.Exception($"Repository does not contain a root with ID: {arrangementID}!!");
+                throw new Exception($"Repository does not contain a root with ID: {arrangementID}!!");
             }
 
             var candidates = m_rootArrangements.Where(arr => !arr.Equals(root));
             if(direction.Axis == Axis.X)
             {
-                candidates = candidates.Where(arrangement =>
-                {
-                    return arrangement.Bounds.Y + arrangement.Bounds.Height >= root.Bounds.Y && arrangement.Bounds.Y <= root.Bounds.Y + root.Bounds.Height;
-                });
-
-                if (direction == Direction.Left)
-                {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.X < root.Bounds.X);
-                }
-                else
-                {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.X > root.Bounds.X);
-                }
+                candidates = FilterForXAxis(direction, root, candidates);
             }
             else
             {
-                candidates = candidates.Where(arrangement =>
-                {
-                    return arrangement.Bounds.X + arrangement.Bounds.Width >= root.Bounds.X && arrangement.Bounds.X <= root.Bounds.X + root.Bounds.Width;
-                });
-
-                if (direction == Direction.Up)
-                {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y < root.Bounds.Y);
-                }
-                else
-                {
-                    candidates = candidates.Where(arrangement => arrangement.Bounds.Y > root.Bounds.Y);
-                }
+                candidates = FilterForYAxis(direction, root, candidates);
             }
 
             if (candidates.Count() == 0)
@@ -86,7 +62,7 @@ namespace Plugins
                 double dx = arr.Bounds.X - root.Bounds.X;
                 double dy = arr.Bounds.Y - root.Bounds.Y;
 
-                return Math.Sqrt(dx * dx + dy * dy);
+                return dx * dx + dy * dy;
             }).First();
         }
 
@@ -122,6 +98,42 @@ namespace Plugins
         public List<EntityID> RootArrangements()
         {
             return m_rootArrangements.Select(arr => arr.ID).ToList();
+        }
+
+        private static IEnumerable<Arrangement> FilterForYAxis(Direction direction, Arrangement root, IEnumerable<Arrangement> candidates)
+        {
+            candidates = candidates.Where(arrangement =>
+                arrangement.Bounds.X + arrangement.Bounds.Width >= root.Bounds.X && arrangement.Bounds.X <= root.Bounds.X + root.Bounds.Width
+            );
+
+            if (direction == Direction.Up)
+            {
+                candidates = candidates.Where(arrangement => arrangement.Bounds.Y < root.Bounds.Y);
+            }
+            else
+            {
+                candidates = candidates.Where(arrangement => arrangement.Bounds.Y > root.Bounds.Y);
+            }
+
+            return candidates;
+        }
+
+        private static IEnumerable<Arrangement> FilterForXAxis(Direction direction, Arrangement root, IEnumerable<Arrangement> candidates)
+        {
+            candidates = candidates.Where(arrangement =>
+                arrangement.Bounds.Y + arrangement.Bounds.Height >= root.Bounds.Y && arrangement.Bounds.Y <= root.Bounds.Y + root.Bounds.Height
+            );
+
+            if (direction == Direction.Left)
+            {
+                candidates = candidates.Where(arrangement => arrangement.Bounds.X < root.Bounds.X);
+            }
+            else
+            {
+                candidates = candidates.Where(arrangement => arrangement.Bounds.X > root.Bounds.X);
+            }
+
+            return candidates;
         }
     }
 }

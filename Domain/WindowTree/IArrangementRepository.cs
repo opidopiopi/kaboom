@@ -14,6 +14,6 @@ namespace Kaboom.Domain.WindowTree
         Arrangement FindThatContainsPoint(int x, int y);
         Arrangement FindParentOf(EntityID arrangementOrWindow);
 
-        Arrangement FindNeighbourOfRootInDirection(EntityID arrangementID, Direction direction);
+        Arrangement FindNeighbourOfRoot(EntityID arrangementID, Direction direction);
     }
 }
