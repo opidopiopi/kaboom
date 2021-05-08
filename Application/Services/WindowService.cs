@@ -61,7 +61,7 @@ namespace Kaboom.Application.Services
                 return;
             }
 
-            var window = parent.RemoveWindowAndReturn(windowID);
+            var window = parent.RemoveAndReturnWindow(windowID);
             if (TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
             {
                 UpdateTree();
@@ -153,11 +153,11 @@ namespace Kaboom.Application.Services
                 {
                     if (direction == Direction.Left || direction == Direction.Up)
                     {
-                        neighbour.InsertAsLast(parent.RemoveWindowAndReturn(windowID));
+                        neighbour.InsertAsLast(parent.RemoveAndReturnWindow(windowID));
                     }
                     else
                     {
-                        neighbour.InsertAsFirst(parent.RemoveWindowAndReturn(windowID));
+                        neighbour.InsertAsFirst(parent.RemoveAndReturnWindow(windowID));
                     }
                 }
 
@@ -229,11 +229,11 @@ namespace Kaboom.Application.Services
             {
                 if (direction == Direction.Left || direction == Direction.Up)
                 {
-                    return arr.LastWindow();
+                    return arr.LastWindowRecursive();
                 }
                 else
                 {
-                    return arr.FirstWindow();
+                    return arr.FirstWindowRecursive();
                 }
             }
 
@@ -265,11 +265,11 @@ namespace Kaboom.Application.Services
             {
                 if (direction == Direction.Left || direction == Direction.Up)
                 {
-                    return rootNeighbour.LastWindow();
+                    return rootNeighbour.LastWindowRecursive();
                 }
                 else
                 {
-                    return rootNeighbour.FirstWindow();
+                    return rootNeighbour.FirstWindowRecursive();
                 }
             }
 

@@ -76,7 +76,7 @@ namespace Kaboom.Application
                 foreach (var id in m_arrangementRepository.RootArrangements())
                 {
                     var arr = m_arrangementRepository.Find(id);
-                    var window = arr.FirstWindow();
+                    var window = arr.FirstWindowRecursive();
 
                     if (window != null)
                     {

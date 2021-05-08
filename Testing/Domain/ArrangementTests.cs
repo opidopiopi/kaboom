@@ -141,14 +141,14 @@ namespace Kaboom.Testing.Domain
             expected.ForEach(child => m_arrangement.InsertAsLast(child));
 
             //Act
-            var removed = m_arrangement.RemoveWindowAndReturn(window.ID);
+            var removed = m_arrangement.RemoveAndReturnWindow(window.ID);
             expected.Remove(window);
 
             //Assert
             Assert.AreEqual(window, removed);
             AssertSequenceEqual(m_arrangement.MyChildren, expected);
 
-            Assert.IsNull(m_arrangement.RemoveWindowAndReturn(expected.First().ID));
+            Assert.IsNull(m_arrangement.RemoveAndReturnWindow(expected.First().ID));
         }
 
         [TestMethod]

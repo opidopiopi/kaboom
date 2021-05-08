@@ -43,5 +43,26 @@ namespace Kaboom.Domain.WindowTree.Helpers
 
         public abstract void Accept(IVisitor visitor);
         public void VisitAllChildren(IVisitor visitor) => Children.ForEach(child => child.Accept(visitor));
+
+        public IBoundedTreeNode FindChild(EntityID childID)
+        {
+            return Children.Find(node => node.ID.Equals(childID));
+        }
+        public void SwapChildren(EntityID childA, EntityID childB)
+        {
+            var tempA = FindChild(childA);
+            var tempB = FindChild(childB);
+
+            var indexA = Children.IndexOf(tempA);
+            var indexB = Children.IndexOf(tempB);
+
+            Children[indexA] = tempB;
+            Children[indexB] = tempA;
+        }
+
+        public void RemoveChild(EntityID childID)
+        {
+            Children.RemoveAll(node => node.ID.Equals(childID));
+        }
     }
 }

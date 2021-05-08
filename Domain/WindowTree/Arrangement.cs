@@ -27,19 +27,8 @@ namespace Kaboom.Domain.WindowTree
 
         public abstract void UpdateBoundsOfChildren();
         public abstract EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction);
-        public void SwapChildren(EntityID childA, EntityID childB)
-        {
-            var tempA = FindChild(childA);
-            var tempB = FindChild(childB);
 
-            var indexA = Children.IndexOf(tempA);
-            var indexB = Children.IndexOf(tempB);
-
-            Children[indexA] = tempB;
-            Children[indexB] = tempA;
-        }
-
-        public EntityID FirstWindow()
+        public EntityID FirstWindowRecursive()
         {
             foreach (var child in Children)
             {
@@ -49,7 +38,7 @@ namespace Kaboom.Domain.WindowTree
                 }
                 else if (child is Arrangement arrangement)
                 {
-                    var result = arrangement.FirstWindow();
+                    var result = arrangement.FirstWindowRecursive();
 
                     if (result != null)
                     {
@@ -61,7 +50,7 @@ namespace Kaboom.Domain.WindowTree
             return null;
         }
 
-        public EntityID LastWindow()
+        public EntityID LastWindowRecursive()
         {
             foreach (var child in Children.Reverse<IBoundedTreeNode>())
             {
@@ -71,7 +60,7 @@ namespace Kaboom.Domain.WindowTree
                 }
                 else if (child is Arrangement arrangement)
                 {
-                    var result = arrangement.LastWindow();
+                    var result = arrangement.LastWindowRecursive();
 
                     if (result != null)
                     {
@@ -88,12 +77,7 @@ namespace Kaboom.Domain.WindowTree
             return m_supportedAxis.Contains(axis);
         }
 
-        public void RemoveChild(EntityID childID)
-        {
-            Children.RemoveAll(node => node.ID.Equals(childID));
-        }
-
-        public Window RemoveWindowAndReturn(EntityID childID)
+        public Window RemoveAndReturnWindow(EntityID childID)
         {
             var child = Children.Find(node => node.ID.Equals(childID));
 
@@ -149,13 +133,6 @@ namespace Kaboom.Domain.WindowTree
                     }
                 }
             }
-
-            UpdateBoundsOfChildren();
-        }
-
-        public IBoundedTreeNode FindChild(EntityID childID)
-        {
-            return Children.Find(node => node.ID.Equals(childID));
         }
 
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
