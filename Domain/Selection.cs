@@ -33,7 +33,8 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow != null)
             {
-                SelectWindow(m_windowService.NextWindowInDirection(direction, m_selectedWindow));
+                var result = m_windowService.NextWindowInDirection(direction, m_selectedWindow);
+                if (result != null) SelectWindow(result);
             }
             else
             {

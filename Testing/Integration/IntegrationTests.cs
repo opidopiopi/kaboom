@@ -147,7 +147,7 @@ namespace Kaboom.Testing.Integration
             //Arrange
             ScenarioOne();
 
-            var asdf = new (MockActionEvent actionEvent, EntityID windowID)[]{
+            var sequence = new (MockActionEvent actionEvent, EntityID windowID)[]{
                 (SelectLeft, m_windows[0].ID),
                 (SelectRight, m_windows[1].ID),
                 (SelectDown, m_windows[2].ID),
@@ -163,12 +163,12 @@ namespace Kaboom.Testing.Integration
                 (SelectLeft, m_windows[0].ID),
             };
 
-            asdf.ToList().ForEach(wow => {
+            sequence.ToList().ForEach(item => {
                 //Act
-                m_actionService.OnActionEvent(wow.actionEvent);
+                m_actionService.OnActionEvent(item.actionEvent);
 
                 //Assert
-                Assert.AreEqual(wow.windowID, m_selection.SelectedWindow, $"\nactual window: {m_arrangementRepository.FindParentOf(m_selection.SelectedWindow).FindChild(m_selection.SelectedWindow)}");
+                Assert.AreEqual(item.windowID, m_selection.SelectedWindow, $"\nactual window: {m_arrangementRepository.FindParentOf(m_selection.SelectedWindow).FindChild(m_selection.SelectedWindow)}");
             });
         }
 

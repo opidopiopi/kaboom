@@ -62,7 +62,6 @@ namespace Kaboom.Application.Services
             }
 
             var window = parent.RemoveWindowAndReturn(windowID);
-
             if (TryToMoveUnderCurrentRoot(ref window, direction, ref parent))
             {
                 UpdateTree();
@@ -90,54 +89,55 @@ namespace Kaboom.Application.Services
             }
         }
 
-        private bool TryToMoveToDifferentRoot(ref Window window, Direction direction, ref Arrangement parent)
+        public EntityID NextWindowInDirection(Direction direction, EntityID currentlySelected)
         {
-            var otherRoot = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
-            if (otherRoot != null)
-            {
-                if (direction == Direction.Left || direction == Direction.Up)
-                {
-                    otherRoot.InsertAsLast(window);
-                }
-                else
-                {
-                    otherRoot.InsertAsFirst(window);
-                }
+            var parent = m_arrangements.FindParentOf(currentlySelected);
 
-                UpdateTree();
-                return true;
-            }
-            else
+            if (parent == null)
             {
-                return false;
+                throw new System.Exception("Somehow the currently selected entity has no parent....");
+            }
+
+            var candidate = TryToGetNextLocally(direction, currentlySelected, ref parent);
+            if (candidate != null)
+            {
+                return candidate;
+            }
+
+            Arrangement root;
+            candidate = TryToGetNextUnderCurrentRoot(direction, parent, out root);
+            if (candidate != null)
+            {
+                return candidate;
+            }
+
+            candidate = TryToGetNextFromDifferentRoot(direction, ref root);
+            if (candidate != null)
+            {
+                return candidate;
+            }
+
+            return null;
+        }
+
+        public void UnWrapWindowParent(EntityID windowID)
+        {
+            var parent = m_arrangements.FindParentOf(windowID);
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+
+            if (superParent != null)
+            {
+                superParent.UnWrapChildToSelf(parent.ID);
+                UpdateTree();
             }
         }
 
-        private bool TryToMoveUnderCurrentRoot(ref Window window, Direction direction, ref Arrangement parent)
+        public void HightlightWindow(EntityID windowID)
         {
-            var superParent = m_arrangements.FindParentOf(parent.ID);
-            while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
+            if (windowID != null)
             {
-                if (superParent.SupportsAxis(direction.Axis))
-                {
-                    if (direction == Direction.Left || direction == Direction.Up)
-                    {
-                        superParent.InsertBefore(window, parent);
-                    }
-                    else
-                    {
-                        superParent.InsertAfter(window, parent);
-                    }
-
-                    UpdateTree();
-                    return true;
-                }
-
-                parent = superParent;
-                superParent = m_arrangements.FindParentOf(parent.ID);
+                m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
             }
-
-            return false;
         }
 
         private bool TryToMoveLocally(EntityID windowID, Direction direction, ref Arrangement parent)
@@ -169,22 +169,63 @@ namespace Kaboom.Application.Services
                 return false;
             }
         }
-
-        public EntityID NextWindowInDirection(Direction direction, EntityID currentlySelected)
+        private bool TryToMoveUnderCurrentRoot(ref Window window, Direction direction, ref Arrangement parent)
         {
-            var parent = m_arrangements.FindParentOf(currentlySelected);
-
-            if (parent == null)
+            var superParent = m_arrangements.FindParentOf(parent.ID);
+            while (superParent != null) //go up the tree until we find an arrangement that allows us to move the window
             {
-                throw new System.Exception("Somehow the currently selected entity has no parent....");
+                if (superParent.SupportsAxis(direction.Axis))
+                {
+                    if (direction == Direction.Left || direction == Direction.Up)
+                    {
+                        superParent.InsertBefore(window, parent);
+                    }
+                    else
+                    {
+                        superParent.InsertAfter(window, parent);
+                    }
+
+                    UpdateTree();
+                    return true;
+                }
+
+                parent = superParent;
+                superParent = m_arrangements.FindParentOf(parent.ID);
             }
 
-            var nextSelected = parent.FindChild(parent.NeighbourOfChildInDirection(currentlySelected, direction));
-            if (nextSelected is Window win)
+            return false;
+        }
+        private bool TryToMoveToDifferentRoot(ref Window window, Direction direction, ref Arrangement parent)
+        {
+            var otherRoot = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+            if (otherRoot != null)
+            {
+                if (direction == Direction.Left || direction == Direction.Up)
+                {
+                    otherRoot.InsertAsLast(window);
+                }
+                else
+                {
+                    otherRoot.InsertAsFirst(window);
+                }
+
+                UpdateTree();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private EntityID TryToGetNextLocally(Direction direction, EntityID currentlySelected, ref Arrangement parent)
+        {
+            var neighbour = parent.FindChild(parent.NeighbourOfChildInDirection(currentlySelected, direction));
+            if (neighbour is Window win)
             {
                 return win.ID;
             }
-            else if (nextSelected is Arrangement arr)
+            else if (neighbour is Arrangement arr)
             {
                 if (direction == Direction.Left || direction == Direction.Up)
                 {
@@ -196,11 +237,16 @@ namespace Kaboom.Application.Services
                 }
             }
 
-            var superParent = m_arrangements.FindParentOf(parent.ID);
+            return null;
+        }
+        private EntityID TryToGetNextUnderCurrentRoot(Direction direction, Arrangement startParent, out Arrangement endParent)
+        {
+            var superParent = m_arrangements.FindParentOf(startParent.ID);
+            endParent = startParent;
 
             while (superParent != null)
             {
-                var parentNeighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(parent.ID, direction));
+                var parentNeighbour = superParent.FindChild(superParent.NeighbourOfChildInDirection(endParent.ID, direction));
 
                 if (parentNeighbour is Window window)
                 {
@@ -218,11 +264,15 @@ namespace Kaboom.Application.Services
                     }
                 }
 
-                parent = superParent;
-                superParent = m_arrangements.FindParentOf(parent.ID);
+                endParent = superParent;
+                superParent = m_arrangements.FindParentOf(endParent.ID);
             }
 
-            var rootNeighbour = m_arrangements.FindNeighbourOfRootInDirection(parent.ID, direction);
+            return null;
+        }
+        private EntityID TryToGetNextFromDifferentRoot(Direction direction, ref Arrangement rootArrangement)
+        {
+            var rootNeighbour = m_arrangements.FindNeighbourOfRootInDirection(rootArrangement.ID, direction);
             if (rootNeighbour != null)
             {
                 if (direction == Direction.Left || direction == Direction.Up)
@@ -234,37 +284,8 @@ namespace Kaboom.Application.Services
                     return rootNeighbour.FirstWindow();
                 }
             }
-            else
-            {
-                if (direction == Direction.Left || direction == Direction.Up)
-                {
-                    return parent.FirstWindow();
-                }
-                else
-                {
-                    return parent.LastWindow();
-                }
-            }
-        }
 
-        public void UnWrapWindowParent(EntityID windowID)
-        {
-            var parent = m_arrangements.FindParentOf(windowID);
-            var superParent = m_arrangements.FindParentOf(parent.ID);
-
-            if (superParent != null)
-            {
-                superParent.UnWrapChildToSelf(parent.ID);
-                UpdateTree();
-            }
-        }
-
-        public void HightlightWindow(EntityID windowID)
-        {
-            if (windowID != null)
-            {
-                m_renderer.HighlightWindow(m_arrangements.FindParentOf(windowID).FindChild(windowID) as Window);
-            }
+            return null;
         }
 
         private void UpdateTree()
