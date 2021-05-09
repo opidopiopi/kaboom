@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kaboom.Adapters;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
@@ -11,13 +12,13 @@ namespace Plugins
     {
         private const int SELECTED_WINDOW_BORDER_WIDTH = 5;
 
-        private IntPtr m_selectedWindowHandle = IntPtr.Zero;
+        private IWindow m_selectedWindow = null;
         private IntPtr m_eventHook = IntPtr.Zero;
         private readonly Win32Wrapper.WinEventDelegate m_updateCallback;
 
         public FormNotShowingInAltTab()
         {
-            Text = WindowsWindowRenderer.OVERLAY_NAME;
+            Text = WindowsRenderService.OVERLAY_NAME;
             FormBorderStyle = FormBorderStyle.None;
             BackColor = Color.White;
             TransparencyKey = Color.White;
@@ -25,6 +26,7 @@ namespace Plugins
             StartPosition = FormStartPosition.Manual;
             ShowInTaskbar = false;
 
+            //let the form span over all screens
             Bounds = Screen.AllScreens.Select(screen => screen.Bounds).Aggregate((a, b) =>
                 {
                     int minX = a.X < b.X ? a.X : b.X;
@@ -48,11 +50,12 @@ namespace Plugins
 
         private void OverlayUpdate(object sender, PaintEventArgs e)
         {
-            if (m_selectedWindowHandle != IntPtr.Zero && Win32Wrapper.IsWindow(m_selectedWindowHandle))
+            if (m_selectedWindow != null && Win32Wrapper.IsWindow(m_selectedWindow.WindowHandle))
             {
-                Win32Wrapper.RECT windowRect;
-                Win32Wrapper.DwmGetWindowAttribute(m_selectedWindowHandle, Win32Wrapper.DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out windowRect, sizeof(int) * 4);
+                var windowRect = m_selectedWindow.GetActualWindowRect();
 
+                //the hidden Form spans over all screens so there might be an offset
+                //between the coordinates of a window and the coordinates in the graphics
                 var form = sender as FormNotShowingInAltTab;
                 windowRect.X -= form.Bounds.X;
                 windowRect.Y -= form.Bounds.Y;
@@ -67,18 +70,15 @@ namespace Plugins
                 graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                 graphics.DrawRectangle(
                     pen,
-                    windowRect.X - WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
-                    windowRect.Y - WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
-                    windowRect.Width + 2 * WindowsWindowRenderer.WINDOW_BORDER_WIDTH,
-                    windowRect.Height + 2 * WindowsWindowRenderer.WINDOW_BORDER_WIDTH
+                    windowRect.X - WindowsRenderService.WINDOW_BORDER_Size,
+                    windowRect.Y - WindowsRenderService.WINDOW_BORDER_Size,
+                    windowRect.Width + 2 * WindowsRenderService.WINDOW_BORDER_Size,
+                    windowRect.Height + 2 * WindowsRenderService.WINDOW_BORDER_Size
                 );
-            }
-            else
-            {
-                m_selectedWindowHandle = IntPtr.Zero;
             }
         }
 
+        //make this form not show up in ALt+Tab
         protected override CreateParams CreateParams
         {
             get
@@ -90,9 +90,9 @@ namespace Plugins
             }
         }
 
-        public void SetSelectedWindowHandle(IntPtr windowHandle)
+        public void SetSelectedWindow(IWindow window)
         {
-            m_selectedWindowHandle = windowHandle;
+            m_selectedWindow = window;
             Invoke(new MethodInvoker(delegate { Refresh(); }));
         }
 
@@ -116,7 +116,7 @@ namespace Plugins
 
         private void SelectedWindowMovedEvent(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            if (hwnd == m_selectedWindowHandle)
+            if (m_selectedWindow != null && hwnd == m_selectedWindow.WindowHandle)
             {
                 Refresh();
             }

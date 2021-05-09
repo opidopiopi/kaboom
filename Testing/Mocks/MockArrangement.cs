@@ -1,8 +1,10 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using System.Collections.Generic;
 
-namespace Kaboom.Testing.Mock
+namespace Kaboom.Testing.Mocks
 {
     public class MockArrangement : Arrangement
     {
@@ -30,9 +32,9 @@ namespace Kaboom.Testing.Mock
         {
             int index = Children.IndexOf(FindChild(childID));
 
-            index += (direction == Direction.Up || direction == Direction.Left) ? -1 : 1;
+            index += direction == Direction.Up || direction == Direction.Left ? -1 : 1;
 
-            if(index < 0 || index >= Children.Count)
+            if (index < 0 || index >= Children.Count)
             {
                 return null;
             }
@@ -45,8 +47,9 @@ namespace Kaboom.Testing.Mock
         public override void UpdateBoundsOfChildren()
         {
             Updated = true;
-            Children.ForEach(child => {
-                if(child is Arrangement arrangement)
+            Children.ForEach(child =>
+            {
+                if (child is Arrangement arrangement)
                 {
                     arrangement.UpdateBoundsOfChildren();
                 }

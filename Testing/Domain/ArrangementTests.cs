@@ -1,6 +1,7 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mock;
+﻿using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
+using Kaboom.Domain.WindowTree.Helpers;
+using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,55 +135,20 @@ namespace Kaboom.Testing.Domain
         {
             //Arrange
             List<IBoundedTreeNode> expected = Enumerable.Range(0, 10).Select(i => new MockTreeNode()).ToList<IBoundedTreeNode>();
-            var window = new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "test");
+            var window = new Window(new Bounds(1, 1, 1, 1), "test");
 
             expected.Insert(5, window);
             expected.ForEach(child => m_arrangement.InsertAsLast(child));
 
             //Act
-            var removed = m_arrangement.RemoveWindowAndReturn(window.ID);
+            var removed = m_arrangement.RemoveAndReturnWindow(window.ID);
             expected.Remove(window);
 
             //Assert
             Assert.AreEqual(window, removed);
             AssertSequenceEqual(m_arrangement.MyChildren, expected);
 
-            Assert.IsNull(m_arrangement.RemoveWindowAndReturn(expected.First().ID));
-        }
-
-
-        [TestMethod]
-        public void arrangement_for_all_underlying_windows()
-        {
-            //Arrange
-            var levelOneA = new MockArrangement(new Axis[] { });
-            var levelOneB = new MockArrangement(new Axis[] { });
-            m_arrangement.InsertAsLast(levelOneA);
-            m_arrangement.InsertAsLast(levelOneB);
-
-            var levelTwoA = new MockArrangement(new Axis[] { });
-            var levelTwoB = new MockArrangement(new Axis[] { });
-            levelOneA.InsertAsLast(levelTwoA);
-            levelOneA.InsertAsLast(levelTwoB);
-
-            var levelThree = new MockArrangement(new Axis[] { });
-            levelTwoA.InsertAsLast(levelThree);
-
-            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "test")).ToArray();
-
-            m_arrangement.InsertAsLast(windows[0]);
-            levelOneA.InsertAsLast(windows[1]);
-            levelOneB.InsertAsLast(windows[2]);
-            levelTwoA.InsertAsLast(windows[3]);
-            levelTwoB.InsertAsLast(windows[4]);
-            levelThree.InsertAsLast(windows[5]);
-
-            //Act
-            List<Window> allWindows = new List<Window>();
-            m_arrangement.ForAllUnderlyingWindows((window) => allWindows.Add(window));
-
-            //Assert
-            CollectionAssert.AreEquivalent(windows, allWindows);
+            Assert.IsNull(m_arrangement.RemoveAndReturnWindow(expected.First().ID));
         }
 
         [TestMethod]
@@ -202,7 +168,7 @@ namespace Kaboom.Testing.Domain
             var levelThree = new MockArrangement(new Axis[] { });
             levelTwoA.InsertAsLast(levelThree);
 
-            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "test")).ToArray();
+            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Bounds(1, 1, 1, 1), "test")).ToArray();
 
             m_arrangement.InsertAsLast(windows[0]);
             levelOneA.InsertAsLast(windows[1]);
@@ -238,7 +204,7 @@ namespace Kaboom.Testing.Domain
             var levelThree = new MockArrangement();
             levelTwoA.InsertAsLast(levelThree);
 
-            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "test")).ToArray();
+            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Bounds(1, 1, 1, 1), "test")).ToArray();
 
             m_arrangement.InsertAsLast(windows[0]);
             levelOneA.InsertAsLast(windows[1]);
@@ -279,7 +245,7 @@ namespace Kaboom.Testing.Domain
             var levelThree = new MockArrangement();
             levelTwoA.InsertAsLast(levelThree);
 
-            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Kaboom.Abstraction.Bounds(1, 1, 1, 1), "test")).ToArray();
+            Window[] windows = Enumerable.Range(0, 6).Select(i => new Window(new Bounds(1, 1, 1, 1), "test")).ToArray();
 
             m_arrangement.InsertAsLast(windows[0]);
             levelOneA.InsertAsLast(windows[1]);

@@ -1,13 +1,12 @@
-﻿using Kaboom.Abstraction;
-using Kaboom.Application;
-using Kaboom.Application.WorkspaceActions;
-using Kaboom.Domain.ShortcutActions;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
-using Kaboom.Testing.Mock;
+﻿using Kaboom.Application;
+using Kaboom.Application.Actions.SelectionActions;
+using Kaboom.Application.Services;
+using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
+using Kaboom.Testing.Mocks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Kaboom.Testing.Integration
@@ -16,11 +15,10 @@ namespace Kaboom.Testing.Integration
     public class IntegrationTests
     {
         private MockArrangementRepository m_arrangementRepository;
-        private Mock<IWindowRenderer> m_windowRendererMock;
+        private Mock<IRenderService> m_windowRendererMock;
         private WindowService m_windowService;
-        private Workspace m_workspace;
+        private Selection m_selection;
 
-        private MockShortcutListener m_shortcutListener;
         private ActionService m_actionService;
 
         private VerticalArrangement m_screenA;
@@ -30,31 +28,30 @@ namespace Kaboom.Testing.Integration
         private Arrangement[] m_childArrangements;
         private Window[] m_windows;
 
-        private readonly Shortcut MoveUp = new Shortcut(Modifier.WINDOWS, '0');
-        private readonly Shortcut MoveDown = new Shortcut(Modifier.WINDOWS, '1');
-        private readonly Shortcut MoveLeft = new Shortcut(Modifier.WINDOWS, '2');
-        private readonly Shortcut MoveRight = new Shortcut(Modifier.WINDOWS, '3');
+        private readonly MockActionEvent MoveUp = new MockActionEvent();
+        private readonly MockActionEvent MoveDown = new MockActionEvent();
+        private readonly MockActionEvent MoveLeft = new MockActionEvent();
+        private readonly MockActionEvent MoveRight = new MockActionEvent();
 
-        private readonly Shortcut SelectUp = new Shortcut(Modifier.ALT, '0');
-        private readonly Shortcut SelectDown = new Shortcut(Modifier.ALT, '1');
-        private readonly Shortcut SelectLeft = new Shortcut(Modifier.ALT, '2');
-        private readonly Shortcut SelectRight = new Shortcut(Modifier.ALT, '3');
+        private readonly MockActionEvent SelectUp = new MockActionEvent();
+        private readonly MockActionEvent SelectDown = new MockActionEvent();
+        private readonly MockActionEvent SelectLeft = new MockActionEvent();
+        private readonly MockActionEvent SelectRight = new MockActionEvent();
 
-        private readonly Shortcut WrapHorizontal = new Shortcut(Modifier.CTRL, '0');
-        private readonly Shortcut WrapVertical = new Shortcut(Modifier.CTRL, '1');
-        private readonly Shortcut UnWrap = new Shortcut(Modifier.CTRL, '2');
+        private readonly MockActionEvent WrapHorizontal = new MockActionEvent();
+        private readonly MockActionEvent WrapVertical = new MockActionEvent();
+        private readonly MockActionEvent UnWrap = new MockActionEvent();
 
         [TestInitialize]
         public void SetUp()
         {
             m_arrangementRepository = new MockArrangementRepository();
-            m_windowRendererMock = new Mock<IWindowRenderer>();
+            m_windowRendererMock = new Mock<IRenderService>();
 
             m_windowService = new WindowService(m_arrangementRepository, m_windowRendererMock.Object);
-            m_workspace = new Workspace(m_windowService, m_arrangementRepository);
+            m_selection = new Selection(m_windowService, m_arrangementRepository);
 
-            m_shortcutListener = new MockShortcutListener();
-            m_actionService = new ActionService(m_shortcutListener);
+            m_actionService = new ActionService();
             AddActions();
 
             //somewhat like this
@@ -80,20 +77,19 @@ namespace Kaboom.Testing.Integration
 
         private void AddActions()
         {
-            m_actionService.AddAction(new MoveWindowAction(MoveUp, m_workspace, Direction.Up));
-            m_actionService.AddAction(new MoveWindowAction(MoveDown, m_workspace, Direction.Down));
-            m_actionService.AddAction(new MoveWindowAction(MoveLeft, m_workspace, Direction.Left));
-            m_actionService.AddAction(new MoveWindowAction(MoveRight, m_workspace, Direction.Right));
+            m_actionService.RegisterActionForEvent(MoveUp, new MoveWindowAction(m_selection, Direction.Up));
+            m_actionService.RegisterActionForEvent(MoveDown, new MoveWindowAction(m_selection, Direction.Down));
+            m_actionService.RegisterActionForEvent(MoveLeft, new MoveWindowAction(m_selection, Direction.Left));
+            m_actionService.RegisterActionForEvent(MoveRight, new MoveWindowAction(m_selection, Direction.Right));
 
+            m_actionService.RegisterActionForEvent(SelectUp, new SelectWindowAction(m_selection, Direction.Up));
+            m_actionService.RegisterActionForEvent(SelectDown, new SelectWindowAction(m_selection, Direction.Down));
+            m_actionService.RegisterActionForEvent(SelectLeft, new SelectWindowAction(m_selection, Direction.Left));
+            m_actionService.RegisterActionForEvent(SelectRight, new SelectWindowAction(m_selection, Direction.Right));
 
-            m_actionService.AddAction(new SelectWindowAction(SelectUp, m_workspace, Direction.Up));
-            m_actionService.AddAction(new SelectWindowAction(SelectDown, m_workspace, Direction.Down));
-            m_actionService.AddAction(new SelectWindowAction(SelectLeft, m_workspace, Direction.Left));
-            m_actionService.AddAction(new SelectWindowAction(SelectRight, m_workspace, Direction.Right));
-
-            m_actionService.AddAction(new WrapWindowAction<HorizontalArrangement>(WrapHorizontal, m_workspace));
-            m_actionService.AddAction(new WrapWindowAction<VerticalArrangement>(WrapVertical, m_workspace));
-            m_actionService.AddAction(new UnWrapWindowAction(UnWrap, m_workspace));
+            m_actionService.RegisterActionForEvent(WrapHorizontal, new WrapWindowAction<HorizontalArrangement>(m_selection));
+            m_actionService.RegisterActionForEvent(WrapVertical, new WrapWindowAction<VerticalArrangement>(m_selection));
+            m_actionService.RegisterActionForEvent(UnWrap, new UnWrapWindowAction(m_selection));
         }
 
         private void ScenarioOne()
@@ -151,7 +147,7 @@ namespace Kaboom.Testing.Integration
             //Arrange
             ScenarioOne();
 
-            var asdf = new (Shortcut shortcut, EntityID windowID)[]{
+            var sequence = new (MockActionEvent actionEvent, EntityID windowID)[]{
                 (SelectLeft, m_windows[0].ID),
                 (SelectRight, m_windows[1].ID),
                 (SelectDown, m_windows[2].ID),
@@ -167,12 +163,12 @@ namespace Kaboom.Testing.Integration
                 (SelectLeft, m_windows[0].ID),
             };
 
-            asdf.ToList().ForEach(wow => {
+            sequence.ToList().ForEach(item => {
                 //Act
-                m_shortcutListener.TriggerShortcut(wow.shortcut);
+                m_actionService.OnActionEvent(item.actionEvent);
 
                 //Assert
-                Assert.AreEqual(wow.windowID, m_workspace.SelectedWindow, $"\nactual window: {m_arrangementRepository.FindParentOf(m_workspace.SelectedWindow).FindChild(m_workspace.SelectedWindow)}");
+                Assert.AreEqual(item.windowID, m_selection.SelectedWindow, $"\nactual window: {m_arrangementRepository.FindParentOf(m_selection.SelectedWindow).FindChild(m_selection.SelectedWindow)}");
             });
         }
 
@@ -183,11 +179,11 @@ namespace Kaboom.Testing.Integration
             //Arrange
             ScenarioOne();
 
-            new Shortcut[]{
+            new MockActionEvent[]{
                 SelectLeft,
                 MoveRight,
                 MoveDown,
-            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+            }.ToList().ForEach(actionEvent => m_actionService.OnActionEvent(actionEvent));
 
             Assert.AreEqual(
                 new Bounds(
@@ -199,13 +195,13 @@ namespace Kaboom.Testing.Integration
                 m_windows[0].Bounds
             );
 
-            new Shortcut[]{
+            new MockActionEvent[]{
                 SelectDown,
                 MoveRight,
                 MoveRight,
                 MoveRight,
                 MoveRight,
-            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+            }.ToList().ForEach(actionEvent => m_actionService.OnActionEvent(actionEvent));
 
             Assert.AreEqual(
                 new Bounds(
@@ -228,7 +224,7 @@ namespace Kaboom.Testing.Integration
                 new Window(new Bounds(1, 1, 1, 1), "window1"),
                 new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
-            m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_windowService.InsertWindowIntoTree(window, m_selection));
 
             Assert.AreEqual(
                 new Bounds(
@@ -240,16 +236,16 @@ namespace Kaboom.Testing.Integration
                 m_windows[0].Bounds
             );
 
-            Assert.AreEqual(m_windows[2].ID, m_workspace.SelectedWindow);
+            Assert.AreEqual(m_windows[2].ID, m_selection.SelectedWindow);
 
             //Act
-            new Shortcut[]{
+            new MockActionEvent[]{
                 SelectLeft,
                 SelectLeft,
                 WrapVertical,
                 SelectRight,
                 MoveLeft,
-            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+            }.ToList().ForEach(actionEvent => m_actionService.OnActionEvent(actionEvent));
 
             //Assert
             Assert.AreEqual(
@@ -292,17 +288,17 @@ namespace Kaboom.Testing.Integration
                 new Window(new Bounds(1, 1, 1, 1), "window1"),
                 new Window(new Bounds(1, 1, 1, 1), "window2"),
             };
-            m_windows.Reverse<Window>().ToList().ForEach(window => m_workspace.InsertWindow(window));
+            m_windows.Reverse<Window>().ToList().ForEach(window => m_windowService.InsertWindowIntoTree(window, m_selection));
 
             //Act
-            new Shortcut[]{
+            new MockActionEvent[]{
                 SelectLeft,
                 SelectLeft,
                 WrapVertical,
                 SelectRight,
                 MoveLeft,
                 UnWrap,
-            }.ToList().ForEach(shortcut => m_shortcutListener.TriggerShortcut(shortcut));
+            }.ToList().ForEach(actionEvent => m_actionService.OnActionEvent(actionEvent));
 
             //Assert
             Assert.AreEqual(

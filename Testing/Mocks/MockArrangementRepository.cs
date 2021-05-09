@@ -1,9 +1,10 @@
-﻿using Kaboom.Domain.WindowTree.ArrangementAggregate;
-using Kaboom.Domain.WindowTree.General;
+﻿using Kaboom.Domain;
+using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kaboom.Testing.Mock
+namespace Kaboom.Testing.Mocks
 {
     public class MockArrangementRepository : IArrangementRepository
     {
@@ -19,12 +20,12 @@ namespace Kaboom.Testing.Mock
             return m_arrangements.Where(arr => arr.ID.Equals(arrangementID)).FirstOrDefault();
         }
 
-        public Arrangement FindNeighbourOfRootInDirection(EntityID arrangementID, Direction direction)
+        public Arrangement FindNeighbourOfRoot(EntityID arrangementID, Direction direction)
         {
             int index = m_arrangements.IndexOf(m_arrangements.Find(arr => arr.ID.Equals(arrangementID)));
-            index += (direction == Direction.Up || direction == Direction.Left) ? -1 : 1;
+            index += direction == Direction.Up || direction == Direction.Left ? -1 : 1;
 
-            if(index >= 0 && index < m_arrangements.Count)
+            if (index >= 0 && index < m_arrangements.Count)
             {
                 return m_arrangements[index];
             }

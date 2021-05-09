@@ -1,19 +1,29 @@
-﻿using Kaboom.Application;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
+﻿using Kaboom.Application.Services;
+using Kaboom.Domain.WindowTree;
 using System.Collections.Generic;
 
-namespace Kaboom.Testing.Mock
+namespace Kaboom.Testing.Mocks
 {
-    public class MockWindowRenderer : IWindowRenderer
+    public class MockWindowRenderer : IRenderService
     {
         public List<Window> RenderedWindows = new List<Window>();
 
-        public void HighlightWindow(Window selectedWindow)
+        public void ExecuteFromRoot(Arrangement rootArrangement)
         {
-            
+            rootArrangement.Accept(this);
         }
 
-        public void Render(Window window)
+        public void HighlightWindow(Window selectedWindow)
+        {
+
+        }
+
+        public void Visit(Arrangement arrangement)
+        {
+            arrangement.VisitAllChildren(this);
+        }
+
+        public void Visit(Window window)
         {
             RenderedWindows.Add(window);
         }

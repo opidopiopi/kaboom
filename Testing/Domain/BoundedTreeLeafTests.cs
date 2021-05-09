@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using Moq;
-using Kaboom.Domain.WindowTree.ArrangementAggregate;
 using Kaboom.Domain.WindowTree.Exceptions;
+using Kaboom.Domain.WindowTree.Helpers;
 
 namespace Kaboom.Testing.Domain
 {
@@ -48,24 +48,6 @@ namespace Kaboom.Testing.Domain
             //Act & Assert
             Assert.ThrowsException<CannotRemoveChild>(() => treeLeafMock.Object.Remove(childMock));
             Assert.ThrowsException<CannotRemoveChild>(() => treeLeafMock.Object.Remove(null));
-        }
-
-
-        [TestMethod]
-        public void bounded_tree_leaf_has_no_children_to_visit()
-        {
-            //Arrange
-            var treeLeafMock = new Mock<BoundedTreeLeaf>();
-            var visitorMock = new Mock<IVisitor>();
-            visitorMock.Setup(visitor => visitor.Visit(It.IsAny<Arrangement>()));
-            visitorMock.Setup(visitor => visitor.Visit(It.IsAny<Window>()));
-
-            //Act
-            treeLeafMock.Object.VisitAllChildren(visitorMock.Object);
-
-            //Assert
-            visitorMock.Verify(visitor => visitor.Visit(It.IsAny<Arrangement>()), Times.Never);
-            visitorMock.Verify(visitor => visitor.Visit(It.IsAny<Window>()), Times.Never);
         }
     }
 }
