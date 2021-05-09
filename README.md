@@ -10,8 +10,20 @@ The shortcuts are no longer hardcoded. Wow amazing...
 You should find the config file at %appdata%/Kaboom/settings.conf after running it once.
 I used this config file parser: https://github.com/salaros/config-parser
 
-Some windows might not be catched and therefore not tiled.
-It is really a pain in the *** to find out which window we might want to catch and which not.
-I need to find a good solution for that one...
+The default shortcuts are as follows:<br>
+
+Move Window: Alt + Arrow Key<br>
+Move Selection: Ctrl + Arrow Key<br>
+
+Wrap selected Window with horizontal Arrangement: Alt + H<br>
+Wrap selected Window with vertical Arrangement: Alt + V<br>
+Unwrap parent of selected Window: Alt + U<br>
+
+Exit Kaboom: Alt + Q<br>
+<br>
+
+Note that it is rather hard to decide which window to catch and which not.
+Some Windows might not be catched while other invisible windows such as overlays might.
+Also some Applications have little helper windows (Paint.net for example) that might get tiled and are then unusable.
 
 If you have any suggestions feel free to open an issue.
