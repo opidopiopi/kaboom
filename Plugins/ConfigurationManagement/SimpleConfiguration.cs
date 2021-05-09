@@ -4,6 +4,7 @@ using Kaboom.Application.ConfigurationManagement;
 using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.ValueObjects;
+using Plugins.Actions;
 using Plugins.Shortcuts;
 
 namespace Plugins.ConfigurationManagement
@@ -36,6 +37,8 @@ namespace Plugins.ConfigurationManagement
                 new ShortcutSetting("Shortcuts.WrapVertical",   "Alt V",        shortcutListener, eventListener, new WrapWindowAction<VerticalArrangement>(selection)),
                 new ShortcutSetting("Shortcuts.WrapHorizontal", "Alt H",        shortcutListener, eventListener, new WrapWindowAction<HorizontalArrangement>(selection)),
                 new ShortcutSetting("Shortcuts.Unwrap",         "Alt U",        shortcutListener, eventListener, new UnWrapWindowAction(selection)),
+
+                new ShortcutSetting("Shortcuts.Exit",           "Alt Q",        shortcutListener, eventListener, new ExitAction()),
             };
         }
     }
