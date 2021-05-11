@@ -47,7 +47,12 @@ namespace Plugins
 
         private void Render(Window window)
         {
-            m_mapper.MapToIWindow(window).ApplyPreferredRect(WINDOW_BORDER_Size);
+            m_mapper
+                .MapToIWindow(window)
+                .ApplyRect(
+                    WINDOW_BORDER_Size,
+                    RectangleMapper.BoundsToRectangle(window.Bounds)
+                );
         }
 
         private void PrepareForm()

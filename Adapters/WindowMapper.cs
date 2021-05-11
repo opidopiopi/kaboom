@@ -29,8 +29,6 @@ namespace Kaboom.Adapters
         public IWindow MapToIWindow(Window window)
         {
             var iWindow = m_windowInfo.FirstOrDefault(info => info.Value.Equals(window)).Key;
-            
-            if(iWindow != null) iWindow.PrefferedRectangle = RectangleMapper.BoundsToRectangle(window.Bounds);
 
             return iWindow;
         }

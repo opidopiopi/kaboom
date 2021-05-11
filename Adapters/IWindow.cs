@@ -6,11 +6,10 @@ namespace Kaboom.Adapters
     public interface IWindow
     {
         IntPtr WindowHandle { get; }
-        Rectangle PrefferedRectangle { get; set; }
 
         string WindowName();
         Rectangle GetActualWindowRect();
-        void ApplyPreferredRect(int borderSize);
+        void ApplyRect(int borderSize, Rectangle rectangle);
         void PutInForground();
     }
 }

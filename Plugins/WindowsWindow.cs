@@ -8,7 +8,6 @@ namespace Plugins
     public class WindowsWindow : IWindow
     {
         public IntPtr WindowHandle { get; }
-        public Rectangle PrefferedRectangle { get; set; }
 
         public WindowsWindow(IntPtr windowHandle)
         {
@@ -23,7 +22,7 @@ namespace Plugins
             return new Rectangle(rect.X, rect.Y, rect.Width, rect.Height);
         }
 
-        public void ApplyPreferredRect(int borderSize)
+        public void ApplyRect(int borderSize, Rectangle rectangle)
         {
             //windows might have an invisible border that we want to get rid of
             Win32Wrapper.RECT withBorder;
@@ -37,10 +36,10 @@ namespace Plugins
 
             Win32Wrapper.MoveWindow(
                 WindowHandle,
-                PrefferedRectangle.X + xOffset + borderSize,
-                PrefferedRectangle.Y + yOffset + borderSize,
-                PrefferedRectangle.Width + widthOffset - 2 * borderSize,
-                PrefferedRectangle.Height + heightOffset - 2 * borderSize,
+                rectangle.X + xOffset + borderSize,
+                rectangle.Y + yOffset + borderSize,
+                rectangle.Width + widthOffset - 2 * borderSize,
+                rectangle.Height + heightOffset - 2 * borderSize,
                 true
             );
         }
