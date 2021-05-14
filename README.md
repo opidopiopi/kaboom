@@ -1,7 +1,6 @@
 # Kaboom - tiling window manager for windows
 You might ask yourself why 'Kaboom', that doesn't seem to have anything to do with tiling window managers?
-BUT, imagine aaalll the people, that thought jeez window explorer sucks. And then Kaboom! Here is a solution!
-Yeah, I know not the most creative story ever...
+Well I am not very creative with names, so...
 
 Anyhow, Kaboom is a tiling window manager for windows.
 It tiles windows. It tiles horizontally by default, a vertical arrangement is available too.
