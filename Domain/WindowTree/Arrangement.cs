@@ -18,8 +18,7 @@ namespace Kaboom.Domain.WindowTree
 
         public void RemoveEmptyChildArrangements()
         {
-            Children.RemoveAll(
-            child =>
+            Children.RemoveAll(child =>
             {
                 return child is Arrangement arrangement && arrangement.Children.Count == 0;
             });
@@ -27,50 +26,6 @@ namespace Kaboom.Domain.WindowTree
 
         public abstract void UpdateBoundsOfChildren();
         public abstract EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction);
-
-        public EntityID FirstWindowRecursive()
-        {
-            foreach (var child in Children)
-            {
-                if (child is Window window)
-                {
-                    return window.ID;
-                }
-                else if (child is Arrangement arrangement)
-                {
-                    var result = arrangement.FirstWindowRecursive();
-
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public EntityID LastWindowRecursive()
-        {
-            foreach (var child in Children.Reverse<IBoundedTreeNode>())
-            {
-                if (child is Window window)
-                {
-                    return window.ID;
-                }
-                else if (child is Arrangement arrangement)
-                {
-                    var result = arrangement.LastWindowRecursive();
-
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
-        }
 
         public bool SupportsAxis(Axis axis)
         {
@@ -83,7 +38,7 @@ namespace Kaboom.Domain.WindowTree
 
             if (child is Window window)
             {
-                Children.Remove(child);
+                Children.Remove(window);
                 return window;
             }
             else
@@ -92,7 +47,7 @@ namespace Kaboom.Domain.WindowTree
             }
         }
 
-        public void WrapChildWithNode(EntityID childID, IBoundedTreeNode substitute)
+        public void WrapChildWithNode(EntityID childID, IBoundedTreeNode wrapper)
         {
             var child = FindChild(childID);
 
@@ -105,8 +60,8 @@ namespace Kaboom.Domain.WindowTree
                 int index = Children.IndexOf(child);
                 RemoveChild(childID);
 
-                Children.Insert(index, substitute);
-                substitute.InsertAsFirst(child);
+                Children.Insert(index, wrapper);
+                wrapper.InsertAsFirst(child);
             }
         }
 

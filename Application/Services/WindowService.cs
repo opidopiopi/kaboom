@@ -1,6 +1,7 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 
 namespace Kaboom.Application.Services
@@ -225,15 +226,15 @@ namespace Kaboom.Application.Services
             {
                 return win.ID;
             }
-            else if (neighbour is Arrangement arr)
+            else if (neighbour is Arrangement arrangement)
             {
                 if (direction == Direction.Left || direction == Direction.Up)
                 {
-                    return arr.LastWindowRecursive();
+                    return WindowFinder.LastWindowUnderArrangement(arrangement);
                 }
                 else
                 {
-                    return arr.FirstWindowRecursive();
+                    return WindowFinder.FirstWindowUnderArrangement(arrangement);
                 }
             }
 
@@ -265,11 +266,11 @@ namespace Kaboom.Application.Services
             {
                 if (direction == Direction.Left || direction == Direction.Up)
                 {
-                    return rootNeighbour.LastWindowRecursive();
+                    return WindowFinder.LastWindowUnderArrangement(rootNeighbour);
                 }
                 else
                 {
-                    return rootNeighbour.FirstWindowRecursive();
+                    return WindowFinder.FirstWindowUnderArrangement(rootNeighbour);
                 }
             }
 
@@ -278,9 +279,9 @@ namespace Kaboom.Application.Services
 
         private void UpdateTree()
         {
-            m_arrangements.RootArrangements().ForEach(arrangementID =>
+            m_arrangements.RootArrangements().ForEach(rootID =>
             {
-                var root = m_arrangements.Find(arrangementID);
+                var root = m_arrangements.Find(rootID);
 
                 m_emptyArrangementRemover.ExecuteFromRoot(root);
                 root.UpdateBoundsOfChildren();

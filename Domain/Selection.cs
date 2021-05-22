@@ -1,6 +1,7 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 
 namespace Kaboom.Application
@@ -73,10 +74,10 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow == null)
             {
-                foreach (var id in m_arrangementRepository.RootArrangements())
+                foreach (var rootID in m_arrangementRepository.RootArrangements())
                 {
-                    var arr = m_arrangementRepository.Find(id);
-                    var window = arr.FirstWindowRecursive();
+                    var root = m_arrangementRepository.Find(rootID);
+                    var window = WindowFinder.FirstWindowUnderArrangement(root);
 
                     if (window != null)
                     {
