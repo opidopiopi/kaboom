@@ -7,17 +7,22 @@
 
         private Arrangement parent;
 
-        public ParentFinder(Arrangement root, EntityID targetID)
+        private ParentFinder(Arrangement root, EntityID targetID)
         {
             this.root = root;
             childID = targetID;
         }
 
-        public Arrangement FindParentInTree()
+        private Arrangement Find()
         {
             Visit(root);
 
             return parent;
+        }
+
+        public static Arrangement FindParentInTree(Arrangement root, EntityID targetID)
+        {
+            return new ParentFinder(root, targetID).Find();
         }
 
         public void Visit(Arrangement arrangement)

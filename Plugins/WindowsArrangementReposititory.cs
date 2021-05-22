@@ -1,5 +1,6 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace Plugins
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
         {
             return m_rootArrangements
-                .Select(root => root.FindParentOf(arrangementOrWindow))
+                .Select(root => ParentFinder.FindParentInTree(root, arrangementOrWindow))
                 .Where(parent => parent != null)
                 .FirstOrDefault();
         }
