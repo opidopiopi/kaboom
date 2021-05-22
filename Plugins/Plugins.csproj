@@ -55,6 +55,7 @@
     <Compile Include="ConfigurationManagement\SalarosConfigParser.cs" />
     <Compile Include="ConfigurationManagement\ShortcutSetting.cs" />
     <Compile Include="ConfigurationManagement\SimpleConfiguration.cs" />
+    <Compile Include="DirectionFilterForArrangements.cs" />
     <Compile Include="FormNotShowingInAltTab.cs">
       <SubType>Form</SubType>
     </Compile>

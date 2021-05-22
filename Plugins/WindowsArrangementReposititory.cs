@@ -15,74 +15,51 @@ namespace Plugins
 
         public WindowsArrangementReposititory()
         {
-            m_rootArrangements = Screen.AllScreens.Select(screen =>
-            {
-                return new DefaultArrangementType
+            m_rootArrangements = Screen.AllScreens.Select(
+                screen => new DefaultArrangementType
                 {
                     Bounds = new Bounds(screen.Bounds.X, screen.Bounds.Y, screen.Bounds.Width, screen.Bounds.Height)
-                };
-            }).ToList<Arrangement>();
+                }
+            ).ToList<Arrangement>();
         }
 
         public Arrangement AnyRoot()
         {
-            return (m_rootArrangements.Count > 0) ? m_rootArrangements[0] : null;
+            return m_rootArrangements.FirstOrDefault();
         }
 
         public Arrangement Find(EntityID arrangementID)
         {
-            return m_rootArrangements.Where(arr => arr.ID.Equals(arrangementID)).FirstOrDefault();
+            return m_rootArrangements.Where(arrrangement => arrrangement.ID.Equals(arrangementID)).FirstOrDefault();
         }
 
-        public Arrangement FindNeighbourOfRoot(EntityID arrangementID, Direction direction)
+        public Arrangement FindNeighbourOfRoot(EntityID rootID, Direction direction)
         {
-            var root = m_rootArrangements.Find(arr => arr.ID.Equals(arrangementID));
-            if(root == null)
+            var root = m_rootArrangements.Find(arr => arr.ID.Equals(rootID));
+            if (root == null)
             {
-                throw new Exception($"Repository does not contain a root with ID: {arrangementID}!!");
+                throw new Exception($"Repository does not contain a root with ID: {rootID}!!");
             }
 
-            var candidates = m_rootArrangements.Where(arr => !arr.Equals(root));
-            if(direction.Axis == Axis.X)
-            {
-                candidates = FilterForXAxis(direction, root, candidates);
-            }
-            else
-            {
-                candidates = FilterForYAxis(direction, root, candidates);
-            }
+            var candidates = m_rootArrangements.Where(candidate => !candidate.Equals(root));
+            candidates = DirectionFilterForArrangements.FilterForDirection(direction, root, candidates);
 
-            if (candidates.Count() == 0)
-            {
-                return null;
-            }
-
-            return candidates.OrderBy(arr =>
-            {
-                double dx = arr.Bounds.X - root.Bounds.X;
-                double dy = arr.Bounds.Y - root.Bounds.Y;
-
-                return dx * dx + dy * dy;
-            }).First();
+            return CandidateThatIsTheClosestToTheRoot(root, candidates);
         }
 
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
         {
-            foreach (var child in m_rootArrangements)
-            {
-                var res = child.FindParentOf(arrangementOrWindow);
-
-                if (res != null)
-                {
-                    return res;
-                }
-            }
-            return null;
+            return m_rootArrangements
+                .Select(root => root.FindParentOf(arrangementOrWindow))
+                .Where(parent => parent != null)
+                .FirstOrDefault();
         }
 
         public Arrangement FindThatContainsPoint(int x, int y)
         {
-            return m_rootArrangements.Where(arr => arr.Bounds.IsPointInside(x, y)).FirstOrDefault();
+            return m_rootArrangements
+                .Where(arr => arr.Bounds.IsPointInside(x, y))
+                .FirstOrDefault();
         }
 
         public void InsertRoot(Arrangement arrangement)
@@ -100,40 +77,15 @@ namespace Plugins
             return m_rootArrangements.Select(arr => arr.ID).ToList();
         }
 
-        private static IEnumerable<Arrangement> FilterForYAxis(Direction direction, Arrangement root, IEnumerable<Arrangement> candidates)
+        private static Arrangement CandidateThatIsTheClosestToTheRoot(Arrangement root, IEnumerable<Arrangement> candidates)
         {
-            candidates = candidates.Where(arrangement =>
-                arrangement.Bounds.X + arrangement.Bounds.Width >= root.Bounds.X && arrangement.Bounds.X <= root.Bounds.X + root.Bounds.Width
-            );
-
-            if (direction == Direction.Up)
+            return candidates.OrderBy(arrangement =>
             {
-                candidates = candidates.Where(arrangement => arrangement.Bounds.Y < root.Bounds.Y);
-            }
-            else
-            {
-                candidates = candidates.Where(arrangement => arrangement.Bounds.Y > root.Bounds.Y);
-            }
+                double deltaX = arrangement.Bounds.X - root.Bounds.X;
+                double deltaY = arrangement.Bounds.Y - root.Bounds.Y;
 
-            return candidates;
-        }
-
-        private static IEnumerable<Arrangement> FilterForXAxis(Direction direction, Arrangement root, IEnumerable<Arrangement> candidates)
-        {
-            candidates = candidates.Where(arrangement =>
-                arrangement.Bounds.Y + arrangement.Bounds.Height >= root.Bounds.Y && arrangement.Bounds.Y <= root.Bounds.Y + root.Bounds.Height
-            );
-
-            if (direction == Direction.Left)
-            {
-                candidates = candidates.Where(arrangement => arrangement.Bounds.X < root.Bounds.X);
-            }
-            else
-            {
-                candidates = candidates.Where(arrangement => arrangement.Bounds.X > root.Bounds.X);
-            }
-
-            return candidates;
+                return deltaX * deltaX + deltaY * deltaY;
+            }).FirstOrDefault();
         }
     }
 }
