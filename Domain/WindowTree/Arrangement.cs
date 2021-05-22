@@ -137,26 +137,7 @@ namespace Kaboom.Domain.WindowTree
 
         public Arrangement FindParentOf(EntityID arrangementOrWindow)
         {
-            if (FindChild(arrangementOrWindow) != null)
-            {
-                return this;
-            }
-            else
-            {
-                foreach (var child in Children)
-                {
-                    if (child is Arrangement arrangement)
-                    {
-                        var res = arrangement.FindParentOf(arrangementOrWindow);
-
-                        if (res != null)
-                        {
-                            return res;
-                        }
-                    }
-                }
-            }
-            return null;
+            return new ParentFinder(this, arrangementOrWindow).FindParentInTree();
         }
 
         public override void Accept(IVisitor visitor)
