@@ -20,7 +20,7 @@ namespace Kaboom.Testing.Application
             m_settingProvider = new Mock<IProvideSettings>();
             m_settings = Enumerable.Range(0, 5).Select(index => new MockSetting(index.ToString(), index.ToString())).ToArray();
 
-            m_configuration = new IConfiguration(m_settingProvider.Object, m_settings);
+            m_configuration = new ConfigurationBase(m_settingProvider.Object, m_settings);
         }
 
         [TestMethod]
