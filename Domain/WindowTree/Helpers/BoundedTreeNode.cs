@@ -11,6 +11,7 @@ namespace Kaboom.Domain.WindowTree.Helpers
 
         public EntityID ID { get; } = new EntityID();
         public Bounds Bounds { get; set; }
+        public bool Visible { get; set; }
 
         public void InsertAsFirst(IBoundedTreeNode child) => Children.Insert(0, child);
         public void InsertAsLast(IBoundedTreeNode child) => Children.Add(child);

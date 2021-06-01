@@ -42,7 +42,12 @@ namespace Plugins
 
         public void Visit(Window window)
         {
-            Render(window);
+            var iWindow = m_mapper.MapToIWindow(window);
+            if (window.Visible)
+            {
+                Render(window);
+                Win32Wrapper.ShowWindow(iWindow.WindowHandle, 5);
+            }
         }
 
         private void Render(Window window)

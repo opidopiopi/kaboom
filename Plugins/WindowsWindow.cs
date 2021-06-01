@@ -54,7 +54,7 @@ namespace Plugins
         /// </summary>
         public void Prepare()
         {
-            Win32Wrapper.ShowWindow(WindowHandle, /*SW_RESTORE*/ 9);
+            Restore();
 
             var rect = GetActualWindowRect();
             Win32Wrapper.SetWindowPos(
@@ -65,6 +65,16 @@ namespace Plugins
                 rect.Width,
                 rect.Height,
                 0x0040);
+        }
+
+        public void Minimize()
+        {
+            Win32Wrapper.ShowWindow(WindowHandle, /*SW_MINIMIZE*/ 6);
+        }
+
+        public void Restore()
+        {
+            Win32Wrapper.ShowWindow(WindowHandle, /*SW_RESTORE*/ 9);
         }
 
         public override bool Equals(object obj)

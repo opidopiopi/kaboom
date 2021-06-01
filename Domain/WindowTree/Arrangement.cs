@@ -12,6 +12,7 @@ namespace Kaboom.Domain.WindowTree
         protected Arrangement(Axis[] supportedAxis)
         {
             m_supportedAxis = supportedAxis;
+            Visible = true;
         }
 
         public void RemoveEmptyChildArrangements()
@@ -91,5 +92,7 @@ namespace Kaboom.Domain.WindowTree
                 return index;
             }
         }
+
+        public void PropagateVisibility() => Children.ForEach(child => child.Visible = this.Visible);
     }
 }

@@ -35,7 +35,11 @@ namespace Kaboom.Application
             if (m_selectedWindow != null)
             {
                 var result = m_windowService.NextWindowInDirection(direction, m_selectedWindow);
-                if (result != null) SelectWindow(result);
+                if (result != null)
+                {
+                    SelectWindow(result);
+                    m_windowService.UpdateTree();
+                }
             }
             else
             {

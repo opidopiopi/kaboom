@@ -15,6 +15,7 @@ namespace Plugins
         private IWindow m_selectedWindow = null;
         private IntPtr m_eventHook = IntPtr.Zero;
         private readonly Win32Wrapper.WinEventDelegate m_updateCallback;
+        private long m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
         public FormNotShowingInAltTab()
         {
@@ -116,9 +117,13 @@ namespace Plugins
 
         private void SelectedWindowMovedEvent(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            if (m_selectedWindow != null && hwnd == m_selectedWindow.WindowHandle)
+            if (
+                m_selectedWindow != null &&
+                hwnd == m_selectedWindow.WindowHandle &&
+                DateTimeOffset.Now.ToUnixTimeMilliseconds() - m_lastUpdate > 20)
             {
                 Refresh();
+                m_lastUpdate = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             }
         }
     }

@@ -7,7 +7,6 @@ namespace Kaboom.Domain.WindowTree
     public class Window : BoundedTreeLeaf
     {
         public string Title { get; }
-        public bool Visible { get; set; }
 
         public Window(Bounds initialBounds, string title)
         {
