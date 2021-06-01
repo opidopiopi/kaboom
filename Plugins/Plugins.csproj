@@ -51,7 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actions\DebugTreePrint.cs" />
     <Compile Include="Actions\ExitAction.cs" />
+    <Compile Include="ConfigurationManagement\DebugConfiguration.cs" />
     <Compile Include="ConfigurationManagement\SalarosConfigParser.cs" />
     <Compile Include="ConfigurationManagement\ShortcutSetting.cs" />
     <Compile Include="ConfigurationManagement\SimpleConfiguration.cs" />

@@ -2,33 +2,61 @@
 {
     public class StackArrangement : VerticalArrangement
     {
-        private EntityID m_lastSelected;
-        private ISelection m_selection;
+        private EntityID lastSelected;
+        private ISelection selection;
+        private IArrangementRepository arrangementRepository;
 
-        public StackArrangement(ISelection selection)
+        public StackArrangement(ISelection selection, IArrangementRepository arrangementRepository)
         {
-            m_selection = selection;
+            this.selection = selection;
+            this.arrangementRepository = arrangementRepository;
         }
 
         public override void UpdateBoundsOfChildren()
         {
-            if (FindParentOf(m_selection.SelectedWindow) is Arrangement parent)
+            if(FindChild(selection.SelectedWindow) != null)
             {
-
+                lastSelected = selection.SelectedWindow;
+            }
+            else
+            {
+                var parentID = IHaveNoGoodNameForThisMethod();
+                if (parentID != null)
+                {
+                    lastSelected = parentID;
+                }
             }
 
-            var topMostWindow = FindChild(m_lastSelected);
-            if(topMostWindow == null)
+            var topMostWindow = FindChild(lastSelected);
+            if (topMostWindow == null)
             {
                 topMostWindow = Children[0];
-                m_lastSelected = topMostWindow.ID;
+                lastSelected = topMostWindow.ID;
             }
 
             topMostWindow.Bounds = this.Bounds;
             foreach (var child in Children)
             {
-                child.Visible = child.ID.Equals(m_lastSelected);
+                child.Visible = child.ID.Equals(lastSelected);
             }
+        }
+
+        private EntityID IHaveNoGoodNameForThisMethod()
+        {
+            EntityID parentID = selection.SelectedWindow;
+            do
+            {
+                var parent = arrangementRepository.FindParentOf(parentID);
+
+                if (parent == this)
+                {
+                    return parentID;
+                }
+
+                parentID = (parent == null)? null:parent.ID;
+            } while (parentID != null);
+
+            return null;
         }
     }
 }

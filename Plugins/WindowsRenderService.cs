@@ -46,7 +46,6 @@ namespace Plugins
             if (window.Visible)
             {
                 Render(window);
-                Win32Wrapper.ShowWindow(iWindow.WindowHandle, 5);
             }
         }
 

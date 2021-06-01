@@ -75,14 +75,14 @@ namespace Kaboom.Application.Services
             }
         }
 
-        private void UpdateTree()
+        public void UpdateTree()
         {
             m_arrangements.RootArrangements().ForEach(rootID =>
             {
                 var root = m_arrangements.Find(rootID);
 
                 m_emptyArrangementRemover.ExecuteFromRoot(root);
-                root.UpdateBoundsOfChildren();
+                root.Accept(new TreeUpdate());
                 m_renderer.ExecuteFromRoot(root);
             });
         }

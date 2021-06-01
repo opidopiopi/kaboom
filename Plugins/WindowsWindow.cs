@@ -34,14 +34,14 @@ namespace Plugins
             int widthOffset = withBorder.Width - noBorder.Width;
             int heightOffset = withBorder.Height - noBorder.Height;
 
-            Win32Wrapper.MoveWindow(
+            Win32Wrapper.SetWindowPos(
                 WindowHandle,
+                new IntPtr(0),
                 rectangle.X + xOffset + borderSize,
                 rectangle.Y + yOffset + borderSize,
                 rectangle.Width + widthOffset - 2 * borderSize,
                 rectangle.Height + heightOffset - 2 * borderSize,
-                true
-            );
+                0x0040 /*SWP_SHOWWINDOW*/);
         }
 
         public string WindowName()
