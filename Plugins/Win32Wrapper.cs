@@ -16,6 +16,13 @@ namespace Plugins
             return nameBuilder.ToString();
         }
 
+        /**
+         * Origin: http://pinvoke.net/default.aspx/user32/GetWindowThreadProcessId.html
+         */
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
         /* 
          * Origin: http://pinvoke.net/default.aspx/Enums/DwmGetWindowAttribute.html
          */

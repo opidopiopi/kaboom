@@ -1,4 +1,6 @@
-﻿namespace Kaboom.Domain.WindowTree
+﻿using Kaboom.Domain.WindowTree.ValueObjects;
+
+namespace Kaboom.Domain.WindowTree
 {
     public class StackArrangement : VerticalArrangement
     {
@@ -34,7 +36,13 @@
                 lastSelected = topMostWindow.ID;
             }
 
-            topMostWindow.Bounds = this.Bounds;
+            topMostWindow.Bounds = new Bounds(
+                Bounds.X + 42,
+                Bounds.Y,
+                Bounds.Width - 42,
+                Bounds.Height
+            );
+
             foreach (var child in Children)
             {
                 child.Visible = child.ID.Equals(lastSelected);

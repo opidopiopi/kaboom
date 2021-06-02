@@ -70,6 +70,7 @@ namespace Plugins.Overlay
             graphics.TranslateTransform(-form.Bounds.X, -form.Bounds.Y);
 
             components.ForEach(component => component.Render(graphics));
+            graphics.Flush();
         }
 
         //make this form not show up in ALt+Tab

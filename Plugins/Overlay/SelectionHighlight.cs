@@ -20,7 +20,6 @@ namespace Plugins.Overlay
             {
                 var windowRect = selectedWindow.GetActualWindowRect();
 
-                graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
                 graphics.DrawRectangle(
                     pen,
                     windowRect.X - WindowsRenderService.WINDOW_BORDER_Size,

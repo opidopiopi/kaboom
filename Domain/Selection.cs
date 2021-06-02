@@ -78,9 +78,8 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow == null)
             {
-                foreach (var rootID in m_arrangementRepository.RootArrangements())
+                foreach (var root in m_arrangementRepository.RootArrangements())
                 {
-                    var root = m_arrangementRepository.Find(rootID);
                     var window = WindowFinder.FirstWindowUnderArrangement(root);
 
                     if (window != null)

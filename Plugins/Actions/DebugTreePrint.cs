@@ -2,6 +2,7 @@
 using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Plugins.Actions
@@ -18,18 +19,16 @@ namespace Plugins.Actions
 
         public void Execute()
         {
-            arrangementRepository
-                .RootArrangements()
-                .Select(rootID => arrangementRepository.Find(rootID))
-                .ToList()
-                .ForEach(root => ExecuteFromRoot(root));
+            RenderTrees(arrangementRepository.RootArrangements());
         }
 
-        public void ExecuteFromRoot(Arrangement rootArrangement)
+        public void RenderTrees(IEnumerable<Arrangement> rootArrangements)
         {
-            Console.WriteLine();
-            currentNestingLevel = 0;
-            rootArrangement.Accept(this);
+            rootArrangements.ToList().ForEach(root => {
+                Console.WriteLine();
+                currentNestingLevel = 0;
+                root.Accept(this);
+            });
         }
 
         public void HighlightWindow(Window selectedWindow)

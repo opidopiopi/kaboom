@@ -73,9 +73,9 @@ namespace Plugins
             m_rootArrangements.RemoveAll(arr => arr.ID.Equals(arrangementID));
         }
 
-        public List<EntityID> RootArrangements()
+        public List<Arrangement> RootArrangements()
         {
-            return m_rootArrangements.Select(arr => arr.ID).ToList();
+            return m_rootArrangements;
         }
 
         private static Arrangement CandidateThatIsTheClosestToTheRoot(Arrangement root, IEnumerable<Arrangement> candidates)

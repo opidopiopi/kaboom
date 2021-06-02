@@ -2,6 +2,7 @@
 using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
 using Kaboom.Domain.WindowTree.ValueObjects;
+using System.Linq;
 
 namespace Kaboom.Application.Services
 {
@@ -77,14 +78,13 @@ namespace Kaboom.Application.Services
 
         public void UpdateTree()
         {
-            m_arrangements.RootArrangements().ForEach(rootID =>
+            m_arrangements.RootArrangements().ForEach(root =>
             {
-                var root = m_arrangements.Find(rootID);
-
                 m_emptyArrangementRemover.ExecuteFromRoot(root);
                 root.Accept(new TreeUpdate());
-                m_renderer.ExecuteFromRoot(root);
             });
+
+            m_renderer.RenderTrees(m_arrangements.RootArrangements());
         }
 
         private Arrangement FindBestParentForWindow(Window newWindow)

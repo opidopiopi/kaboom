@@ -2,6 +2,8 @@
 using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree;
 using Plugins.Overlay;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Plugins
 {
@@ -10,27 +12,33 @@ namespace Plugins
         public const int WINDOW_BORDER_Size = 5;
         public const string OVERLAY_NAME = "Kaboom_overlay";
 
-        private WindowMapper m_mapper;
+        private WindowMapper windowMapper;
         private IOverlay overlay;
         private SelectionHighlight selectionHighlight = new SelectionHighlight();
+        private List<StackArrangementVisualizer> stackArrangementVisualizers = new List<StackArrangementVisualizer>();
 
         public WindowsRenderService(WindowMapper mapper, IOverlay overlay)
         {
-            m_mapper = mapper;
+            this.windowMapper = mapper;
             this.overlay = overlay;
 
             overlay.AddComponent(selectionHighlight);
         }
 
-        public void ExecuteFromRoot(Arrangement rootArrangement)
+        public void RenderTrees(IEnumerable<Arrangement> rootArrangements)
         {
-            rootArrangement.Accept(this);
+            stackArrangementVisualizers.ForEach(visualizer => overlay.RemoveComponent(visualizer));
+            stackArrangementVisualizers.Clear();
+
+            rootArrangements.ToList().ForEach(root => root.Accept(this));
+            stackArrangementVisualizers.ForEach(visualizer => overlay.AddComponent(visualizer));
+
             overlay.ReRender();
         }
 
         public void HighlightWindow(Window selectedWindow)
         {
-            var iWindow = m_mapper.MapToIWindow(selectedWindow);
+            var iWindow = windowMapper.MapToIWindow(selectedWindow);
             iWindow.PutInForground();
             
             selectionHighlight.SetSelectedWindow(iWindow);
@@ -41,6 +49,11 @@ namespace Plugins
 
         public void Visit(Arrangement arrangement)
         {
+            if(arrangement is StackArrangement stackArrangement)
+            {
+                stackArrangementVisualizers.Add(new StackArrangementVisualizer(stackArrangement, windowMapper));
+            }
+
             arrangement.VisitAllChildren(this);
         }
 
@@ -54,7 +67,7 @@ namespace Plugins
 
         private void Render(Window window)
         {
-            m_mapper
+            windowMapper
                 .MapToIWindow(window)
                 .ApplyRect(
                     WINDOW_BORDER_Size,
