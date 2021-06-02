@@ -4,6 +4,7 @@ using Kaboom.Application.ConfigurationManagement;
 using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree;
 using Plugins.ConfigurationManagement;
+using Plugins.Overlay;
 using Plugins.Shortcuts;
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -18,6 +19,7 @@ namespace Plugins
         private WindowMapper windowMapper = new WindowMapper();
         private Selection selection;
 
+        private WindowsFormOverlay overlay = new WindowsFormOverlay();
         private WindowsRenderService renderService;
         private ActionService actionService = new ActionService();
         private WindowService windowService;
@@ -29,7 +31,7 @@ namespace Plugins
 
         public TilingWindowManager()
         {
-            renderService = new WindowsRenderService(windowMapper);
+            renderService = new WindowsRenderService(windowMapper, overlay);
             windowService = new WindowService(arrangementRepository, renderService);
             selection = new Selection(windowService, arrangementRepository);
 
@@ -55,6 +57,8 @@ namespace Plugins
             configuration.ApplySettings();
             configuration.SaveAllSettings();
             configParser.Save();
+
+            overlay.StartFormThread();
 
             using(var windowCatcher = new WindowCatcher(windowMapper, selection, windowService, new DefaultCatchingRule()))
             {

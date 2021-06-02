@@ -58,9 +58,12 @@
     <Compile Include="ConfigurationManagement\ShortcutSetting.cs" />
     <Compile Include="ConfigurationManagement\SimpleConfiguration.cs" />
     <Compile Include="DirectionFilterForArrangements.cs" />
-    <Compile Include="FormNotShowingInAltTab.cs">
+    <Compile Include="Overlay\SelectionHighlight.cs" />
+    <Compile Include="Overlay\WindowsFormOverlay.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Overlay\IOverlay.cs" />
+    <Compile Include="Overlay\IOverlayComponent.cs" />
     <Compile Include="WindowCatching\IWindowCatchingRule.cs" />
     <Compile Include="Shortcuts\HotKeyManager.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />

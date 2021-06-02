@@ -1,8 +1,7 @@
 ﻿using Kaboom.Adapters;
 using Kaboom.Application.Services;
 using Kaboom.Domain.WindowTree;
-using System.Threading;
-using System.Windows.Forms;
+using Plugins.Overlay;
 
 namespace Plugins
 {
@@ -12,25 +11,30 @@ namespace Plugins
         public const string OVERLAY_NAME = "Kaboom_overlay";
 
         private WindowMapper m_mapper;
-        private FormNotShowingInAltTab m_graphicsForm;
+        private IOverlay overlay;
+        private SelectionHighlight selectionHighlight = new SelectionHighlight();
 
-        public WindowsRenderService(WindowMapper mapper)
+        public WindowsRenderService(WindowMapper mapper, IOverlay overlay)
         {
             m_mapper = mapper;
+            this.overlay = overlay;
 
-            PrepareForm();
+            overlay.AddComponent(selectionHighlight);
         }
 
         public void ExecuteFromRoot(Arrangement rootArrangement)
         {
             rootArrangement.Accept(this);
+            overlay.ReRender();
         }
 
         public void HighlightWindow(Window selectedWindow)
         {
             var iWindow = m_mapper.MapToIWindow(selectedWindow);
-            m_graphicsForm.SetSelectedWindow(iWindow);
             iWindow.PutInForground();
+            
+            selectionHighlight.SetSelectedWindow(iWindow);
+            overlay.ReRender();
 
             Render(selectedWindow);
         }
@@ -42,7 +46,6 @@ namespace Plugins
 
         public void Visit(Window window)
         {
-            var iWindow = m_mapper.MapToIWindow(window);
             if (window.Visible)
             {
                 Render(window);
@@ -57,16 +60,6 @@ namespace Plugins
                     WINDOW_BORDER_Size,
                     RectangleMapper.BoundsToRectangle(window.Bounds)
                 );
-        }
-
-        private void PrepareForm()
-        {
-            m_graphicsForm = new FormNotShowingInAltTab();
-
-            new Thread(() =>
-            {
-                Application.Run(m_graphicsForm);
-            }).Start();
         }
     }
 }
