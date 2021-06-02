@@ -65,9 +65,9 @@ namespace Kaboom.Testing.Mocks
             m_arrangements.RemoveAll(arr => arr.ID.Equals(arrangementID));
         }
 
-        public List<EntityID> RootArrangements()
+        public List<Arrangement> RootArrangements()
         {
-            return m_arrangements.Select(arr => arr.ID).ToList();
+            return m_arrangements;
         }
     }
 }
