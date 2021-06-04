@@ -52,6 +52,7 @@ namespace Kaboom.Application
             if (m_selectedWindow != null)
             {
                 m_arrangementRepository.FindParentOf(m_selectedWindow).WrapChildWithNode(m_selectedWindow, wrapper);
+                m_windowService.UpdateTree();
             }
         }
 

@@ -63,6 +63,10 @@ namespace Plugins
             {
                 Render(window);
             }
+            else
+            {
+                windowMapper.MapToIWindow(window).MoveToBack();
+            }
         }
 
         private void Render(Window window)

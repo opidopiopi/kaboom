@@ -13,5 +13,6 @@ namespace Kaboom.Adapters
         void PutInForground();
         void Minimize();
         void Restore();
+        void MoveToBack();
     }
 }
