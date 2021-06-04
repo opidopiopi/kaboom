@@ -34,13 +34,13 @@ namespace Plugins.Overlay
             {
                 text = "H";
             }
-            else if(arrangement is VerticalArrangement)
-            {
-                text = "V";
-            }
             else if (arrangement is StackArrangement)
             {
                 text = "S";
+            }
+            else if(arrangement is VerticalArrangement)
+            {
+                text = "V";
             }
             else
             {
