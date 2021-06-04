@@ -11,5 +11,6 @@ namespace Kaboom.Domain.Services
         EntityID NextWindowInDirection(Direction direction, EntityID currentlySelected);
         void UnWrapWindowParent(EntityID windowID);
         void HightlightWindow(EntityID windowID);
+        void UpdateTree();
     }
 }

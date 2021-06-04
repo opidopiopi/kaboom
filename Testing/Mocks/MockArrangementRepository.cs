@@ -1,5 +1,6 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace Kaboom.Testing.Mocks
         {
             foreach (var child in m_arrangements)
             {
-                var res = child.FindParentOf(arrangementOrWindow);
+                var res = ParentFinder.FindParentInTree(child, arrangementOrWindow);
 
                 if (res != null)
                 {
@@ -64,9 +65,9 @@ namespace Kaboom.Testing.Mocks
             m_arrangements.RemoveAll(arr => arr.ID.Equals(arrangementID));
         }
 
-        public List<EntityID> RootArrangements()
+        public List<Arrangement> RootArrangements()
         {
-            return m_arrangements.Select(arr => arr.ID).ToList();
+            return m_arrangements;
         }
     }
 }

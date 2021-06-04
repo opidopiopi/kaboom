@@ -3,12 +3,12 @@ using System.Linq;
 
 namespace Kaboom.Application.ConfigurationManagement
 {
-    public class Configuration
+    public class ConfigurationBase : IConfiguration
     {
         private List<Setting> m_settings;
         private IProvideSettings m_settingProvider;
 
-        public Configuration(IProvideSettings configurationSource, params Setting[] settings)
+        public ConfigurationBase(IProvideSettings configurationSource, params Setting[] settings)
         {
             m_settings = settings.ToList();
             m_settingProvider = configurationSource;

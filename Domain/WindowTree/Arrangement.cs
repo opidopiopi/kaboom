@@ -5,8 +5,6 @@ using System.Linq;
 
 namespace Kaboom.Domain.WindowTree
 {
-    public delegate void WindowCallback(Window window);
-
     public abstract class Arrangement : BoundedTreeNode
     {
         private Axis[] m_supportedAxis;
@@ -14,12 +12,12 @@ namespace Kaboom.Domain.WindowTree
         protected Arrangement(Axis[] supportedAxis)
         {
             m_supportedAxis = supportedAxis;
+            Visible = true;
         }
 
         public void RemoveEmptyChildArrangements()
         {
-            Children.RemoveAll(
-            child =>
+            Children.RemoveAll(child =>
             {
                 return child is Arrangement arrangement && arrangement.Children.Count == 0;
             });
@@ -27,50 +25,6 @@ namespace Kaboom.Domain.WindowTree
 
         public abstract void UpdateBoundsOfChildren();
         public abstract EntityID NeighbourOfChildInDirection(EntityID childID, Direction direction);
-
-        public EntityID FirstWindowRecursive()
-        {
-            foreach (var child in Children)
-            {
-                if (child is Window window)
-                {
-                    return window.ID;
-                }
-                else if (child is Arrangement arrangement)
-                {
-                    var result = arrangement.FirstWindowRecursive();
-
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public EntityID LastWindowRecursive()
-        {
-            foreach (var child in Children.Reverse<IBoundedTreeNode>())
-            {
-                if (child is Window window)
-                {
-                    return window.ID;
-                }
-                else if (child is Arrangement arrangement)
-                {
-                    var result = arrangement.LastWindowRecursive();
-
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return null;
-        }
 
         public bool SupportsAxis(Axis axis)
         {
@@ -83,7 +37,7 @@ namespace Kaboom.Domain.WindowTree
 
             if (child is Window window)
             {
-                Children.Remove(child);
+                Children.Remove(window);
                 return window;
             }
             else
@@ -92,76 +46,53 @@ namespace Kaboom.Domain.WindowTree
             }
         }
 
-        public void WrapChildWithNode(EntityID childID, IBoundedTreeNode substitute)
+        public void WrapChildWithNode(EntityID childID, IBoundedTreeNode wrapper)
         {
-            var child = FindChild(childID);
+            IBoundedTreeNode child;
+            int index = RemoveChildAndReturnIndex(childID, out child);
 
-            if (child == null)
-            {
-                throw new Exception($"This node has no child with ID: {childID}!");
-            }
-            else
-            {
-                int index = Children.IndexOf(child);
-                RemoveChild(childID);
-
-                Children.Insert(index, substitute);
-                substitute.InsertAsFirst(child);
-            }
+            Children.Insert(index, wrapper);
+            wrapper.InsertAsFirst(child);
         }
 
         public void UnWrapChildToSelf(EntityID childID)
         {
-            var child = FindChild(childID);
+            IBoundedTreeNode child;
+            int index = RemoveChildAndReturnIndex(childID, out child);
 
-            if (child == null)
+            if (child is Arrangement wrapper)
             {
-                throw new Exception($"This node has no child with ID: {childID}!");
-            }
-            else
-            {
-                int index = Children.IndexOf(child);
-                RemoveChild(childID);
+                wrapper.Children.Reverse();
 
-                if (child is Arrangement arrangement)
+                foreach (var wrapperChild in wrapper.Children)
                 {
-                    arrangement.Children.Reverse();
-
-                    foreach (var c in arrangement.Children)
-                    {
-                        Children.Insert(index, c);
-                    }
+                    Children.Insert(index, wrapperChild);
                 }
             }
-        }
-
-        public Arrangement FindParentOf(EntityID arrangementOrWindow)
-        {
-            if (FindChild(arrangementOrWindow) != null)
-            {
-                return this;
-            }
-            else
-            {
-                foreach (var child in Children)
-                {
-                    if (child is Arrangement arrangement)
-                    {
-                        var res = arrangement.FindParentOf(arrangementOrWindow);
-
-                        if (res != null)
-                        {
-                            return res;
-                        }
-                    }
-                }
-            }
-            return null;
         }
 
         public override void Accept(IVisitor visitor)
         {
             visitor.Visit(this);
         }
+
+        private int RemoveChildAndReturnIndex(EntityID childID, out IBoundedTreeNode child)
+        {
+            child = FindChild(childID);
+
+            if (child == null)
+            {
+                throw new Exception($"This node has no child with ID: {childID}!");
+            }
+            else
+            {
+                int index = Children.IndexOf(child);
+                RemoveChild(childID);
+
+                return index;
+            }
+        }
+
+        public void PropagateVisibility() => Children.ForEach(child => child.Visible = this.Visible);
     }
 }

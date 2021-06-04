@@ -10,7 +10,7 @@ namespace Kaboom.Testing.Application
     [TestClass]
     public class ConfigurationTests
     {
-        private Configuration m_configuration;
+        private IConfiguration m_configuration;
         private Mock<IProvideSettings> m_settingProvider;
         private MockSetting[] m_settings;
 
@@ -20,7 +20,7 @@ namespace Kaboom.Testing.Application
             m_settingProvider = new Mock<IProvideSettings>();
             m_settings = Enumerable.Range(0, 5).Select(index => new MockSetting(index.ToString(), index.ToString())).ToArray();
 
-            m_configuration = new Configuration(m_settingProvider.Object, m_settings);
+            m_configuration = new ConfigurationBase(m_settingProvider.Object, m_settings);
         }
 
         [TestMethod]

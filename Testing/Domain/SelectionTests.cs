@@ -77,7 +77,7 @@ namespace Kaboom.Testing.Domain
             var window = new Window(new Bounds(1, 1, 1, 1), "window");
             var arrangement = new Mock<Arrangement>(new Axis[] { });
             arrangement.Object.InsertAsFirst(window);
-            m_arrangementRepo.Setup(repo => repo.RootArrangements()).Returns((new EntityID[] { arrangement.Object.ID }).ToList());
+            m_arrangementRepo.Setup(repo => repo.RootArrangements()).Returns((new Arrangement[] { arrangement.Object }).ToList());
             m_arrangementRepo.Setup(repo => repo.Find(arrangement.Object.ID)).Returns(arrangement.Object);
 
             //Act

@@ -24,23 +24,26 @@ namespace Plugins
 
         public void ApplyRect(int borderSize, Rectangle rectangle)
         {
-            //windows might have an invisible border that we want to get rid of
-            Win32Wrapper.RECT withBorder;
-            Win32Wrapper.GetWindowRect(WindowHandle, out withBorder);
-            var noBorder = GetActualWindowRect();
+            var rectangleToSet = AdjustToBorder(borderSize, rectangle);
 
-            int xOffset = withBorder.X - noBorder.X;
-            int yOffset = withBorder.Y - noBorder.Y;
-            int widthOffset = withBorder.Width - noBorder.Width;
-            int heightOffset = withBorder.Height - noBorder.Height;
-
-            Win32Wrapper.MoveWindow(
+            Win32Wrapper.SetWindowPos(
                 WindowHandle,
-                rectangle.X + xOffset + borderSize,
-                rectangle.Y + yOffset + borderSize,
-                rectangle.Width + widthOffset - 2 * borderSize,
-                rectangle.Height + heightOffset - 2 * borderSize,
-                true
+                Win32Wrapper.HWND_TOPMOST,
+                rectangleToSet.X,
+                rectangleToSet.Y,
+                rectangleToSet.Width,
+                rectangleToSet.Height,
+                (uint) Win32Wrapper.SetWindowPosFlags.ShowWindow
+            );
+        }
+
+        public void MoveToBack()
+        {
+            Win32Wrapper.SetWindowPos(
+                WindowHandle,
+                Win32Wrapper.HWND_NOTOPMOST,
+                0, 0, 0, 0,
+                (uint) (Win32Wrapper.SetWindowPosFlags.IgnoreMove | Win32Wrapper.SetWindowPosFlags.IgnoreResize)
             );
         }
 
@@ -52,19 +55,37 @@ namespace Plugins
         /// <summary>
         /// Un-maximize the window and call setWindowOnce to apply
         /// </summary>
-        public void Prepare()
+        public void PrepareForInsertion()
         {
-            Win32Wrapper.ShowWindow(WindowHandle, /*SW_RESTORE*/ 9);
+            Restore();
 
             var rect = GetActualWindowRect();
             Win32Wrapper.SetWindowPos(
                 WindowHandle,
-                new IntPtr(0),
+                Win32Wrapper.HWND_TOP,
                 rect.X,
                 rect.Y,
                 rect.Width,
                 rect.Height,
-                0x0040);
+                (uint) Win32Wrapper.SetWindowPosFlags.ShowWindow);
+        }
+
+        public void Minimize()
+        {
+            Win32Wrapper.ShowWindow(WindowHandle, (int) Win32Wrapper.ShowWindowFlags.SW_MINIMIZE);
+        }
+
+        public void Restore()
+        {
+            Win32Wrapper.ShowWindow(WindowHandle, (int)Win32Wrapper.ShowWindowFlags.SW_RESTORE);
+        }
+
+        public void PutInForground()
+        {
+            if (Win32Wrapper.GetForegroundWindow() != WindowHandle)
+            {
+                Win32Wrapper.SetForegroundWindow(WindowHandle);
+            }
         }
 
         public override bool Equals(object obj)
@@ -78,12 +99,24 @@ namespace Plugins
             return 1407091763 + WindowHandle.GetHashCode();
         }
 
-        public void PutInForground()
+        private Rectangle AdjustToBorder(int borderSize, Rectangle rectangle)
         {
-            if (Win32Wrapper.GetForegroundWindow() != WindowHandle)
-            {
-                Win32Wrapper.SetForegroundWindow(WindowHandle);
-            }
+            //windows might have an invisible border that we want to get rid of
+            Win32Wrapper.RECT withBorder;
+            Win32Wrapper.GetWindowRect(WindowHandle, out withBorder);
+            var noBorder = GetActualWindowRect();
+
+            int xOffset = withBorder.X - noBorder.X;
+            int yOffset = withBorder.Y - noBorder.Y;
+            int widthOffset = withBorder.Width - noBorder.Width;
+            int heightOffset = withBorder.Height - noBorder.Height;
+
+            return new Rectangle(
+                rectangle.X + xOffset + borderSize,
+                rectangle.Y + yOffset + borderSize,
+                rectangle.Width + widthOffset - borderSize * 2,
+                rectangle.Height + heightOffset - borderSize * 2
+            );
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Kaboom.Domain.WindowTree
     {
         void InsertRoot(Arrangement arrangement);
         void RemoveRoot(EntityID arrangementID);
-        List<EntityID> RootArrangements();
+        List<Arrangement> RootArrangements();
         Arrangement AnyRoot();
 
         Arrangement Find(EntityID arrangementID);

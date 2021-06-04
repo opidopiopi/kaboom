@@ -7,6 +7,7 @@ namespace Kaboom.Domain.WindowTree.Helpers
     {
         public EntityID ID { get; } = new EntityID();
         public Bounds Bounds { get; set; }
+        public bool Visible { get; set; }
 
 
         public void InsertAsFirst(IBoundedTreeNode child) => throw new CannotInsertChild("Cannot insert children into Leaf node!");

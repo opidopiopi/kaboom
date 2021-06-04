@@ -39,11 +39,6 @@ namespace Kaboom.Domain.WindowTree
             for (int i = 0; i < numChildren; i++)
             {
                 Children[i].Bounds = new Bounds(Bounds.X, Bounds.Y + i * heightPerChild, Bounds.Width, heightPerChild);
-
-                if (Children[i] is Arrangement arrangement)
-                {
-                    arrangement.UpdateBoundsOfChildren();
-                }
             }
         }
     }

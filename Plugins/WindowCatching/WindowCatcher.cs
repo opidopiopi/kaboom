@@ -50,7 +50,7 @@ namespace Plugins
 
             newWindows.ForEach(window =>
             {
-                window.Prepare();
+                window.PrepareForInsertion();
                 m_windowService.InsertWindowIntoTree(m_windowMapper.MapToDomain(window), m_selection);
                 Console.WriteLine($"[WindowCatcher]         New Window: {window.WindowHandle}");
             });

@@ -178,13 +178,13 @@ namespace Kaboom.Testing.Domain
             levelThree.InsertAsLast(windows[5]);
 
             //Act
-            var parents = windows.Select(window => m_arrangement.FindParentOf(window.ID));
+            var parents = windows.Select(window => ParentFinder.FindParentInTree(m_arrangement, window.ID));
             var expected = new List<IBoundedTreeNode>() { m_arrangement, levelOneA, levelOneB, levelTwoA, levelTwoB, levelThree};
 
             //Assert
             AssertSequenceEqual(parents, expected);
 
-            Assert.IsNull(m_arrangement.FindParentOf(new MockTreeLeaf().ID));
+            Assert.IsNull(ParentFinder.FindParentInTree(m_arrangement, new MockTreeLeaf().ID));
         }
 
         [TestMethod]
@@ -221,9 +221,9 @@ namespace Kaboom.Testing.Domain
             Assert.IsTrue(m_arrangement.MyChildren.Contains(wrapper));
             Assert.IsFalse(m_arrangement.MyChildren.Contains(levelOneA));
 
-            Assert.AreEqual(wrapper.FindParentOf(levelOneA.ID), wrapper);
-            Assert.AreEqual(wrapper.FindParentOf(levelTwoA.ID), levelOneA);
-            Assert.AreEqual(wrapper.FindParentOf(levelTwoB.ID), levelOneA);
+            Assert.AreEqual(ParentFinder.FindParentInTree(wrapper, levelOneA.ID), wrapper);
+            Assert.AreEqual(ParentFinder.FindParentInTree(wrapper, levelTwoA.ID), levelOneA);
+            Assert.AreEqual(ParentFinder.FindParentInTree(wrapper, levelTwoB.ID), levelOneA);
 
             Assert.ThrowsException<System.Exception>(() => { m_arrangement.WrapChildWithNode(new MockTreeLeaf().ID, wrapper); });
         }
@@ -258,8 +258,8 @@ namespace Kaboom.Testing.Domain
             m_arrangement.UnWrapChildToSelf(levelOneA.ID);
 
             //Assert
-            Assert.AreEqual(m_arrangement.FindParentOf(levelTwoA.ID), m_arrangement);
-            Assert.AreEqual(m_arrangement.FindParentOf(levelTwoB.ID), m_arrangement);
+            Assert.AreEqual(ParentFinder.FindParentInTree(m_arrangement, levelTwoA.ID), m_arrangement);
+            Assert.AreEqual(ParentFinder.FindParentInTree(m_arrangement, levelTwoB.ID), m_arrangement);
             Assert.IsFalse(m_arrangement.MyChildren.Contains(levelOneA));
 
             Assert.ThrowsException<System.Exception>(() => { m_arrangement.UnWrapChildToSelf(new MockTreeLeaf().ID); });

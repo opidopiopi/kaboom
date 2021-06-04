@@ -16,6 +16,13 @@ namespace Plugins
             return nameBuilder.ToString();
         }
 
+        /**
+         * Origin: http://pinvoke.net/default.aspx/user32/GetWindowThreadProcessId.html
+         */
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+
         /* 
          * Origin: http://pinvoke.net/default.aspx/Enums/DwmGetWindowAttribute.html
          */
@@ -156,6 +163,84 @@ namespace Plugins
          */
         [DllImport("user32.dll")]
         public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        /* 
+         * Origin: http://pinvoke.net/default.aspx/Enums/SHOWWINDOW_FLAGS.html
+         */
+        [Flags]
+        public enum ShowWindowFlags : uint
+        {
+            /// <summary>
+            ///        Hides the window and activates another window.
+            /// </summary>
+            SW_HIDE = 0,
+
+            /// <summary>
+            ///        Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when displaying the window for the first time.
+            /// </summary>
+            SW_SHOWNORMAL = 1,
+
+            /// <summary>
+            ///        Activates and displays a window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when displaying the window for the first time.
+            /// </summary>
+            SW_NORMAL = 1,
+
+            /// <summary>
+            ///        Activates the window and displays it as a minimized window.
+            /// </summary>
+            SW_SHOWMINIMIZED = 2,
+
+            /// <summary>
+            ///        Activates the window and displays it as a maximized window.
+            /// </summary>
+            SW_SHOWMAXIMIZED = 3,
+
+            /// <summary>
+            ///        Maximizes the specified window.
+            /// </summary>
+            SW_MAXIMIZE = 3,
+
+            /// <summary>
+            ///        Displays a window in its most recent size and position. This value is similar to <see cref="ShowWindowCommands.SW_SHOWNORMAL"/>, except the window is not activated.
+            /// </summary>
+            SW_SHOWNOACTIVATE = 4,
+
+            /// <summary>
+            ///        Activates the window and displays it in its current size and position.
+            /// </summary>
+            SW_SHOW = 5,
+
+            /// <summary>
+            ///        Minimizes the specified window and activates the next top-level window in the z-order.
+            /// </summary>
+            SW_MINIMIZE = 6,
+
+            /// <summary>
+            ///        Displays the window as a minimized window. This value is similar to <see cref="ShowWindowCommands.SW_SHOWMINIMIZED"/>, except the window is not activated.
+            /// </summary>
+            SW_SHOWMINNOACTIVE = 7,
+
+            /// <summary>
+            ///        Displays the window in its current size and position. This value is similar to <see cref="ShowWindowCommands.SW_SHOW"/>, except the window is not activated.
+            /// </summary>
+            SW_SHOWNA = 8,
+
+            /// <summary>
+            ///        Activates and displays the window. If the window is minimized or maximized, the system restores it to its original size and position. An application should specify this flag when restoring a minimized window.
+            /// </summary>
+            SW_RESTORE = 9,
+
+            /// <summary>
+            ///        Items 10, 11 and 11 existed in the VB definition but not the c# definition - so I am assuming this was a mistake and have added them here.
+            ///         Please forgive me if this is wrong!  I don't think it should have any negative impact.
+            ///         According to what I have read elsewhere: The SW_SHOWDEFAULT makes sure the window is restored prior to showing, then activating.
+            ///         And the 11's try to coerce a window to minimized or maximized.
+            /// </summary>
+            SW_SHOWDEFAULT = 10,
+            SW_FORCEMINIMIZE = 11,
+            SW_MAX = 11
+
+        }
 
         /* 
          * Origin: http://pinvoke.net/default.aspx/coredll/GetWindowLong.html
@@ -333,6 +418,76 @@ namespace Plugins
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
+
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
+        public static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
+        public static readonly IntPtr HWND_TOP = new IntPtr(0);
+        public static readonly IntPtr HWND_BOTTOM = new IntPtr(1);
+
+        /*
+         * Origin: http://pinvoke.net/default.aspx/Enums/SetWindowPosFlags.html
+         */
+
+        [Flags]
+        public enum SetWindowPosFlags : uint
+        {
+            /// <summary>If the calling thread and the thread that owns the window are attached to different input queues,
+            /// the system posts the request to the thread that owns the window. This prevents the calling thread from
+            /// blocking its execution while other threads process the request.</summary>
+            /// <remarks>SWP_ASYNCWINDOWPOS</remarks>
+            AsynchronousWindowPosition = 0x4000,
+            /// <summary>Prevents generation of the WM_SYNCPAINT message.</summary>
+            /// <remarks>SWP_DEFERERASE</remarks>
+            DeferErase = 0x2000,
+            /// <summary>Draws a frame (defined in the window's class description) around the window.</summary>
+            /// <remarks>SWP_DRAWFRAME</remarks>
+            DrawFrame = 0x0020,
+            /// <summary>Applies new frame styles set using the SetWindowLong function. Sends a WM_NCCALCSIZE message to
+            /// the window, even if the window's size is not being changed. If this flag is not specified, WM_NCCALCSIZE
+            /// is sent only when the window's size is being changed.</summary>
+            /// <remarks>SWP_FRAMECHANGED</remarks>
+            FrameChanged = 0x0020,
+            /// <summary>Hides the window.</summary>
+            /// <remarks>SWP_HIDEWINDOW</remarks>
+            HideWindow = 0x0080,
+            /// <summary>Does not activate the window. If this flag is not set, the window is activated and moved to the
+            /// top of either the topmost or non-topmost group (depending on the setting of the hWndInsertAfter
+            /// parameter).</summary>
+            /// <remarks>SWP_NOACTIVATE</remarks>
+            DoNotActivate = 0x0010,
+            /// <summary>Discards the entire contents of the client area. If this flag is not specified, the valid
+            /// contents of the client area are saved and copied back into the client area after the window is sized or
+            /// repositioned.</summary>
+            /// <remarks>SWP_NOCOPYBITS</remarks>
+            DoNotCopyBits = 0x0100,
+            /// <summary>Retains the current position (ignores X and Y parameters).</summary>
+            /// <remarks>SWP_NOMOVE</remarks>
+            IgnoreMove = 0x0002,
+            /// <summary>Does not change the owner window's position in the Z order.</summary>
+            /// <remarks>SWP_NOOWNERZORDER</remarks>
+            DoNotChangeOwnerZOrder = 0x0200,
+            /// <summary>Does not redraw changes. If this flag is set, no repainting of any kind occurs. This applies to
+            /// the client area, the nonclient area (including the title bar and scroll bars), and any part of the parent
+            /// window uncovered as a result of the window being moved. When this flag is set, the application must
+            /// explicitly invalidate or redraw any parts of the window and parent window that need redrawing.</summary>
+            /// <remarks>SWP_NOREDRAW</remarks>
+            DoNotRedraw = 0x0008,
+            /// <summary>Same as the SWP_NOOWNERZORDER flag.</summary>
+            /// <remarks>SWP_NOREPOSITION</remarks>
+            DoNotReposition = 0x0200,
+            /// <summary>Prevents the window from receiving the WM_WINDOWPOSCHANGING message.</summary>
+            /// <remarks>SWP_NOSENDCHANGING</remarks>
+            DoNotSendChangingEvent = 0x0400,
+            /// <summary>Retains the current size (ignores the cx and cy parameters).</summary>
+            /// <remarks>SWP_NOSIZE</remarks>
+            IgnoreResize = 0x0001,
+            /// <summary>Retains the current Z order (ignores the hWndInsertAfter parameter).</summary>
+            /// <remarks>SWP_NOZORDER</remarks>
+            IgnoreZOrder = 0x0004,
+            /// <summary>Displays the window.</summary>
+            /// <remarks>SWP_SHOWWINDOW</remarks>
+            ShowWindow = 0x0040,
+        }
 
         [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern int GetWindowTextW(IntPtr hWnd, StringBuilder lpWindowText, int nMaxCount);
