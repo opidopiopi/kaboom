@@ -113,46 +113,5 @@ namespace Kaboom.Testing.Domain
             Assert.AreEqual(new Bounds(195, -55, 100, 420), windowC.Bounds);
             Assert.AreEqual(new Bounds(295, -55, 100, 420), windowD.Bounds);
         }
-
-
-        [TestMethod]
-        public void arrangement_updates_bounds_triggers_update_for_lower_arrangements()
-        {
-            /*  m_arrangement
-             *  |
-             *  |--anotherOne
-             *  |  |
-             *  |  |--bitesTheDust
-             *  |  |  |
-             *  |  |  |--windowC
-             *  |  |
-             *  |  |--winowB
-             *  |
-             *  |--windowA
-             */
-
-            //Arrange
-            HorizontalArrangement anotherOne = new HorizontalArrangement();
-            MockTreeLeaf windowA = new MockTreeLeaf();
-            m_arrangement.InsertAsLast(anotherOne);
-            m_arrangement.InsertAsLast(windowA);
-            m_arrangement.Bounds = new Bounds(123, 456, 200, 69);
-
-            HorizontalArrangement bitesTheDust = new HorizontalArrangement();
-            MockTreeLeaf windowB = new MockTreeLeaf();
-            anotherOne.InsertAsLast(bitesTheDust);
-            anotherOne.InsertAsLast(windowB);
-
-            MockTreeLeaf windowC = new MockTreeLeaf();
-            bitesTheDust.InsertAsLast(windowC);
-
-            //Act
-            m_arrangement.UpdateBoundsOfChildren();
-
-            //Assert
-            Assert.AreEqual(new Bounds(223, 456, 100, 69), windowA.Bounds);
-            Assert.AreEqual(new Bounds(173, 456, 50, 69), windowB.Bounds);
-            Assert.AreEqual(new Bounds(123, 456, 50, 69), windowC.Bounds);
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Kaboom.Domain.WindowTree.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Kaboom.Domain.WindowTree.Helpers
 {
@@ -10,6 +11,7 @@ namespace Kaboom.Domain.WindowTree.Helpers
 
         public EntityID ID { get; } = new EntityID();
         public Bounds Bounds { get; set; }
+        public bool Visible { get; set; }
 
         public void InsertAsFirst(IBoundedTreeNode child) => Children.Insert(0, child);
         public void InsertAsLast(IBoundedTreeNode child) => Children.Add(child);
@@ -43,6 +45,7 @@ namespace Kaboom.Domain.WindowTree.Helpers
 
         public abstract void Accept(IVisitor visitor);
         public void VisitAllChildren(IVisitor visitor) => Children.ForEach(child => child.Accept(visitor));
+        public void VisitAllChildrenReverse(IVisitor visitor) => Children.Reverse<IBoundedTreeNode>().ToList().ForEach(child => child.Accept(visitor));
 
         public IBoundedTreeNode FindChild(EntityID childID)
         {

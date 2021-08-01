@@ -1,6 +1,7 @@
 ﻿using Kaboom.Domain;
 using Kaboom.Domain.Services;
 using Kaboom.Domain.WindowTree;
+using Kaboom.Domain.WindowTree.Helpers;
 using Kaboom.Domain.WindowTree.ValueObjects;
 
 namespace Kaboom.Application
@@ -34,7 +35,11 @@ namespace Kaboom.Application
             if (m_selectedWindow != null)
             {
                 var result = m_windowService.NextWindowInDirection(direction, m_selectedWindow);
-                if (result != null) SelectWindow(result);
+                if (result != null)
+                {
+                    SelectWindow(result);
+                    m_windowService.UpdateTree();
+                }
             }
             else
             {
@@ -47,6 +52,7 @@ namespace Kaboom.Application
             if (m_selectedWindow != null)
             {
                 m_arrangementRepository.FindParentOf(m_selectedWindow).WrapChildWithNode(m_selectedWindow, wrapper);
+                m_windowService.UpdateTree();
             }
         }
 
@@ -73,10 +79,9 @@ namespace Kaboom.Application
         {
             if (m_selectedWindow == null)
             {
-                foreach (var id in m_arrangementRepository.RootArrangements())
+                foreach (var root in m_arrangementRepository.RootArrangements())
                 {
-                    var arr = m_arrangementRepository.Find(id);
-                    var window = arr.FirstWindowRecursive();
+                    var window = WindowFinder.FirstWindowUnderArrangement(root);
 
                     if (window != null)
                     {

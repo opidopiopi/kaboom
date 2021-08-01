@@ -9,15 +9,34 @@ using Plugins.Shortcuts;
 
 namespace Plugins.ConfigurationManagement
 {
-    public class SimpleConfiguration : Configuration
+    public class SimpleConfiguration : IConfiguration
     {
-        public SimpleConfiguration(IProvideSettings configurationSource, ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener)
-            : base(configurationSource, Settings(selection, shortcutListener, eventListener))
-        {
+        private ConfigurationBase configurationBase;
 
+        public SimpleConfiguration(IProvideSettings configurationSource, ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener, IArrangementRepository arrangementRepository)
+        {
+            configurationBase = new ConfigurationBase(
+                configurationSource,
+                Settings(selection, shortcutListener, eventListener, arrangementRepository)
+               );
         }
 
-        private static Setting[] Settings(ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener)
+        public void ApplySettings()
+        {
+            configurationBase.ApplySettings();
+        }
+
+        public void LoadValuesForSettings()
+        {
+            configurationBase.LoadValuesForSettings();
+        }
+
+        public void SaveAllSettings()
+        {
+            configurationBase.SaveAllSettings();
+        }
+
+        protected static Setting[] Settings(ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener, IArrangementRepository arrangementRepository)
         {
             return new Setting[]
             {
@@ -36,6 +55,7 @@ namespace Plugins.ConfigurationManagement
                 //wrapping shortcuts
                 new ShortcutSetting("Shortcuts.WrapVertical",   "Alt V",        shortcutListener, eventListener, new WrapWindowAction<VerticalArrangement>(selection)),
                 new ShortcutSetting("Shortcuts.WrapHorizontal", "Alt H",        shortcutListener, eventListener, new WrapWindowAction<HorizontalArrangement>(selection)),
+                new ShortcutSetting("Shortcuts.WrapStack",      "Alt S",        shortcutListener, eventListener, new WrapWithStackArrangementAction(selection, arrangementRepository)),
                 new ShortcutSetting("Shortcuts.Unwrap",         "Alt U",        shortcutListener, eventListener, new UnWrapWindowAction(selection)),
 
                 new ShortcutSetting("Shortcuts.Exit",           "Alt Q",        shortcutListener, eventListener, new ExitAction()),

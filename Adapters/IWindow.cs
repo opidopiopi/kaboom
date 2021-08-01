@@ -11,5 +11,8 @@ namespace Kaboom.Adapters
         Rectangle GetActualWindowRect();
         void ApplyRect(int borderSize, Rectangle rectangle);
         void PutInForground();
+        void Minimize();
+        void Restore();
+        void MoveToBack();
     }
 }
