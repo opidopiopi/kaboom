@@ -9,7 +9,7 @@ namespace Plugins
 {
     public class WindowsRenderService : IRenderService
     {
-        public const int WINDOW_BORDER_Size = 5;
+        public const int WINDOW_BORDER_SIZE = 5;
         public const string OVERLAY_NAME = "Kaboom_overlay";
 
         private WindowMapper windowMapper;
@@ -74,7 +74,7 @@ namespace Plugins
             windowMapper
                 .MapToIWindow(window)
                 .ApplyRect(
-                    WINDOW_BORDER_Size,
+                    WINDOW_BORDER_SIZE,
                     RectangleMapper.BoundsToRectangle(window.Bounds)
                 );
         }

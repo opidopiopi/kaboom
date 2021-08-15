@@ -13,7 +13,7 @@ using System.IO;
 namespace Plugins
 {
     [ExcludeFromCodeCoverage]
-    class TilingWindowManager
+    class TilingWindowManager : IShutdownHandler
     {
         private WindowsArrangementReposititory<HorizontalArrangement> arrangementRepository = new WindowsArrangementReposititory<HorizontalArrangement>();
         private WindowMapper windowMapper = new WindowMapper();
@@ -28,6 +28,8 @@ namespace Plugins
 
         private IConfiguration configuration;
         private SalarosConfigParser configParser;
+
+        private WindowCatcher windowCatcher;
 
         public TilingWindowManager()
         {
@@ -44,7 +46,7 @@ namespace Plugins
 
             actionService.AddActionEventSource(shortcutListener);
 
-            configuration = new SimpleConfiguration(configParser, selection, shortcutListener, actionService, arrangementRepository);
+            configuration = new SimpleConfiguration(configParser, selection, shortcutListener, actionService, arrangementRepository, this);
 
 #if DEBUG
             configuration = new DebugConfiguration(configuration, shortcutListener, actionService, arrangementRepository);
@@ -60,10 +62,17 @@ namespace Plugins
 
             overlay.StartFormThread();
 
-            using(var windowCatcher = new WindowCatcher(windowMapper, selection, windowService, new DefaultCatchingRule()))
+            using(windowCatcher = new WindowCatcher(windowMapper, selection, windowService, new DefaultCatchingRule()))
             {
                 windowCatcher.RunUpdateLoop();
             }
+        }
+
+        public void Shutdown()
+        {
+            windowCatcher.StopUpdateLoop();
+            shortcutListener.Dispose();
+            Environment.Exit(1);
         }
 
         static void Main(string[] args)

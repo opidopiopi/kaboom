@@ -13,11 +13,17 @@ namespace Plugins.ConfigurationManagement
     {
         private ConfigurationBase configurationBase;
 
-        public SimpleConfiguration(IProvideSettings configurationSource, ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener, IArrangementRepository arrangementRepository)
+        public SimpleConfiguration(
+            IProvideSettings configurationSource,
+            ISelection selection,
+            IListenToShortcuts shortcutListener,
+            IActionEventListener eventListener,
+            IArrangementRepository arrangementRepository,
+            IShutdownHandler shutdownHandler)
         {
             configurationBase = new ConfigurationBase(
                 configurationSource,
-                Settings(selection, shortcutListener, eventListener, arrangementRepository)
+                Settings(selection, shortcutListener, eventListener, arrangementRepository, shutdownHandler)
                );
         }
 
@@ -36,7 +42,12 @@ namespace Plugins.ConfigurationManagement
             configurationBase.SaveAllSettings();
         }
 
-        protected static Setting[] Settings(ISelection selection, IListenToShortcuts shortcutListener, IActionEventListener eventListener, IArrangementRepository arrangementRepository)
+        protected static Setting[] Settings(
+            ISelection selection,
+            IListenToShortcuts shortcutListener,
+            IActionEventListener eventListener,
+            IArrangementRepository arrangementRepository,
+            IShutdownHandler shutdownHandler)
         {
             return new Setting[]
             {
@@ -58,7 +69,7 @@ namespace Plugins.ConfigurationManagement
                 new ShortcutSetting("Shortcuts.WrapStack",      "Alt S",        shortcutListener, eventListener, new WrapWithStackArrangementAction(selection, arrangementRepository)),
                 new ShortcutSetting("Shortcuts.Unwrap",         "Alt U",        shortcutListener, eventListener, new UnWrapWindowAction(selection)),
 
-                new ShortcutSetting("Shortcuts.Exit",           "Alt Q",        shortcutListener, eventListener, new ExitAction()),
+                new ShortcutSetting("Shortcuts.Exit",           "Alt Q",        shortcutListener, eventListener, new ExitAction(shutdownHandler)),
             };
         }
     }

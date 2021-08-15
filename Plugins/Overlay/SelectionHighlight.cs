@@ -22,10 +22,10 @@ namespace Plugins.Overlay
 
                 graphics.DrawRectangle(
                     pen,
-                    windowRect.X - WindowsRenderService.WINDOW_BORDER_Size,
-                    windowRect.Y - WindowsRenderService.WINDOW_BORDER_Size,
-                    windowRect.Width + 2 * WindowsRenderService.WINDOW_BORDER_Size,
-                    windowRect.Height + 2 * WindowsRenderService.WINDOW_BORDER_Size
+                    windowRect.X - WindowsRenderService.WINDOW_BORDER_SIZE,
+                    windowRect.Y - WindowsRenderService.WINDOW_BORDER_SIZE,
+                    windowRect.Width + 2 * WindowsRenderService.WINDOW_BORDER_SIZE,
+                    windowRect.Height + 2 * WindowsRenderService.WINDOW_BORDER_SIZE
                 );
             }
         }

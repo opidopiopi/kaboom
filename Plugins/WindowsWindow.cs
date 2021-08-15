@@ -70,6 +70,21 @@ namespace Plugins
                 (uint) Win32Wrapper.SetWindowPosFlags.ShowWindow);
         }
 
+        public void PrepareForExit()
+        {
+            Restore();
+
+            var rect = GetActualWindowRect();
+            Win32Wrapper.SetWindowPos(
+                WindowHandle,
+                Win32Wrapper.HWND_NOTOPMOST,
+                rect.X,
+                rect.Y,
+                rect.Width,
+                rect.Height,
+                (uint)Win32Wrapper.SetWindowPosFlags.ShowWindow);
+        }
+
         public void Minimize()
         {
             Win32Wrapper.ShowWindow(WindowHandle, (int) Win32Wrapper.ShowWindowFlags.SW_MINIMIZE);
@@ -77,7 +92,7 @@ namespace Plugins
 
         public void Restore()
         {
-            Win32Wrapper.ShowWindow(WindowHandle, (int)Win32Wrapper.ShowWindowFlags.SW_RESTORE);
+            Win32Wrapper.ShowWindow(WindowHandle, (int) Win32Wrapper.ShowWindowFlags.SW_RESTORE);
         }
 
         public void PutInForground()

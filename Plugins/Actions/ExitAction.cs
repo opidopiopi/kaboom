@@ -4,9 +4,16 @@ namespace Plugins.Actions
 {
     public class ExitAction : IAction
     {
+        private IShutdownHandler shutdownHandler;
+
+        public ExitAction(IShutdownHandler shutdownHandler)
+        {
+            this.shutdownHandler = shutdownHandler;
+        }
+
         public void Execute()
         {
-            System.Environment.Exit(1);
+            shutdownHandler.Shutdown();
         }
     }
 }

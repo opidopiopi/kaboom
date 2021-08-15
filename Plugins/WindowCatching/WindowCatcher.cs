@@ -48,19 +48,8 @@ namespace Plugins
             var newWindows = currentWindows.Except(m_windows).ToList();
             var removeWindows = m_windows.Except(currentWindows).ToList();
 
-            newWindows.ForEach(window =>
-            {
-                window.PrepareForInsertion();
-                m_windowService.InsertWindowIntoTree(m_windowMapper.MapToDomain(window), m_selection);
-                Console.WriteLine($"[WindowCatcher]         New Window: {window.WindowHandle}");
-            });
-
-            removeWindows.ForEach(window =>
-            {
-                m_windowService.RemoveWindowFromTree(m_windowMapper.MapToDomain(window).ID, m_selection);
-                m_windowMapper.RemoveMappingForWindow(window);
-                Console.WriteLine($"[WindowCatcher]         Removed Window: {window.WindowName()}");
-            });
+            newWindows.ForEach(window => AddWindow(window));
+            removeWindows.ForEach(window => RemoveWindow(window));
             
             m_windows = currentWindows;
         }
@@ -132,6 +121,27 @@ namespace Plugins
         {
             m_eventHooks.ForEach(hook => Win32Wrapper.UnhookWinEvent(hook));
             m_eventHooks.Clear();
+        }
+
+        private void AddWindow(WindowsWindow window)
+        {
+            window.PrepareForInsertion();
+            m_windowService.InsertWindowIntoTree(m_windowMapper.MapToDomain(window), m_selection);
+            Console.WriteLine($"[WindowCatcher]         New Window: {window.WindowHandle}");
+        }
+
+        private void RemoveWindow(WindowsWindow window)
+        {
+            window.PrepareForExit();
+            m_windowService.RemoveWindowFromTree(m_windowMapper.MapToDomain(window).ID, m_selection);
+            m_windowMapper.RemoveMappingForWindow(window);
+            Console.WriteLine($"[WindowCatcher]         Removed Window: {window.WindowName()}");
+        }
+
+        public void StopUpdateLoop()
+        {
+            UnHookEvents();
+            m_windows.ForEach(window => RemoveWindow(window));
         }
 
         public void Dispose()

@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Overlay\IOverlay.cs" />
     <Compile Include="Overlay\IOverlayComponent.cs" />
+    <Compile Include="IShutdownHandler.cs" />
     <Compile Include="WindowCatching\IWindowCatchingRule.cs" />
     <Compile Include="Shortcuts\HotKeyManager.cs" />
     <Compile Include="Shortcuts\Shortcut.cs" />
