@@ -4,7 +4,7 @@ namespace Plugins
 {
     public class DefaultCatchingRule : IWindowCatchingRule
     {
-        public bool DoWeWantToCatchThisWindow(IWindow window)
+        public virtual bool DoWeWantToCatchThisWindow(IWindow window)
         {
             Win32Wrapper.WINDOWINFO info = new Win32Wrapper.WINDOWINFO(null);
             Win32Wrapper.GetWindowInfo(window.WindowHandle, ref info);

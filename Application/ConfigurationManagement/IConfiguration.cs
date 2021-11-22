@@ -5,5 +5,7 @@
         void ApplySettings();
         void LoadValuesForSettings();
         void SaveAllSettings();
+
+        Setting GetSetting(string name);
     }
 }

@@ -23,6 +23,11 @@ namespace Plugins.ConfigurationManagement
             debugPrintShortcut.Apply();
         }
 
+        public Setting GetSetting(string name)
+        {
+            return baseConfiguration.GetSetting(name);
+        }
+
         public void LoadValuesForSettings()
         {
             baseConfiguration.LoadValuesForSettings();

@@ -57,6 +57,7 @@
     <Compile Include="ConfigurationManagement\SalarosConfigParser.cs" />
     <Compile Include="ConfigurationManagement\ShortcutSetting.cs" />
     <Compile Include="ConfigurationManagement\SimpleConfiguration.cs" />
+    <Compile Include="ConfigurationManagement\StaticSetting.cs" />
     <Compile Include="DirectionFilterForArrangements.cs" />
     <Compile Include="Overlay\SelectionHighlight.cs" />
     <Compile Include="Overlay\StackArrangementVisualizer.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="TilingWindowManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Win32Wrapper.cs" />
+    <Compile Include="WindowCatching\NameDependantCatchingRule.cs" />
     <Compile Include="WindowCatching\WindowCatcher.cs" />
     <Compile Include="WindowCatching\DefaultCatchingRule.cs" />
     <Compile Include="WindowsArrangementReposititory.cs" />

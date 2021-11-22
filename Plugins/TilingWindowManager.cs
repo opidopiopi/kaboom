@@ -6,6 +6,7 @@ using Kaboom.Domain.WindowTree;
 using Plugins.ConfigurationManagement;
 using Plugins.Overlay;
 using Plugins.Shortcuts;
+using Plugins.WindowCatching;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -46,7 +47,14 @@ namespace Plugins
 
             actionService.AddActionEventSource(shortcutListener);
 
-            configuration = new SimpleConfiguration(configParser, selection, shortcutListener, actionService, arrangementRepository, this);
+            configuration = new SimpleConfiguration(
+                configParser,
+                selection,
+                shortcutListener,
+                actionService,
+                arrangementRepository,
+                this
+            );
 
 #if DEBUG
             configuration = new DebugConfiguration(configuration, shortcutListener, actionService, arrangementRepository);
@@ -60,9 +68,14 @@ namespace Plugins
             configuration.SaveAllSettings();
             configParser.Save();
 
+            var catchingRule = new NameDependantCatchingRule(
+                configuration.GetSetting("IncludeRegex").Value,
+                configuration.GetSetting("ExcludeRegex").Value
+            );
+
             overlay.StartFormThread();
 
-            using(windowCatcher = new WindowCatcher(windowMapper, selection, windowService, new DefaultCatchingRule()))
+            using(windowCatcher = new WindowCatcher(windowMapper, selection, windowService, catchingRule))
             {
                 windowCatcher.RunUpdateLoop();
             }

@@ -28,5 +28,10 @@ namespace Kaboom.Application.ConfigurationManagement
         {
             m_settings.ForEach(setting => setting.Apply());
         }
+
+        public Setting GetSetting(string name)
+        {
+            return m_settings.Find(setting => setting.Name.Equals(name));
+        }
     }
 }

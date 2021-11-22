@@ -70,7 +70,15 @@ namespace Plugins.ConfigurationManagement
                 new ShortcutSetting("Shortcuts.Unwrap",         "Alt U",        shortcutListener, eventListener, new UnWrapWindowAction(selection)),
 
                 new ShortcutSetting("Shortcuts.Exit",           "Alt Q",        shortcutListener, eventListener, new ExitAction(shutdownHandler)),
+
+                new StaticSetting("IncludeRegex", "_"),
+                new StaticSetting("ExcludeRegex", "_"),
             };
+        }
+
+        public Setting GetSetting(string name)
+        {
+            return configurationBase.GetSetting(name);
         }
     }
 }
